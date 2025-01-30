@@ -1,3 +1,5 @@
+copier le contenu de .env.exemple dans un nouveau fichier .env à la racine du projet
+
 cd back
 npm install
 
