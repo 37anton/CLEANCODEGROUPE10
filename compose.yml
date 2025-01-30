@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  node:
+    image: node:20.14.0-alpine
+    user: node
+    tty: true
+    stdin_open: true
+    working_dir: /home/node
+    entrypoint: sh -c
+    command: '"npm install && npm run start:dev"'
+    depends_on:
+      - mongo
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./back:/home/node
+
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
+    volumes:
+      - data-mongo:/data/db
+    ports:
+      - "27017:27017"
+
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-my_postgres_db}
+    volumes:
+      - data-postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  data-mongo:
+  data-postgres:
