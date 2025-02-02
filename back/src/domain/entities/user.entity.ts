@@ -1,7 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Company } from './company.entity';
 import { Concession } from './concession.entity';
 import { Client } from './client.entity';
+
+import { Notification } from "./notification.entity";
+
 
 @Entity()
 export class User {
@@ -23,6 +27,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
+
   @Column()
   isAdmin: boolean;
 
@@ -34,4 +39,8 @@ export class User {
 
   @ManyToOne(() => Client, client => client.users, { nullable: true })
   client: Client;
+
+  @OneToMany(() => Notification, (notification) => notification.user, { cascade: true })
+  notifications: Notification[];
+
 }

@@ -1,3 +1,4 @@
+
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './pages/Login';
@@ -9,13 +10,16 @@ import ProtectedRoute from './components/ProtectedRoute';
 import MaintenanceHistory from './components/MaintenanceHistory';
 import FaultManagementPage from './pages/FaultManagementPage';
 import { AuthProvider } from './context/AuthContext';
+import Notifications from "./pages/Notifications";
 
 const App = () => {
   const vehicleId = 'vehicle1'; // Exemple d'identifiant de véhicule
 
+
   return (
     <AuthProvider>
       <Router>
+
         <Navbar />
         <div className="pt-16">
           <h1>Vehicle Management System</h1>
@@ -34,6 +38,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/notifications" element={<Notifications />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}
@@ -43,6 +48,7 @@ const App = () => {
         </div>
       </Router>
     </AuthProvider>
+
   );
 };
 

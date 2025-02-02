@@ -1,5 +1,17 @@
 // src/app.module.ts
 import { Module } from '@nestjs/common';
+
+
+import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthModule } from './modules/auth/auth.module';
+import { ScheduleModule } from "@nestjs/schedule";
+import { NotificationService } from "./application/services/notification.service";
+import { Notification } from "./domain/entities/notification.entity";
+import { User } from "./domain/entities/user.entity";
+import { NotificationModule } from "./infrastructure/frameworks/nest.js/notification.module";
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
@@ -7,7 +19,16 @@ import { FaultModule } from './infrastructure/modules/fault.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+
+    NotificationModule,
+    ScheduleModule.forRoot(), // Active le Cron Job
+    TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
+
+    // Configuration globale du ConfigModule
+      ConfigModule.forRoot({ isGlobal: true }),
+
+
+
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -21,5 +42,6 @@ import { FaultModule } from './infrastructure/modules/fault.module';
     MaintenanceModule,
     FaultModule,
   ],
+  providers: [NotificationService],
 })
 export class AppModule {}
