@@ -1,8 +1,9 @@
 version: '3.8'
 
 services:
-  node:
-    image: node:20.14.0-alpine
+  backend:
+    image: node:23-alpine
+    container_name: backend
     user: node
     tty: true
     stdin_open: true
@@ -10,37 +11,52 @@ services:
     entrypoint: sh -c
     command: '"npm install && npm run start:dev"'
     depends_on:
-      - mongo
       - postgres
     env_file:
-      - .env
+      - ./back/.env
     ports:
       - "3000:3000"
     volumes:
       - ./back:/home/node
 
-  mongo:
-    image: mongo
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
-    volumes:
-      - data-mongo:/data/db
-    ports:
-      - "27017:27017"
-
   postgres:
-    image: postgres
+    image: postgres:16.2
+    container_name: postgres
     restart: unless-stopped
     environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-my_postgres_db}
+      POSTGRES_DB: ${POSTGRES_DB:-clean_code}
     volumes:
       - data-postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
+  frontend:
+    image: node:23-alpine
+    container_name: frontend
+    working_dir: /home/node
+    tty: true
+    stdin_open: true
+    entrypoint: sh -c
+    command: '"npm install && npm run dev -- --host"'
+    depends_on:
+      - backend
+    env_file:
+      - ./front/.env
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./front:/home/node
+
+  adminer:
+    image: adminer:4.8.1
+    container_name: adminer
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+
 volumes:
-  data-mongo:
   data-postgres:
