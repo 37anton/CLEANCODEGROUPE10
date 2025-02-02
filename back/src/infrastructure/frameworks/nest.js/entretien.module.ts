@@ -7,18 +7,29 @@ import { PlanifierEntretienUseCase } from '../../../application/use-cases/planif
 import { EntretienController } from '../../../interface/controllers/entretien.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Entretien])],
+  imports: [
+    TypeOrmModule.forFeature([Entretien]), // Intégration TypeORM avec l'entité Entretien
+  ],
   controllers: [EntretienController],
   providers: [
     PlanifierEntretienUseCase,
     {
       provide: 'EntretienRepository',
-      useClass:
-        process.env.STORAGE_ADAPTER === 'in-memory'
-          ? InMemoryEntretienRepository
-          : SqlEntretienRepository,
+      useClass: (() => {
+        // Choix dynamique de l'adaptateur
+        switch (process.env.STORAGE_ADAPTER) {
+          case 'in-memory':
+            return InMemoryEntretienRepository;
+          case 'sql':
+            return SqlEntretienRepository;
+          default:
+            throw new Error(
+              "STORAGE_ADAPTER doit être défini comme 'in-memory' ou 'sql'.",
+            );
+        }
+      })(),
     },
   ],
-  exports: ['EntretienRepository'],
+  exports: [TypeOrmModule, 'EntretienRepository'], // Export si nécessaire
 })
 export class EntretienModule {}
