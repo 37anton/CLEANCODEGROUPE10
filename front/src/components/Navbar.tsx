@@ -19,15 +19,20 @@ const Navbar = () => {
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
-          {token ? (
+        {token ? (
+          <>
+            <li className="mr-2">
+              <Link to="/notifications" className="btn btn-secondary">Notifications</Link>
+            </li>
             <li>
               <button onClick={handleLogout} className="btn btn-error">Logout</button>
             </li>
-          ) : (
-            <li>
-              <Link to="/login" className="btn btn-primary">Login</Link>
-            </li>
-          )}
+          </>
+        ) : (
+          <li>
+            <Link to="/login" className="btn btn-primary">Login</Link>
+          </li>
+        )}
         </ul>
       </div>
     </nav>
