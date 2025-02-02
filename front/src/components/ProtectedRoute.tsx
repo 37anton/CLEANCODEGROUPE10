@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 const ProtectedRoute = () => {
   const { token } = useAuth();
 
-  console.log("🔒 Vérification du token dans ProtectedRoute :", token); // ✅ Voir si token est bien null
+  console.log("Vérification du token dans ProtectedRoute :", token);
 
   return token ? <Outlet /> : <Navigate to="/" replace />;
 };
