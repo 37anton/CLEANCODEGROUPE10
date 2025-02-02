@@ -26,7 +26,7 @@ export class NotificationService {
     }
   }
 
-  async getNotificationsForUser(userId: number) {
+  async getNotificationsForUser(userId: string) {
     return await this.notificationRepo.find({
       where: { user: { id: userId } },
       order: { createdAt: "DESC" },

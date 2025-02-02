@@ -13,7 +13,6 @@ import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/frameworks/nest.js/notification.module";
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
 import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
 import { FaultModule } from './infrastructure/modules/fault.module';
 
@@ -39,6 +38,7 @@ import { FaultModule } from './infrastructure/modules/fault.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    AuthModule,
     MaintenanceModule,
     FaultModule,
   ],
