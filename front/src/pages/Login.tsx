@@ -35,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen">
+    <div className="flex flex-col justify-center items-center">
       <form onSubmit={handleLogin} className="flex flex-col gap-4">
         <input
           type="email"

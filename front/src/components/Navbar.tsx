@@ -1,9 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const { token, logout } = useAuth(); // Récupère le token et la fonction logout
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <nav className="navbar bg-base-100 shadow-md fixed top-0 left-0 w-full px-6 z-50">
@@ -16,7 +21,7 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">
           {token ? (
             <li>
-              <button onClick={logout} className="btn btn-error">Logout</button>
+              <button onClick={handleLogout} className="btn btn-error">Logout</button>
             </li>
           ) : (
             <li>
