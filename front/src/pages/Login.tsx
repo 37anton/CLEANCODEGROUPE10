@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import notyf from "../utils/notyf";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // Import de AuthContext
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth(); // Récupère la fonction login depuis le contexte
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/auth/login", { email, password });
-  
+
       if (response.data?.accessToken) {
-        localStorage.setItem("token", response.data.accessToken);
+        login(response.data.accessToken); // Met à jour le contexte immédiatement
         notyf.success("Connexion réussie !");
         navigate("/dashboard");
       } else {
@@ -22,16 +24,18 @@ const Login = () => {
         notyf.error("Échec de la connexion !");
       }
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+      if (axios.isAxiosError(error)) {  // Vérifie si l'erreur vient d'Axios
+        console.error("Erreur Axios :", error.response?.data); 
         notyf.error(error.response?.data?.message || "Échec de la connexion !");
       } else {
+        console.error("Erreur inconnue :", error);
         notyf.error("Une erreur inattendue est survenue !");
       }
-    }
-  };  
+    }    
+  };
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center min-h-screen">
       <form onSubmit={handleLogin} className="flex flex-col gap-4">
         <input
           type="email"
