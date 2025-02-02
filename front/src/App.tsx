@@ -5,7 +5,8 @@ import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import { AuthProvider } from "./context/AuthContext";
-
+import Home from "./pages/Home";
+import ProtectedRoute from "./components/ProtectedRoute"; //
 
 function App() {
   return (
@@ -14,9 +15,12 @@ function App() {
           <Navbar />
           <div className="pt-16">
             <Routes>
+              <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
             </Routes>
           </div>
         </Router>
