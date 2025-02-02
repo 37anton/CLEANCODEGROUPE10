@@ -14,7 +14,7 @@ const Navbar = () => {
     <nav className="navbar bg-base-100 shadow-md fixed top-0 left-0 w-full px-6 z-50">
       <div className="flex-1">
         <Link to="/" className="text-lg font-bold">
-          🌟 MyApp
+          Triumph Motorcycles
         </Link>
       </div>
       <div className="flex-none">

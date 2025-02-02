@@ -6,7 +6,8 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
-import ProtectedRoute from "./components/ProtectedRoute"; //
+import ProtectedRoute from "./components/ProtectedRoute";
+import Notifications from "./pages/Notifications";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/notifications" element={<Notifications />} />
               </Route>
             </Routes>
           </div>

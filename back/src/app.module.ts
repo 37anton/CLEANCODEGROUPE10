@@ -8,12 +8,15 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { NotificationService } from "./application/services/notification.service";
 import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
+import { NotificationModule } from "./infrastructure/frameworks/nest.js/notification.module";
+
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EntretienModule } from './infrastructure/frameworks/nest.js/entretien.module';
 
 @Module({
   imports: [
+    NotificationModule,
     ScheduleModule.forRoot(), // Active le Cron Job
     TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
 
