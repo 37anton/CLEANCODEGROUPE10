@@ -1,4 +1,6 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
+
 
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -10,18 +12,21 @@ import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/frameworks/nest.js/notification.module";
 
-
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EntretienModule } from './infrastructure/frameworks/nest.js/entretien.module';
+import { ConfigModule } from '@nestjs/config';
+import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
+import { FaultModule } from './infrastructure/modules/fault.module';
 
 @Module({
   imports: [
+
     NotificationModule,
     ScheduleModule.forRoot(), // Active le Cron Job
     TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
 
     // Configuration globale du ConfigModule
       ConfigModule.forRoot({ isGlobal: true }),
+
 
 
     TypeOrmModule.forRoot({
@@ -32,14 +37,10 @@ import { EntretienModule } from './infrastructure/frameworks/nest.js/entretien.m
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-
       synchronize: true,
     }),
-    EntretienModule,
-
-
-    AuthModule, // AuthModule peut maintenant utiliser ConfigService
-
+    MaintenanceModule,
+    FaultModule,
   ],
   providers: [NotificationService],
 })
