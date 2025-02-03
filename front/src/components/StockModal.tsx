@@ -1,37 +1,52 @@
+import { useState } from "react";
+
 interface StockModalProps {
   isOpen: boolean;
   onClose: () => void;
+  part: { id: string; name: string };
+  stock: { partId: string; quantity: number; alertThreshold: number };
 }
 
-const StockModal = ({ isOpen, onClose }: StockModalProps) => {
-  if (!isOpen) return null; // Ne pas afficher la modale si elle est fermée
+const StockModal = ({ isOpen, onClose, part, stock }: StockModalProps) => {
+  const [quantity, setQuantity] = useState(stock.quantity);
+  const [alertThreshold, setAlertThreshold] = useState(stock.alertThreshold);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">Ajouter une pièce</h2>
+        <h2 className="text-xl font-bold mb-4">Modifier le stock</h2>
 
-        {/* Formulaire sans logique d'envoi pour l'instant */}
         <form className="space-y-4">
           <label className="block">
-            <span className="text-gray-700">Produit</span>
-            <select className="select select-bordered w-full">
-              <option value="">Sélectionner une pièce</option>
-              <option value="1">Filtre à huile</option>
-              <option value="2">Plaquette de frein</option>
-              <option value="3">Pneu</option>
-              <option value="4">Todo : récupérer les produits du back</option>
-            </select>
+            <span className="text-gray-700">Nom de la pièce</span>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              value={part.name}
+              disabled
+            />
           </label>
 
           <label className="block">
-            <span className="text-gray-700">Nombre de pièces disponibles</span>
-            <input type="number" className="input input-bordered w-full" />
+            <span className="text-gray-700">Quantité disponible</span>
+            <input
+              type="number"
+              className="input input-bordered w-full"
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+            />
           </label>
 
           <label className="block">
             <span className="text-gray-700">Seuil d'alerte</span>
-            <input type="number" className="input input-bordered w-full" />
+            <input
+              type="number"
+              className="input input-bordered w-full"
+              value={alertThreshold}
+              onChange={(e) => setAlertThreshold(Number(e.target.value))}
+            />
           </label>
 
           <div className="flex justify-end space-x-2">
@@ -39,7 +54,7 @@ const StockModal = ({ isOpen, onClose }: StockModalProps) => {
               Annuler
             </button>
             <button type="submit" className="btn btn-primary">
-              Ajouter
+              Modifier
             </button>
           </div>
         </form>
