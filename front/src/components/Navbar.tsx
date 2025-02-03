@@ -19,20 +19,23 @@ const Navbar = () => {
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
-        {token ? (
-          <>
-            <li className="mr-2">
-              <Link to="/notifications" className="btn btn-secondary">Notifications</Link>
-            </li>
+          {token ? (
+            <>
+              <li className="mr-2">
+                <Link to="/notifications" className="btn btn-secondary">Notifications</Link>
+              </li>
+              <li className="mr-2">
+                <Link to="/stock" className="btn btn-accent">Stock</Link>
+              </li>
+              <li>
+                <button onClick={handleLogout} className="btn btn-error">Logout</button>
+              </li>
+            </>
+          ) : (
             <li>
-              <button onClick={handleLogout} className="btn btn-error">Logout</button>
+              <Link to="/login" className="btn btn-primary">Login</Link>
             </li>
-          </>
-        ) : (
-          <li>
-            <Link to="/login" className="btn btn-primary">Login</Link>
-          </li>
-        )}
+          )}
         </ul>
       </div>
     </nav>
