@@ -21,3 +21,5 @@ serveur : postgres
 utilisateur : postgres
 mdp : postgres
 base de données clean_code
+
+lancer les fixtures : docker compose exec backend npm run db:seed:up
