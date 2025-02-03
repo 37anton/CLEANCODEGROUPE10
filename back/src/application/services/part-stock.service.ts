@@ -57,4 +57,16 @@ export class PartStockService {
 
     return await this.partStockRepository.save(stock);
   }
+
+  async findAll(user: User): Promise<PartStock[]> {
+    return this.partStockRepository.find({
+      where: [
+        { company: user.company },
+        { concession: user.concession },
+        { client: user.client },
+      ],
+      relations: ["part"], // Charge aussi les détails des pièces
+    });
+  }
+  
 }

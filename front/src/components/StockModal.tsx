@@ -6,24 +6,25 @@ interface StockModalProps {
   isOpen: boolean;
   onClose: () => void;
   part: { id: string; name: string };
-  stock: { id?: string; partId: string; quantity: number; alertThreshold: number } | null;
-  onStockUpdate: (updatedStock: { partId: string; quantity: number; alertThreshold: number }) => void;
+  refreshStocks: () => void;
 }
 
-const StockModal = ({ isOpen, onClose, part, stock, onStockUpdate }: StockModalProps) => {
-  const [quantity, setQuantity] = useState(stock?.quantity || 0);
-  const [alertThreshold, setAlertThreshold] = useState(stock?.alertThreshold || 5);
+const StockModal = ({ isOpen, onClose, part, refreshStocks }: StockModalProps) => {
+  const [quantity, setQuantity] = useState(0);
+  const [alertThreshold, setAlertThreshold] = useState(5);
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
+    refreshStocks();
+
     e.preventDefault();
     setLoading(true);
-
+  
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:3000/part-stock",
         {
           partId: part.id,
@@ -31,14 +32,14 @@ const StockModal = ({ isOpen, onClose, part, stock, onStockUpdate }: StockModalP
           alertThreshold,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-
-      onStockUpdate(response.data);
+  
       notyf.success("Stock mis à jour !");
+  
+      refreshStocks();
+
       onClose();
     } catch (error) {
       console.error("Erreur lors de la mise à jour du stock :", error);
