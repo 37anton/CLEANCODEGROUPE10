@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'ty
 import { Part } from "./part.entity";
 import { Company } from "./company.entity";
 import { Concession } from "./concession.entity";
+import { Client } from "./client.entity";
 
 @Entity()
 export class PartStock {
@@ -16,6 +17,9 @@ export class PartStock {
 
   @ManyToOne(() => Concession, { nullable: true }) // Si c'est une concession qui gère le stock
   concession?: Concession;
+
+  @ManyToOne(() => Client, { nullable: true }) // Si c'est un client
+  client?: Client;
 
   @Column({ default: 0 }) // Nombre de pièces disponibles
   quantity: number;
