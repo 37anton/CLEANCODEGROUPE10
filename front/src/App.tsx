@@ -11,6 +11,7 @@ import MaintenanceHistory from './components/MaintenanceHistory';
 import FaultManagementPage from './pages/FaultManagementPage';
 import { AuthProvider } from './context/AuthContext';
 import Notifications from "./pages/Notifications";
+import Stock from "./pages/Stock"; //
 
 const App = () => {
   const vehicleId = 'vehicle1'; // Exemple d'identifiant de véhicule
@@ -30,6 +31,7 @@ const App = () => {
             <Link to="/login">Login</Link> |{' '}
             <Link to="/register">Register</Link> |{' '}
             <Link to="/dashboard">Dashboard</Link>
+            <Link to="/stock">Stock</Link>
           </nav>
           <Routes>
             {/* Routes existantes */}
@@ -44,6 +46,7 @@ const App = () => {
             {/* Nouvelles routes ajoutées */}
             <Route path="/maintenance-history" element={<MaintenanceHistory vehicleId={vehicleId} />} />
             <Route path="/fault-management" element={<FaultManagementPage />} />
+            <Route path="/stock" element={<Stock />} />
           </Routes>
         </div>
       </Router>
