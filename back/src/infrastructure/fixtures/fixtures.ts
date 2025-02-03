@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import { User } from "../../domain/entities/user.entity";
 import { Company } from "../../domain/entities/company.entity";
 import { Concession } from "../../domain/entities/concession.entity";
+import { Part } from "../../domain/entities/part.entity"; // Import de l'entité Part
 import * as bcrypt from 'bcryptjs';
 
 const dataSource = new DataSource({
@@ -98,6 +99,31 @@ async function seedDatabase() {
   user8.isAdmin = true;
   user8.concession = concession2;
   await dataSource.manager.save(user8);
+
+  // Création de pièces (Parts)
+  const parts = [
+    { name: "Filtre à huile" },
+    { name: "Plaquette de frein" },
+    { name: "Pneu" },
+    { name: "Bougie d'allumage" },
+    { name: "Batterie" },
+    { name: "Chaîne de transmission" },
+    { name: "Kit de frein arrière" },
+    { name: "Amortisseur avant" },
+    { name: "Amortisseur arrière" },
+    { name: "Disque de frein" },
+    { name: "Échappement" },
+    { name: "Guidon" },
+    { name: "Rétroviseur" },
+    { name: "Phare avant" },
+    { name: "Clignotant" }
+  ];
+
+  for (const partData of parts) {
+    const part = new Part();
+    part.name = partData.name;
+    await dataSource.manager.save(part);
+  }
 
   console.log("Fixtures ajoutées avec succès");
   await dataSource.destroy();
