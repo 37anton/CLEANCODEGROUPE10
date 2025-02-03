@@ -1,16 +1,18 @@
 import { useState } from "react";
 import axios from "axios";
+import notyf from "../utils/notyf";
 
 interface StockModalProps {
   isOpen: boolean;
   onClose: () => void;
   part: { id: string; name: string };
-  stock: { partId: string; quantity: number; alertThreshold: number };
+  stock: { id?: string; partId: string; quantity: number; alertThreshold: number } | null;
+  onStockUpdate: (updatedStock: { partId: string; quantity: number; alertThreshold: number }) => void;
 }
 
-const StockModal = ({ isOpen, onClose, part, stock }: StockModalProps) => {
-  const [quantity, setQuantity] = useState(stock.quantity);
-  const [alertThreshold, setAlertThreshold] = useState(stock.alertThreshold);
+const StockModal = ({ isOpen, onClose, part, stock, onStockUpdate }: StockModalProps) => {
+  const [quantity, setQuantity] = useState(stock?.quantity || 0);
+  const [alertThreshold, setAlertThreshold] = useState(stock?.alertThreshold || 5);
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
@@ -20,8 +22,8 @@ const StockModal = ({ isOpen, onClose, part, stock }: StockModalProps) => {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("token"); // On récupère le token
-      await axios.post(
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
         "http://localhost:3000/part-stock",
         {
           partId: part.id,
@@ -35,11 +37,12 @@ const StockModal = ({ isOpen, onClose, part, stock }: StockModalProps) => {
         }
       );
 
-      alert("Stock mis à jour !");
+      onStockUpdate(response.data);
+      notyf.success("Stock mis à jour !");
       onClose();
     } catch (error) {
       console.error("Erreur lors de la mise à jour du stock :", error);
-      alert("Erreur lors de la mise à jour du stock");
+      notyf.error("Erreur lors de la mise à jour du stock");
     } finally {
       setLoading(false);
     }
