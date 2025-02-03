@@ -10,11 +10,15 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { NotificationService } from "./application/services/notification.service";
 import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
-import { NotificationModule } from "./infrastructure/frameworks/nest.js/notification.module";
+import { NotificationModule } from "./infrastructure/frameworks/nestjs/notification.module";
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
 import { FaultModule } from './infrastructure/modules/fault.module';
+import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
+import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
+
+
 
 @Module({
   imports: [
@@ -41,6 +45,8 @@ import { FaultModule } from './infrastructure/modules/fault.module';
     AuthModule,
     MaintenanceModule,
     FaultModule,
+    PartModule,
+    PartStockModule
   ],
   providers: [NotificationService],
 })
