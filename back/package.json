@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:seed:up": "ts-node src/infrastructure/fixtures/fixtures.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -27,6 +28,7 @@
     "@nestjs/mongoose": "^11.0.0",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^5.0.1",
     "@nestjs/typeorm": "^11.0.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",

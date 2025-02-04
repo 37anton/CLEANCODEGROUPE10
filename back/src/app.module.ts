@@ -1,24 +1,37 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
+
+
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { ScheduleModule } from "@nestjs/schedule";
+import { NotificationService } from "./application/services/notification.service";
+import { Notification } from "./domain/entities/notification.entity";
+import { User } from "./domain/entities/user.entity";
+import { NotificationModule } from "./infrastructure/frameworks/nestjs/notification.module";
 
-// 👇 On importe les modules Mongoose et TypeORM
-import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
+import { FaultModule } from './infrastructure/modules/fault.module';
+import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
+import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
+
+
 
 @Module({
   imports: [
+
+    NotificationModule,
+    ScheduleModule.forRoot(), // Active le Cron Job
+    TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
+
     // Configuration globale du ConfigModule
-    ConfigModule.forRoot({ isGlobal: true }),
+      ConfigModule.forRoot({ isGlobal: true }),
 
-    // 👇 Configuration Mongoose pour MongoDB
-    MongooseModule.forRoot(
-      `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=admin`,
-    ),    
 
-    // 👇 Configuration TypeORM pour PostgreSQL
+
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -27,12 +40,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // Ne JAMAIS activer en production pour éviter de perdre des données
+      synchronize: true,
     }),
-
-    AuthModule, // AuthModule peut maintenant utiliser ConfigService
+    AuthModule,
+    MaintenanceModule,
+    FaultModule,
+    PartModule,
+    PartStockModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [NotificationService],
 })
 export class AppModule {}
