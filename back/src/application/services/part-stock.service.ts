@@ -5,6 +5,8 @@ import { PartStock } from "../../domain/entities/part-stock.entity";
 import { CreatePartStockDto } from "../../application/dto/create-part-stock.dto";
 import { User } from "../../domain/entities/user.entity";
 import { Part } from "../../domain/entities/part.entity";
+import { Notification } from "../../domain/entities/notification.entity";
+import { Cron } from "@nestjs/schedule";
 
 @Injectable()
 export class PartStockService {
@@ -14,7 +16,9 @@ export class PartStockService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Part)
-    private readonly partRepository: Repository<Part>
+    private readonly partRepository: Repository<Part>,
+    @InjectRepository(Notification)
+    private readonly notificationRepository: Repository<Notification>
   ) {}
 
   async updateStock(userId: string, createPartStockDto: CreatePartStockDto): Promise<PartStock> {
@@ -46,7 +50,7 @@ export class PartStockService {
     let stock = await this.partStockRepository.findOne({ where: condition });
   
     if (!stock) {
-      // S'il n'existe pas, on le crée avec la relation associée à l'utilisateur
+      // Si aucun stock n'existe, on le crée avec la relation associée à l'utilisateur
       stock = this.partStockRepository.create({
         part,
         quantity: createPartStockDto.quantity,
@@ -63,7 +67,7 @@ export class PartStockService {
   
     return await this.partStockRepository.save(stock);
   }
-
+  
   async findAll(user: User): Promise<PartStock[]> {
     const fullUser = await this.userRepository.findOne({
       where: { id: user.id },
@@ -98,5 +102,42 @@ export class PartStockService {
     return stocks;
   }
   
+  // Cron job qui s'exécute tous les jours à 4h du matin
+  @Cron('0 4 * * *')
+  async checkStocksAndNotify() {
+    console.log("Déclenchement du cron pour vérifier les stocks");
+    
+    // Récupérer tous les part stocks avec leurs relations (part, company, concession, client)
+    const stocks = await this.partStockRepository.find({
+      relations: ["part", "company", "concession", "client"]
+    });
   
+    for (const stock of stocks) {
+      if (stock.quantity < stock.alertThreshold) {
+        // On détermine les utilisateurs concernés en fonction de la relation présente
+        let users: User[] = [];
+        if (stock.company) {
+          users = await this.userRepository.find({ where: { company: { id: stock.company.id } } });
+        } else if (stock.concession) {
+          users = await this.userRepository.find({ where: { concession: { id: stock.concession.id } } });
+        } else if (stock.client) {
+          users = await this.userRepository.find({ where: { client: { id: stock.client.id } } });
+        }
+  
+        // Création du message de notification
+        const message = `Attention : le stock de ${stock.part.name} est insuffisant (Quantité: ${stock.quantity}, Seuil: ${stock.alertThreshold}).`;
+  
+        // Création d'une notification pour chaque utilisateur concerné
+        for (const user of users) {
+          const notification = this.notificationRepository.create({
+            message,
+            isRead: false,
+            user: user
+          });
+          await this.notificationRepository.save(notification);
+          console.log(`Notification créée pour ${user.email} pour la pièce ${stock.part.name}.`);
+        }
+      }
+    }
+  }
 }
