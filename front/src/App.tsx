@@ -6,15 +6,13 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import ProtectedRoute from './components/ProtectedRoute';
-import MaintenanceHistory from './components/MaintenanceHistory';
-import FaultManagementPage from './pages/FaultManagementPage';
 import { AuthProvider } from './context/AuthContext';
 import Notifications from "./pages/Notifications";
 import Stock from "./pages/Stock"; //
 import Orders from "./pages/Orders";
 
 const App = () => {
-  const vehicleId = 'vehicle1'; // Exemple d'identifiant de véhicule
+
 
 
   return (
@@ -26,8 +24,6 @@ const App = () => {
           <h1>Vehicle Management System</h1>
           <nav style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0' }}>
             <Link to="/">Home</Link> |{' '}
-            <Link to="/maintenance-history">Maintenance History</Link> |{' '}
-            <Link to="/fault-management">Fault Management</Link> |{' '}
             <Link to="/login">Login</Link> |{' '}
             <Link to="/register">Register</Link> |{' '}
             <Link to="/dashboard">Dashboard</Link>
@@ -45,8 +41,7 @@ const App = () => {
             </Route>
 
             {/* Nouvelles routes ajoutées */}
-            <Route path="/maintenance-history" element={<MaintenanceHistory vehicleId={vehicleId} />} />
-            <Route path="/fault-management" element={<FaultManagementPage />} />
+
             <Route path="/stock" element={<Stock />} />
           </Routes>
         </div>
