@@ -19,6 +19,7 @@ import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
 import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
 import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
+import { OrderModule } from "./infrastructure/frameworks/nestjs/order.module";
 
 
 
@@ -47,7 +48,8 @@ import { PartStock } from './domain/entities/part-stock.entity';
     FaultModule,
     PartModule,
     PartStockModule,
-    NotificationModule
+    NotificationModule,
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService, NotificationService],
