@@ -1,4 +1,14 @@
-copier le contenu de .env.exemple dans un nouveau fichier .env à la racine du projet
+copier le contenu de .env.exemple dans un nouveau fichier .env à la racine du projet :
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=clean_code
+POSTGRES_URI=postgresql://postgres:postgres@postgres:5432
+STORAGE_ADAPTER=in-memory
+JWT_SECRET=mySuperSecretKey
+
+faire un .env dans /front
 
 faire docker-compose up
 
