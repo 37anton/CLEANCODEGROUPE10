@@ -17,6 +17,8 @@ import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
 import { FaultModule } from './infrastructure/modules/fault.module';
 import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
 import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
+import { Part } from './domain/entities/part.entity';
+import { PartStock } from './domain/entities/part-stock.entity';
 
 
 
@@ -28,9 +30,7 @@ import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.m
     TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
 
     // Configuration globale du ConfigModule
-      ConfigModule.forRoot({ isGlobal: true }),
-
-
+    ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -46,8 +46,10 @@ import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.m
     MaintenanceModule,
     FaultModule,
     PartModule,
-    PartStockModule
+    PartStockModule,
+    NotificationModule
   ],
-  providers: [NotificationService],
+  controllers: [AppController],
+  providers: [AppService, NotificationService],
 })
 export class AppModule {}
