@@ -1,5 +1,9 @@
 import { DataSource } from "typeorm";
 import { User } from "../../domain/entities/user.entity";
+import { Supplier } from "../../domain/entities/supplier.entity";
+import { PartSupplier } from "../../domain/entities/part-supplier.entity";
+import { Order, OrderStatus } from "../../domain/entities/order.entity";
+import { OrderItem } from "../../domain/entities/order-item.entity";
 import { Company } from "../../domain/entities/company.entity";
 import { Concession } from "../../domain/entities/concession.entity";
 import { Part } from "../../domain/entities/part.entity"; // Import de l'entité Part
@@ -124,6 +128,106 @@ async function seedDatabase() {
     part.name = partData.name;
     await dataSource.manager.save(part);
   }
+
+  // Création de 2 fournisseurs
+  const supplier1 = new Supplier();
+  supplier1.name = "Supplier A";
+  supplier1.phone = "0123456789";
+  supplier1.deliveryTime = 5;
+  supplier1.city = "Paris";
+  await dataSource.manager.save(supplier1);
+
+  const supplier2 = new Supplier();
+  supplier2.name = "Supplier B";
+  supplier2.phone = "0987654321";
+  supplier2.deliveryTime = 7;
+  supplier2.city = "Lyon";
+  await dataSource.manager.save(supplier2);
+
+  // Création d'une commande pour Company 1 auprès de Supplier A
+  const order1 = new Order();
+  order1.supplier = supplier1;
+  order1.company = company1; // Lien avec Company 1
+  order1.status = OrderStatus.PENDING;
+  order1.expectedDeliveryDate = new Date();
+  order1.expectedDeliveryDate.setDate(order1.expectedDeliveryDate.getDate() + supplier1.deliveryTime);
+  order1.totalPrice = 0; // Calculé après ajout des items
+  await dataSource.manager.save(order1);
+
+  // Récupération des pièces "Filtre à huile" et "Disque de frein"
+  const partFilter = await dataSource.manager.findOneBy(Part, { name: "Filtre à huile" });
+  const partBrakeDisc = await dataSource.manager.findOneBy(Part, { name: "Disque de frein" });
+
+  if (partFilter && partBrakeDisc) {
+    // Supplier A - Filtre à huile à 10€
+    const partSupplier1 = new PartSupplier();
+    partSupplier1.part = partFilter;
+    partSupplier1.supplier = supplier1;
+    partSupplier1.price = 10;
+    await dataSource.manager.save(partSupplier1);
+
+    // Supplier B - Filtre à huile à 15€
+    const partSupplier2 = new PartSupplier();
+    partSupplier2.part = partFilter;
+    partSupplier2.supplier = supplier2;
+    partSupplier2.price = 15;
+    await dataSource.manager.save(partSupplier2);
+
+    // Supplier A - Disque de frein à 25€
+    const partSupplier3 = new PartSupplier();
+    partSupplier3.part = partBrakeDisc;
+    partSupplier3.supplier = supplier1;
+    partSupplier3.price = 25;
+    await dataSource.manager.save(partSupplier3);
+
+    // Supplier B - Disque de frein à 30€
+    const partSupplier4 = new PartSupplier();
+    partSupplier4.part = partBrakeDisc;
+    partSupplier4.supplier = supplier2;
+    partSupplier4.price = 30;
+    await dataSource.manager.save(partSupplier4);
+  } else {
+    console.error("Les pièces n'ont pas été trouvées en base.");
+  }
+
+  // Ajoute des OrderItems à la commande order1
+  // Vérification des pièces avant de récupérer les relations PartSupplier
+  if (!partFilter || !partBrakeDisc) {
+    throw new Error("Les pièces 'Filtre à huile' ou 'Disque de frein' sont introuvables.");
+  }
+
+  // Récupération des relations entre fournisseurs et pièces
+  const partSupplierFilterA = await dataSource.manager.findOne(PartSupplier, {
+    where: { part: { id: partFilter.id }, supplier: { id: supplier1.id } }
+  });
+
+  const partSupplierBrakeDiscA = await dataSource.manager.findOne(PartSupplier, {
+    where: { part: { id: partBrakeDisc.id }, supplier: { id: supplier1.id } }
+  });
+
+  if (!partSupplierFilterA || !partSupplierBrakeDiscA) {
+    throw new Error("Impossible de trouver les relations PartSupplier pour Supplier A.");
+  }
+
+  // Ajout des OrderItems à la commande
+  const orderItem1 = new OrderItem();
+  orderItem1.order = order1;
+  orderItem1.partSupplier = partSupplierFilterA;
+  orderItem1.quantity = 3;
+  orderItem1.price = partSupplierFilterA.price; // Stocke le prix unitaire
+  await dataSource.manager.save(orderItem1);
+
+  const orderItem2 = new OrderItem();
+  orderItem2.order = order1;
+  orderItem2.partSupplier = partSupplierBrakeDiscA;
+  orderItem2.quantity = 2;
+  orderItem2.price = partSupplierBrakeDiscA.price; // Stocke le prix unitaire
+  await dataSource.manager.save(orderItem2);
+
+  // Mise à jour du prix total de la commande
+  order1.totalPrice = (orderItem1.quantity * orderItem1.price) + (orderItem2.quantity * orderItem2.price);
+  await dataSource.manager.save(order1);
+
 
   console.log("Fixtures ajoutées avec succès");
   await dataSource.destroy();

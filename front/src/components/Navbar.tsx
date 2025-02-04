@@ -35,6 +35,11 @@ const Navbar = () => {
                       Stock
                     </Link>
                   </li>
+                  <li className="mr-2">
+                    <Link to="/orders" className="btn btn-primary">
+                      Orders
+                    </Link>
+                  </li>
                   <li>
                     <button onClick={handleLogout} className="btn btn-error">
                       Logout
@@ -89,6 +94,11 @@ const Navbar = () => {
               <li>
                 <Link to="/stock" className="btn btn-accent w-full">
                   Stock
+                </Link>
+              </li>
+              <li>
+                <Link to="/orders" className="btn btn-primary w-full">
+                  Orders
                 </Link>
               </li>
               <li>
