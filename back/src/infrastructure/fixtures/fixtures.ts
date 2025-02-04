@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import { User } from "../../domain/entities/user.entity";
 import { Company } from "../../domain/entities/company.entity";
 import { Concession } from "../../domain/entities/concession.entity";
+import { Client } from "../../domain/entities/client.entity";
 import * as bcrypt from 'bcryptjs';
 
 const dataSource = new DataSource({
@@ -19,6 +20,15 @@ async function seedDatabase() {
   await dataSource.initialize();
 
   console.log("Connexion à la base de données");
+
+  // Création de 2 clients
+  const client1 = new Client();
+  client1.name = "Client 1";
+  await dataSource.manager.save(client1);
+
+  const client2 = new Client();
+  client2.name = "Company 2";
+  await dataSource.manager.save(client2);
 
   // Création de 2 companies
   const company1 = new Company();
@@ -98,6 +108,34 @@ async function seedDatabase() {
   user8.isAdmin = true;
   user8.concession = concession2;
   await dataSource.manager.save(user8);
+
+  const user9 = new User();
+  user9.email = "user1@client1.com";
+  user9.password = passwordHash;
+  user9.isAdmin = false;
+  user9.client = client1;
+  await dataSource.manager.save(user9);
+
+  const user10 = new User();
+  user10.email = "user2@client1.com";
+  user10.password = passwordHash;
+  user10.isAdmin = true;
+  user10.client = client1;
+  await dataSource.manager.save(user10);
+
+  const user11 = new User();
+  user11.email = "user1@client2.com";
+  user11.password = passwordHash;
+  user11.isAdmin = false;
+  user11.client = client2;
+  await dataSource.manager.save(user11);
+
+  const user12 = new User();
+  user12.email = "user2@client2.com";
+  user12.password = passwordHash;
+  user12.isAdmin = true;
+  user12.client = client2;
+  await dataSource.manager.save(user12);
 
   console.log("Fixtures ajoutées avec succès");
   await dataSource.destroy();

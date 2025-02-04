@@ -23,10 +23,22 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
     const user = await this.userService.findByEmail(email);
+  
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload = { id: user.id, email: user.email, role: user.role };
+  
+    // Préparer le payload pour le JWT
+    const payload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      isAdmin: user.isAdmin,
+      companyId: user.company?.id || null,    // Inclure l'ID de la company, si existant
+      clientId: user.client?.id || null,     // Inclure l'ID du client, si existant
+      concessionId: user.concession?.id || null, // Inclure l'ID de la concession, si existant
+    };
+  
     return {
       accessToken: this.jwtService.sign(payload),
     };

@@ -32,13 +32,13 @@ export class User {
   isAdmin: boolean;
 
   @ManyToOne(() => Company, company => company.users, { nullable: true })
-  company: Company;
+  company: Company | null;
 
   @ManyToOne(() => Concession, concession => concession.users, { nullable: true })
-  concession: Concession;
+  concession: Concession | null;
 
   @ManyToOne(() => Client, client => client.users, { nullable: true })
-  client: Client;
+  client: Client | null;
 
   @OneToMany(() => Notification, (notification) => notification.user, { cascade: true })
   notifications: Notification[];

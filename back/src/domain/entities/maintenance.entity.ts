@@ -1,5 +1,5 @@
 // src/domain/entities/maintenance.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Interval } from './interval.entity';
 
 @Entity()
@@ -7,6 +7,7 @@ export class Maintenance {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // Référence à la moto (clé étrangère stockée sous forme de string)
   @Column()
   vehicleId: string;
 

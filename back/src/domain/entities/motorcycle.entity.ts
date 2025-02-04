@@ -1,22 +1,22 @@
-// src/domain/entities/motorcycle.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Concession } from './concession.entity';
-import { Trial } from './trial.entity';
-import { ClientMotorcycle } from './client-motorcycle.entity';
+import { Concession } from './concession.entity'; // Doit être défini
+
 import { Incident } from './incident.entity';
 import { Warranty } from './warranty.entity';
 import { Maintenance } from './maintenance.entity';
-import { MotorcyclePart } from './motorcycle-part.entity';
-import { CompanyMotorcycle } from './company-motorcycle.entity';
 import { Interval } from './interval.entity';
+import { CompanyMotorcycle } from './company-motorcycle.entity';
+import { ClientMotorcycle } from './client-motorcycle.entity';
+import { MotorcyclePart } from './motorcycle-part.entity';
+import { Trial } from './trial.entity';
 
 @Entity()
 export class Motorcycle {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  vin: string; // Vehicle Identification Number
+  @Column({ unique: true })
+  vin: string;
 
   @Column()
   model: string;
@@ -24,7 +24,6 @@ export class Motorcycle {
   @Column({ type: 'timestamp' })
   manufactureDate: Date;
 
-  // Maintenance info
   @Column({ type: 'timestamp' })
   lastMaintenanceDate: Date;
 
@@ -34,14 +33,9 @@ export class Motorcycle {
   @Column()
   lastMaintenanceMileage: number;
 
+  // Optionnel : la moto peut être créée par une concession, une company ou un client.
   @ManyToOne(() => Concession, concession => concession.motorcycles, { nullable: true })
   concession: Concession;
-
-  @OneToMany(() => Trial, trial => trial.motorcycle)
-  trials: Trial[];
-
-  @OneToMany(() => ClientMotorcycle, cm => cm.motorcycle)
-  clientMotorcycles: ClientMotorcycle[];
 
   @OneToMany(() => Incident, incident => incident.motorcycle)
   incidents: Incident[];
@@ -52,13 +46,19 @@ export class Motorcycle {
   @OneToMany(() => Maintenance, maintenance => maintenance.vehicleId)
   maintenances: Maintenance[];
 
-  @OneToMany(() => MotorcyclePart, mp => mp.motorcycle)
-  motorcycleParts: MotorcyclePart[];
-
   @OneToMany(() => Interval, interval => interval.motorcycle)
   intervals: Interval[];
 
-  // For CompanyMotorcycle relation:
+  // Relations avec les tables d'association
   @OneToMany(() => CompanyMotorcycle, cm => cm.motorcycle)
   companyMotorcycles: CompanyMotorcycle[];
+
+  @OneToMany(() => ClientMotorcycle, cm => cm.motorcycle)
+  clientMotorcycles: ClientMotorcycle[];
+
+  @OneToMany(() => MotorcyclePart, mp => mp.motorcycle)
+  motorcycleParts: MotorcyclePart[];
+
+  @OneToMany(() => Trial, trial => trial.motorcycle)
+  trials: Trial[];
 }

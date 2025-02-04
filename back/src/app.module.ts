@@ -9,9 +9,12 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ScheduleModule } from "@nestjs/schedule";
 import { NotificationService } from "./application/services/notification.service";
 import { Notification } from "./domain/entities/notification.entity";
+import { MaintenanceCronService } from './application/services/maintenance-cron.service'; // ADDED
 import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/frameworks/nest.js/notification.module";
-
+import { IncidentModule } from './infrastructure/modules/incident.module';
+import { WarrantyModule } from './infrastructure/modules/warranty.module';
+import { MotorcycleModule } from './infrastructure/modules/motorcycle.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
 import { FaultModule } from './infrastructure/modules/fault.module';
@@ -40,8 +43,12 @@ import { FaultModule } from './infrastructure/modules/fault.module';
     }),
     AuthModule,
     MaintenanceModule,
+    IncidentModule,
+    WarrantyModule,
     FaultModule,
+    MotorcycleModule,
+    
   ],
-  providers: [NotificationService],
+  providers: [MaintenanceCronService, NotificationService],
 })
 export class AppModule {}

@@ -1,47 +1,46 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+// src/pages/NotificationsPage.tsx
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 interface Notification {
-  id: number;
+  id: string;
   message: string;
-  isRead: boolean;
+  createdAt: string;
 }
 
-const Notifications = () => {
+const NotificationsPage: React.FC = () => {
   const { token } = useAuth();
-  const navigate = useNavigate();
-  const [notifications, setNotifications] = useState<Notification[]>([]); 
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login"); // Redirige vers login si l'utilisateur n'est pas connecté
-      return;
-    }
-
     axios
-      .get("http://localhost:3000/notifications", {
-        headers: { Authorization: `Bearer ${token}` }, // Envoie du token pour sécuriser la requête
+      .get('http://localhost:3000/notification/all-for-user', {
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        setNotifications(response.data);
+      .then((res) => {
+        setNotifications(res.data);
+        setLoading(false);
       })
-      .catch((error) => {
-        console.error("Erreur lors du chargement des notifications :", error);
+      .catch((err) => {
+        console.error('Erreur notifications :', err);
+        setLoading(false);
       });
-  }, [token, navigate]);
+  }, [token]);
+
+  if (loading) return <div>Chargement...</div>;
 
   return (
-    <div className="min-h-screen p-6">
-      <h1 className="text-2xl font-bold mb-6">🔔 Notifications</h1>
+    <div>
+      <h2>Mes notifications</h2>
       {notifications.length === 0 ? (
-        <p className="text-gray-500">Aucune notification pour le moment.</p>
+        <p>Aucune notification</p>
       ) : (
-        <ul className="space-y-4">
+        <ul>
           {notifications.map((notif) => (
-            <li key={notif.id} className={`p-4 rounded-lg ${notif.isRead ? "bg-gray-200" : "bg-blue-100 font-bold"}`}>
-              {notif.message}
+            <li key={notif.id}>
+              {notif.message} <small>({new Date(notif.createdAt).toLocaleString()})</small>
             </li>
           ))}
         </ul>
@@ -50,4 +49,4 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export default NotificationsPage;

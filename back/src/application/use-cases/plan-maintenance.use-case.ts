@@ -12,33 +12,45 @@ export class PlanMaintenanceUseCase {
       save(maintenance: Maintenance): Promise<Maintenance>;
       findByVehicleId(vehicleId: string): Promise<Maintenance[]>;
     },
+    @Inject('CustomMotorcycleRepository')
+    private readonly motorcycleRepository: {
+      findById(id: string): Promise<Motorcycle>;
+      update(motorcycle: Motorcycle): Promise<Motorcycle>;
+    },
   ) {
     console.log('[DEBUG] PlanMaintenanceUseCase loaded');
   }
 
-  async execute(motorcycle: Motorcycle): Promise<Maintenance> {
-    console.log('[DEBUG] Executing with motorcycle:', motorcycle);
+  async execute(motorcycleData: Motorcycle): Promise<Maintenance> {
+    console.log('[DEBUG] Executing maintenance for motorcycle:', motorcycleData);
 
-    // Calculate next maintenance date and mileage threshold according to configuration
-    const { nextDate, nextKm } = MaintenanceSchedulerService.calculateNextMaintenance(motorcycle);
+    const { nextDate, nextKm } = MaintenanceSchedulerService.calculateNextMaintenance(motorcycleData);
 
     const now = new Date();
     let status: 'SCHEDULED' | 'COMPLETED' = 'SCHEDULED';
 
-    // If current mileage is less than the threshold and current date is before scheduled date, mark as COMPLETED
-    if (motorcycle.mileage < nextKm && now < nextDate) {
+    // Exemple de logique : si le kilométrage est inférieur au seuil ET si la date actuelle est avant la date prévue, considérer comme COMPLETED.
+    if (motorcycleData.mileage < nextKm && now < nextDate) {
       status = 'COMPLETED';
     }
 
     const maintenance = new Maintenance();
     maintenance.id = crypto.randomUUID();
-    maintenance.vehicleId = motorcycle.id;
+    maintenance.vehicleId = motorcycleData.id;
     maintenance.scheduledDate = nextDate;
     maintenance.status = status;
     maintenance.scheduledMileage = nextKm;
 
     console.log('[DEBUG] Maintenance planned:', maintenance);
     await this.maintenanceRepository.save(maintenance);
+
+    if (status === 'COMPLETED') {
+      const motorcycle = await this.motorcycleRepository.findById(motorcycleData.id);
+      motorcycle.lastMaintenanceDate = nextDate;
+      motorcycle.lastMaintenanceMileage = nextKm;
+      await this.motorcycleRepository.update(motorcycle);
+      console.log('[DEBUG] Motorcycle updated with new maintenance date and mileage.');
+    }
 
     return maintenance;
   }

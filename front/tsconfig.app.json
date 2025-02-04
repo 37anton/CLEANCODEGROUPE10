@@ -22,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "../back/src/application", "../back/src/infrastructure", "../back/src/domain"]
+  "include": ["src", "../back/src/application", "../back/src/infrastructure", "../back/src/domain", "../back/src/auth"]
 }
