@@ -33,3 +33,8 @@ mdp : postgres
 base de données clean_code
 
 lancer les fixtures : docker compose exec backend npm run db:seed:up
+
+
+
+Un cron est déclenché tous les jours à 4h du matin pour déclencher des notifications concernant les seuils des stocks.
+Si un produit a une quantité < au stock, tous les utilisateurs liés à ce stock (via Company, Concession, ou Client) ils auront une notification disponibles sur /notifications
