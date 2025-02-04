@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import notyf from "../utils/notyf";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext"; // Import de AuthContext
+import { useAuth } from "../context/AuthContext"; // Import du contexte d'authentification
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,23 +15,23 @@ const Login = () => {
     try {
       const response = await axios.post("http://localhost:3000/auth/login", { email, password });
 
-      if (response.data?.accessToken) {
-        login(response.data.accessToken); // Met à jour le contexte immédiatement
+      if (response.data?.accessToken && response.data?.user) {
+        login(response.data.accessToken, response.data.user); // Met à jour le contexte avec le token et l'utilisateur
         notyf.success("Connexion réussie !");
         navigate("/dashboard");
       } else {
-        console.warn("⚠️ Aucune accessToken dans la réponse !");
+        console.warn("⚠️ Aucune accessToken ou user dans la réponse !");
         notyf.error("Échec de la connexion !");
       }
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {  // Vérifie si l'erreur vient d'Axios
-        console.error("Erreur Axios :", error.response?.data); 
+      if (axios.isAxiosError(error)) {
+        console.error("Erreur Axios :", error.response?.data);
         notyf.error(error.response?.data?.message || "Échec de la connexion !");
       } else {
         console.error("Erreur inconnue :", error);
         notyf.error("Une erreur inattendue est survenue !");
       }
-    }    
+    }
   };
 
   return (

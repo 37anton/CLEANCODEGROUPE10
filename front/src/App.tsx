@@ -1,4 +1,3 @@
-
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './pages/Login';
@@ -12,6 +11,7 @@ import FaultManagementPage from './pages/FaultManagementPage';
 import { AuthProvider } from './context/AuthContext';
 import Notifications from "./pages/Notifications";
 import Stock from "./pages/Stock"; //
+import Orders from "./pages/Orders";
 
 const App = () => {
   const vehicleId = 'vehicle1'; // Exemple d'identifiant de véhicule
@@ -41,6 +41,7 @@ const App = () => {
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/orders" element={<Orders />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}
