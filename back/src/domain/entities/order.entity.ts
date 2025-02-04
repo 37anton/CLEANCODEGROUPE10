@@ -1,46 +1,44 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, Column } from "typeorm";
-import { Supplier } from "./supplier.entity";
-import { OrderItem } from "./order-item.entity";
-import { Company } from "./company.entity";
-import { Concession } from "./concession.entity";
-import { Client } from "./client.entity";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, Column } from 'typeorm';
+import { Supplier } from './supplier.entity';
+import { OrderItem } from './order-item.entity';
+import { Company } from './company.entity';
+import { Concession } from './concession.entity';
+import { Client } from './client.entity';
 
 export enum OrderStatus {
-  PENDING = "En attente",
-  SHIPPED = "Expédié",
-  DELIVERED = "Livré",
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  SHIPPED = 'SHIPPED',
+  DELIVERED = 'DELIVERED',
+  CANCELED = 'CANCELED',
 }
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => Supplier, { nullable: false })
-  supplier: Supplier; // Fournisseur auprès duquel la commande est passée
+  supplier: Supplier;
 
   @ManyToOne(() => Company, { nullable: true })
-  company?: Company; // Une entreprise peut passer une commande
+  company: Company;
 
   @ManyToOne(() => Concession, { nullable: true })
-  concession?: Concession; // Une concession peut passer une commande
+  concession: Concession;
 
   @ManyToOne(() => Client, { nullable: true })
-  client?: Client; // Un client peut aussi passer une commande
+  client: Client;
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
-  orderItems: OrderItem[]; // Liste des pièces commandées
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
+  orderItems: OrderItem[];
 
-  @Column({
-    type: "enum",
-    enum: OrderStatus,
-    default: OrderStatus.PENDING,
-  })
-  status: OrderStatus; // Statut de la commande
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  totalPrice: number;
 
-  @Column("decimal", { precision: 10, scale: 2, default: 0 })
-  totalPrice: number; // Prix total de la commande
+  @Column({ type: 'timestamp' })
+  expectedDeliveryDate: Date;
 
-  @Column({ type: "timestamp", nullable: true })
-  expectedDeliveryDate: Date; // Date de livraison prévue
+  @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PENDING })
+  status: OrderStatus;
 }

@@ -22,5 +22,13 @@ export class UserService {
       where: { email },
       relations: ["company", "concession", "client"],
     });
-  }  
+  }
+
+  async findById(id: string, relations: string[] = []) {
+    return this.userRepository.findOne({
+      where: { id },
+      relations,
+    });
+  }
+  
 }
