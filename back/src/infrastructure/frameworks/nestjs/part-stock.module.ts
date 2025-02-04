@@ -6,10 +6,12 @@ import { PartStock } from "../../../domain/entities/part-stock.entity";
 import { Part } from "../../../domain/entities/part.entity";
 import { User } from "../../../domain/entities/user.entity";
 import { UserModule } from "../nestjs/user.module";
+import { Notification } from "../../../domain/entities/notification.entity";
+
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PartStock, Part, User]),
+    TypeOrmModule.forFeature([PartStock, Part, User, Notification]),
     UserModule
   ],
   controllers: [PartStockController],
