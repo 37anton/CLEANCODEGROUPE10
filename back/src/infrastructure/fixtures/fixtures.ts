@@ -5,6 +5,7 @@ import { PartSupplier } from "../../domain/entities/part-supplier.entity";
 import { Order, OrderStatus } from "../../domain/entities/order.entity";
 import { OrderItem } from "../../domain/entities/order-item.entity";
 import { Company } from "../../domain/entities/company.entity";
+import { Driver } from "../../domain/entities/driver.entity";
 import { Concession } from "../../domain/entities/concession.entity";
 import { Part } from "../../domain/entities/part.entity"; // Import de l'entité Part
 import * as bcrypt from 'bcryptjs';
@@ -228,6 +229,20 @@ async function seedDatabase() {
   order1.totalPrice = (orderItem1.quantity * orderItem1.price) + (orderItem2.quantity * orderItem2.price);
   await dataSource.manager.save(order1);
 
+  // Création de 2 conducteurs pour Company 1
+  const driver1 = new Driver();
+  driver1.name = "Jean Dupont";
+  driver1.license = "A2";
+  driver1.experience = 3; // 3 ans d'expérience
+  driver1.company = company1;
+  await dataSource.manager.save(driver1);
+
+  const driver2 = new Driver();
+  driver2.name = "Sophie Martin";
+  driver2.license = "A";
+  driver2.experience = 5; // 5 ans d'expérience
+  driver2.company = company1;
+  await dataSource.manager.save(driver2);
 
   console.log("Fixtures ajoutées avec succès");
   await dataSource.destroy();

@@ -16,6 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
 import { FaultModule } from './infrastructure/modules/fault.module';
 import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
+import { DriverModule  } from "./infrastructure/frameworks/nestjs/driver.module";
 import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
 import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
@@ -49,7 +50,8 @@ import { OrderModule } from "./infrastructure/frameworks/nestjs/order.module";
     PartModule,
     PartStockModule,
     NotificationModule,
-    OrderModule
+    OrderModule,
+    DriverModule
   ],
   controllers: [AppController],
   providers: [AppService, NotificationService],
