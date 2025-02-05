@@ -14,6 +14,7 @@ export class DriverService {
     return this.driverRepository.find({
       where: { company: { id: companyId } },
       relations: ['company'], // Inclure les détails de la company si nécessaire
+      order: { name: "ASC" }
     });
   }
 
