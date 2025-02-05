@@ -40,6 +40,11 @@ const Navbar = () => {
                       Orders
                     </Link>
                   </li>
+                  <li className="mr-2">
+                    <Link to="/drivers" className="btn btn-info">
+                      Drivers
+                    </Link>
+                  </li>
                   <li>
                     <button onClick={handleLogout} className="btn btn-error">
                       Logout
@@ -99,6 +104,11 @@ const Navbar = () => {
               <li>
                 <Link to="/orders" className="btn btn-primary w-full">
                   Orders
+                </Link>
+              </li>
+              <li>
+                <Link to="/drivers" className="btn btn-info w-full">
+                  Drivers
                 </Link>
               </li>
               <li>
