@@ -11,7 +11,7 @@ interface Motorcycle {
   lastMaintenanceDate: string;
   mileage: number;
   lastMaintenanceMileage: number;
-  concession?: { id: string }; // si applicable
+  concession?: { id: string };
 }
 
 const MotorcycleList: React.FC = () => {
@@ -35,22 +35,22 @@ const MotorcycleList: React.FC = () => {
 
   return (
     <div>
-      <h1>My Motorcycles</h1>
+      <h1>Mes Motos</h1>
       {motorcycles.length === 0 ? (
-        <p>No motorcycles found</p>
+        <p>Aucune moto trouvée</p>
       ) : (
         <ul>
           {motorcycles.map((moto) => (
             <li key={moto.id}>
-              <p>
-                {moto.model} - {moto.vin}
-              </p>
-              {/* Boutons pour modifier et supprimer */}
+              <p>{moto.model} - {moto.vin}</p>
               <Link to={`/motorcycles/update/${moto.id}`}>
-                <button>Edit</button>
+                <button>Modifier</button>
               </Link>
               <Link to={`/motorcycles/delete/${moto.id}`}>
-                <button>Delete</button>
+                <button>Supprimer</button>
+              </Link>
+              <Link to={`/maintenance-plan/${moto.id}`}>
+                <button>Voir Maintenance</button>
               </Link>
             </li>
           ))}

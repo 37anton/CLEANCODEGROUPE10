@@ -13,7 +13,10 @@ import Orders from "./pages/Orders";
 import  Motorcycles  from "./pages/Motorcycles"
 import UpdateMotorcycle from './components/UpdateMotorcycle';
 import DeleteMotorcycle from './components/DeleteMotorcycle';
-
+import MaintenancePlanPage from './pages/MaintenancePlanPage';
+import CreateIntervalDefinition from './pages/CreateIntervalDefinition';
+import UpdateIntervalDefinition from './pages/UpdateIntervalDefinition';
+import IntervalDefinitionList from './pages/IntervalDefinitionList';
 const App = () => {
 
 
@@ -31,7 +34,8 @@ const App = () => {
             <Link to="/register">Register</Link> |{' '}
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/stock">Stock</Link>
-            <Link to="/motorcycles">Create moto</Link>
+            <Link to="/motorcycles">moto</Link>
+            <Link to="/interval-definitions">Liste des Intervalles</Link>
           </nav>
           <Routes>
             {/* Routes existantes */}
@@ -44,6 +48,10 @@ const App = () => {
               <Route path="/motorcycles" element={<Motorcycles />} />
               <Route path="/motorcycles/update/:id" element={<UpdateMotorcycle />} />
               <Route path="/motorcycles/delete/:id" element={<DeleteMotorcycle />} />
+              <Route path="/maintenance-plan/:motorcycleId" element={<MaintenancePlanPage />} />
+              <Route path="/create-interval" element={<CreateIntervalDefinition />} /> {/* Nouvelle route */}
+              <Route path="/update-interval/:id" element={<UpdateIntervalDefinition />} />
+              <Route path="/interval-definitions" element={<IntervalDefinitionList />} />
               <Route path="/orders" element={<Orders />} />
             </Route>
 

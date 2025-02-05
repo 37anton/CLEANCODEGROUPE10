@@ -1,5 +1,6 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 interface CreateMotorcycleDto {
   vin: string;
@@ -10,16 +11,40 @@ interface CreateMotorcycleDto {
   lastMaintenanceMileage: number;
 }
 
+interface IntervalDefinition {
+  id: string;
+  model: string;
+  km: number;
+  timeInYears: number;
+}
+
 const CreateMotorcycle: React.FC = () => {
+  const { token } = useAuth();
   const [vin, setVin] = useState<string>('');
-  const [model, setModel] = useState<string>('');
+  const [model, setModel] = useState<string>(''); // sera choisi via dropdown
   const [manufactureDate, setManufactureDate] = useState<string>('');
   const [lastMaintenanceDate, setLastMaintenanceDate] = useState<string>('');
   const [mileage, setMileage] = useState<number>(0);
   const [lastMaintenanceMileage, setLastMaintenanceMileage] = useState<number>(0);
+  const [intervalDefinitions, setIntervalDefinitions] = useState<IntervalDefinition[]>([]);
 
-  // Supposons que le token JWT est stocké dans localStorage
-  const token = localStorage.getItem('token');
+  // Récupère la liste des définitions d'intervalles pour alimenter le dropdown
+  useEffect(() => {
+    const fetchIntervalDefinitions = async () => {
+      try {
+        const response = await axios.get<IntervalDefinition[]>('http://localhost:3000/interval-definitions', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIntervalDefinitions(response.data);
+        if (response.data.length > 0) {
+          setModel(response.data[0].model); // valeur par défaut
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des définitions d'intervalle", error);
+      }
+    };
+    fetchIntervalDefinitions();
+  }, [token]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -37,12 +62,10 @@ const CreateMotorcycle: React.FC = () => {
       const response = await axios.post(
         'http://localhost:3000/motorcycles/create',
         dto,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log('Moto créée :', response.data);
-      // Vous pouvez ici réinitialiser le formulaire ou rediriger l'utilisateur
+      // Réinitialisation ou redirection
     } catch (error) {
       console.error('Erreur lors de la création de la moto', error);
     }
@@ -62,12 +85,13 @@ const CreateMotorcycle: React.FC = () => {
       </div>
       <div>
         <label>Modèle :</label>
-        <input
-          type="text"
-          value={model}
-          onChange={(e) => setModel(e.target.value)}
-          required
-        />
+        <select value={model} onChange={(e) => setModel(e.target.value)} required>
+          {intervalDefinitions.map(def => (
+            <option key={def.id} value={def.model}>
+              {def.model}
+            </option>
+          ))}
+        </select>
       </div>
       <div>
         <label>Date de Fabrication :</label>
@@ -101,9 +125,7 @@ const CreateMotorcycle: React.FC = () => {
         <input
           type="number"
           value={lastMaintenanceMileage}
-          onChange={(e) =>
-            setLastMaintenanceMileage(Number(e.target.value))
-          }
+          onChange={(e) => setLastMaintenanceMileage(Number(e.target.value))}
           required
         />
       </div>

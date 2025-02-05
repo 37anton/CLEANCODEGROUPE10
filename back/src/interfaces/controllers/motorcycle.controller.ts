@@ -3,6 +3,8 @@ import { CreateMotorcycleUseCase } from '../../application/use-cases/create-moto
 import { GetMotorcyclesUseCase } from '../../application/use-cases/get-motorcycles.use-case';
 import { UpdateMotorcycleUseCase } from '../../application/use-cases/update-motorcycle.use-case';
 import { DeleteMotorcycleUseCase } from '../../application/use-cases/delete-motorcycle.use-case';
+import { SetMotorcycleIntervalUseCase } from '../../application/use-cases/set-motorcycle-interval.use-case';
+import { GetMaintenancePlanUseCase } from '../../application/use-cases/get-maintenance-plan.use-case';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { Request } from 'express';
@@ -14,6 +16,8 @@ export class MotorcycleController {
     private readonly getMotorcyclesUseCase: GetMotorcyclesUseCase,
     private readonly updateMotorcycleUseCase: UpdateMotorcycleUseCase,
     private readonly deleteMotorcycleUseCase: DeleteMotorcycleUseCase,
+    private readonly setMotorcycleIntervalUseCase: SetMotorcycleIntervalUseCase,
+    private readonly getMaintenancePlanUseCase: GetMaintenancePlanUseCase,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -23,7 +27,12 @@ export class MotorcycleController {
     @Req() req: Request,
   ): Promise<Motorcycle> {
     const user = req.user as any;
-    return this.createMotorcycleUseCase.execute(motorcycleData, user);
+    const motorcycle = await this.createMotorcycleUseCase.execute(motorcycleData, user);
+
+    // Dès la création, on définit l'intervalle d'entretien en fonction du modèle
+    await this.setMotorcycleIntervalUseCase.execute(motorcycle.id);
+
+    return motorcycle;
   }    
 
   @UseGuards(JwtAuthGuard)
@@ -52,6 +61,13 @@ export class MotorcycleController {
   ): Promise<{ message: string }> {
     const user = req.user as any;
     await this.deleteMotorcycleUseCase.execute(id, user);
-    return { message: 'Motorcycle deleted successfully' };
+    return { message: 'Moto supprimée avec succès' };
+  }
+
+  // Endpoint pour obtenir le plan d'entretien de la moto
+  @UseGuards(JwtAuthGuard)
+  @Get(':id/maintenance-plan')
+  async getMaintenancePlan(@Param('id') id: string) {
+    return this.getMaintenancePlanUseCase.execute(id);
   }
 }

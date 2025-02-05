@@ -12,4 +12,19 @@ export interface MotorcycleRepository {
    * Récupère toutes les motos associées à l’utilisateur (par company ou par client).
    */
   findMotorcyclesForUser(user: User): Promise<Motorcycle[]>;
+
+  /**
+   * Récupère une moto par son identifiant.
+   */
+  findById(id: string): Promise<Motorcycle>;
+
+  /**
+   * Met à jour une moto.
+   */
+  update(motorcycle: Motorcycle): Promise<Motorcycle>;
+
+  /**
+   * Supprime une moto par son identifiant.
+   */
+  delete(id: string): Promise<void>;
 }
