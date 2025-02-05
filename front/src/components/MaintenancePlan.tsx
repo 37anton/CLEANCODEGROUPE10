@@ -22,6 +22,7 @@ const MaintenancePlanComponent: React.FC<Props> = ({ motorcycleId }) => {
           `http://localhost:3000/motorcycles/${motorcycleId}/maintenance-plan`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        console.log("Données reçues :", response.data); //
         setPlan(response.data);
       } catch (err) {
         console.error("Erreur lors de la récupération du plan d'entretien", err);
@@ -42,8 +43,12 @@ const MaintenancePlanComponent: React.FC<Props> = ({ motorcycleId }) => {
         <strong>Prochain entretien au km :</strong> {plan.nextMaintenanceMileage}
       </p>
       <p>
-        <strong>Prochaine date d'entretien :</strong> {new Date(plan.nextMaintenanceDate).toLocaleDateString()}
-      </p>
+  <strong>Prochaine date d'entretien :</strong>{" "}
+  {plan.nextMaintenanceDate === "ASAP"
+    ? "ASAP"
+    : new Date(plan.nextMaintenanceDate).toLocaleDateString()}
+</p>
+
     </div>
   );
 };

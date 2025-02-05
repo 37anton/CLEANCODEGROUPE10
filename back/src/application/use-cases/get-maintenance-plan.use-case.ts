@@ -11,21 +11,45 @@ export class GetMaintenancePlanUseCase {
   ) {}
 
   async execute(motorcycleId: string): Promise<MaintenancePlan> {
-    // Récupérer la moto et s'assurer qu'un intervalle est défini
+    // Récupération de la moto avec ses intervalles chargés
     const motorcycle: Motorcycle = await this.motorcycleRepository.findById(motorcycleId);
     if (!motorcycle.intervals || motorcycle.intervals.length === 0) {
       throw new Error("Aucun intervalle d'entretien défini pour cette moto.");
     }
-    // Pour ce calcul, nous utilisons le premier intervalle défini
+    // On suppose qu'il y a un seul intervalle par moto
     const interval = motorcycle.intervals[0];
 
-    const nextMaintenanceMileage = motorcycle.lastMaintenanceMileage + interval.km;
-    const nextMaintenanceDate = new Date(motorcycle.lastMaintenanceDate);
-    nextMaintenanceDate.setFullYear(nextMaintenanceDate.getFullYear() + interval.timeInYears);
+    // Vérifier que la date du dernier entretien est valide
+    const lastMaintenance = new Date(motorcycle.lastMaintenanceDate);
+    if (isNaN(lastMaintenance.getTime())) {
+      // Si la date n'est pas valide, nous considérons qu'on doit réaliser la maintenance ASAP.
+      return {
+        nextMaintenanceMileage: "ASAP",
+        nextMaintenanceDate: "ASAP",
+      };
+    }
 
-    return {
-      nextMaintenanceMileage,
-      nextMaintenanceDate,
-    };
+    // Calcul des seuils
+    const computedNextMileage = motorcycle.lastMaintenanceMileage + interval.km;
+    const computedNextDate = new Date(lastMaintenance);
+    computedNextDate.setFullYear(lastMaintenance.getFullYear() + interval.timeInYears);
+
+    const now = new Date();
+
+    // Si l'un des deux critères est dépassé, on retourne ASAP dans les deux champs
+    if (
+      motorcycle.mileage >= computedNextMileage ||
+      now >= computedNextDate
+    ) {
+      return {
+        nextMaintenanceMileage: "ASAP",
+        nextMaintenanceDate: "ASAP",
+      };
+    } else {
+      return {
+        nextMaintenanceMileage: computedNextMileage.toString(),
+        nextMaintenanceDate: computedNextDate.toLocaleDateString(),
+      };
+    }
   }
 }

@@ -1,5 +1,5 @@
 export interface MaintenancePlan {
-    nextMaintenanceMileage: number;
-    nextMaintenanceDate: Date;
+    nextMaintenanceMileage: string;
+    nextMaintenanceDate: string;
   }
   
