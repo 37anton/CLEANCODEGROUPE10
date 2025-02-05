@@ -1,22 +1,19 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Injectable, Inject } from "@nestjs/common";
+import { PART_REPOSITORY, PartRepository } from "../../infrastructure/repositories/part.repository";
 import { Part } from "../../domain/entities/part.entity";
 import { CreatePartDto } from "../../application/dto/create-part.dto";
 
 @Injectable()
 export class PartService {
   constructor(
-    @InjectRepository(Part)
-    private readonly partRepository: Repository<Part>
+    @Inject(PART_REPOSITORY) private readonly partRepository: PartRepository
   ) {}
 
   async create(createPartDto: CreatePartDto): Promise<Part> {
-    const newPart = this.partRepository.create(createPartDto);
-    return await this.partRepository.save(newPart);
+    return this.partRepository.create(createPartDto);
   }
 
   async findAll(): Promise<Part[]> {
-    return await this.partRepository.find();
+    return this.partRepository.findAll();
   }
 }
