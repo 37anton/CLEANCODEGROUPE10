@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards, Patch, Param, Body } from '@nestjs/common';
 import { DriverService } from '../../../application/services/driver.service';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { Request } from 'express';
@@ -21,5 +21,21 @@ export class DriverController {
     // Récupération des conducteurs de la même entreprise
     const drivers = await this.driverService.getDriversByCompany(companyId);
     return drivers;
+  }
+
+  @Patch(':id')
+  async updateDriver(
+    @Param('id') driverId: string,
+    @Req() req: Request,
+    @Body() updateData: Partial<{ name: string; license: string; experience: number }>
+  ) {
+    const user = req.user as any;
+    const companyId = user.company?.id;
+
+    if (!companyId) {
+      return { message: "Vous n'êtes pas associé à une entreprise." };
+    }
+
+    return await this.driverService.updateDriver(driverId, companyId, updateData);
   }
 }
