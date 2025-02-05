@@ -16,6 +16,8 @@ import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
 import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
 import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
+import { MotorcycleModule } from './infrastructure/modules/motorcycle.module';
+
 
 
 
@@ -42,7 +44,8 @@ import { PartStock } from './domain/entities/part-stock.entity';
     AuthModule,
     PartModule,
     PartStockModule,
-    NotificationModule
+    NotificationModule,
+    MotorcycleModule
   ],
   controllers: [AppController],
   providers: [AppService, NotificationService],

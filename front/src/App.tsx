@@ -10,6 +10,7 @@ import { AuthProvider } from './context/AuthContext';
 import Notifications from "./pages/Notifications";
 import Stock from "./pages/Stock"; //
 import Orders from "./pages/Orders";
+import  Motorcycles  from "./pages/Motorcycles"
 
 const App = () => {
 
@@ -28,6 +29,7 @@ const App = () => {
             <Link to="/register">Register</Link> |{' '}
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/stock">Stock</Link>
+            <Link to="/motorcycles">Create moto</Link>
           </nav>
           <Routes>
             {/* Routes existantes */}
@@ -37,6 +39,7 @@ const App = () => {
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/motorcycles" element={<Motorcycles />} />
               <Route path="/orders" element={<Orders />} />
             </Route>
 
