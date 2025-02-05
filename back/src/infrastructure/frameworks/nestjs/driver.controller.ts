@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards, Patch, Param, Body } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards, Patch, Param, Body, Post } from '@nestjs/common';
 import { DriverService } from '../../../application/services/driver.service';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { Request } from 'express';
@@ -37,5 +37,20 @@ export class DriverController {
     }
 
     return await this.driverService.updateDriver(driverId, companyId, updateData);
+  }
+
+  @Post()
+  async createDriver(
+    @Req() req: Request,
+    @Body() driverData: Partial<{ name: string; license: string; experience: number }>
+  ) {
+    const user = req.user as any;
+    const companyId = user.company?.id;
+
+    if (!companyId) {
+      return { message: "Vous n'êtes pas associé à une entreprise." };
+    }
+
+    return await this.driverService.createDriver(companyId, driverData);
   }
 }

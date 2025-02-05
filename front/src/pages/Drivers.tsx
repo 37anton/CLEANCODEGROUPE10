@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import EditDriverModal from "../components/EditDriverModal";
+import CreateDriverModal from "../components/CreateDriverModal";
 
 interface Driver {
   id: string;
@@ -14,6 +15,7 @@ const DriverPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
 
   useEffect(() => {
     fetchDrivers();
@@ -39,7 +41,10 @@ const DriverPage: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">🚗 Liste des Conducteurs</h1>
+      <h1 className="text-2xl font-bold">🚗 Liste des Conducteurs</h1>
+      
+      <button className="btn" onClick={() => setShowCreateModal(true)}>Ajouter un Conducteur</button>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {drivers.map((driver) => (
           <div
@@ -54,11 +59,20 @@ const DriverPage: React.FC = () => {
         ))}
       </div>
 
+      {/* Modal pour éditer un conducteur */}
       {selectedDriver && (
         <EditDriverModal
           driver={selectedDriver}
           onClose={() => setSelectedDriver(null)}
           onUpdate={fetchDrivers}
+        />
+      )}
+
+      {/* Modal pour créer un conducteur */}
+      {showCreateModal && (
+        <CreateDriverModal
+          onClose={() => setShowCreateModal(false)}
+          onCreate={fetchDrivers}
         />
       )}
     </div>

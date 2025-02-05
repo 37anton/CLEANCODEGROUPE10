@@ -1,13 +1,17 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { Injectable, ForbiddenException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Driver } from '../../domain/entities/driver.entity';
+import { Company } from '../../domain/entities/company.entity';
 
 @Injectable()
 export class DriverService {
   constructor(
     @InjectRepository(Driver)
     private readonly driverRepository: Repository<Driver>,
+
+    @InjectRepository(Company)
+    private readonly companyRepository: Repository<Company>,
   ) {}
 
   async getDriversByCompany(companyId: string): Promise<Driver[]> {
@@ -39,5 +43,22 @@ export class DriverService {
     await this.driverRepository.save(driver);
 
     return driver;
+  }
+
+  async createDriver(companyId: string, driverData: Partial<Driver>): Promise<Driver> {
+    // Vérifier si l'entreprise existe
+    const company = await this.companyRepository.findOne({ where: { id: companyId } });
+
+    if (!company) {
+      throw new BadRequestException("L'entreprise associée n'existe pas.");
+    }
+
+    // Créer + sauvegarder le nouveau conducteur
+    const newDriver = this.driverRepository.create({
+      ...driverData,
+      company, // Associe le conducteur à l'entreprise de l'utilisateur
+    });
+
+    return await this.driverRepository.save(newDriver);
   }
 }
