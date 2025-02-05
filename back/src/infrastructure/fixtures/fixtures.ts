@@ -12,11 +12,11 @@ import * as bcrypt from 'bcryptjs';
 
 const dataSource = new DataSource({
   type: "postgres",
-  host: "postgres",
-  port: 5432,
-  username: "postgres",
-  password: "postgres",
-  database: "clean_code",
+  host: process.env.POSTGRES_HOST || "localhost",
+  port: Number(process.env.POSTGRES_PORT) || 5432,
+  username: process.env.POSTGRES_USER || "postgres",
+  password: process.env.POSTGRES_PASSWORD || "postgres",
+  database: process.env.POSTGRES_DB || "clean_code",
   entities: ["src/domain/entities/*.ts"],
   synchronize: true, // Activer uniquement pour les tests
 });
