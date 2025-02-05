@@ -2,6 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { CompanyMotorcycle } from './company-motorcycle.entity';
+import { Driver } from './driver.entity';
 
 @Entity()
 export class Company {
@@ -16,4 +17,8 @@ export class Company {
 
   @OneToMany(() => CompanyMotorcycle, cm => cm.company)
   companyMotorcycles: CompanyMotorcycle[];
+
+  @OneToMany(() => Driver, driver => driver.company)
+  drivers: Driver[]; // Liste des conducteurs associés à cette entreprise
+
 }

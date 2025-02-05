@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
+import Drivers from "./pages/Drivers";
 import ProtectedRoute from './components/ProtectedRoute';
 import MaintenanceHistory from './components/MaintenanceHistory';
 import FaultManagementPage from './pages/FaultManagementPage';
@@ -42,6 +43,7 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/orders" element={<Orders />} />
+              <Route path="/drivers" element={<Drivers />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}
