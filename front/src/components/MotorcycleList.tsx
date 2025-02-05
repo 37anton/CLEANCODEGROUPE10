@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 interface Motorcycle {
   id: string;
@@ -9,23 +11,22 @@ interface Motorcycle {
   lastMaintenanceDate: string;
   mileage: number;
   lastMaintenanceMileage: number;
-  // Ajoutez d'autres propriétés si nécessaire
+  concession?: { id: string }; // si applicable
 }
 
 const MotorcycleList: React.FC = () => {
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
-  const token = localStorage.getItem('token');
+  const { token } = useAuth();
 
   useEffect(() => {
     const fetchMotorcycles = async () => {
       try {
-        const response = await axios.get<Motorcycle[]>(
-          'http://localhost:3000/motorcycles',
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const response = await axios.get<Motorcycle[]>('http://localhost:3000/motorcycles', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setMotorcycles(response.data);
       } catch (error) {
-        console.error('Erreur lors de la récupération des motos', error);
+        console.error('Error fetching motorcycles', error);
       }
     };
 
@@ -34,14 +35,27 @@ const MotorcycleList: React.FC = () => {
 
   return (
     <div>
-      <h1>Mes Motos</h1>
-      <ul>
-        {motorcycles.map((moto) => (
-          <li key={moto.id}>
-            {moto.model} - VIN : {moto.vin}
-          </li>
-        ))}
-      </ul>
+      <h1>My Motorcycles</h1>
+      {motorcycles.length === 0 ? (
+        <p>No motorcycles found</p>
+      ) : (
+        <ul>
+          {motorcycles.map((moto) => (
+            <li key={moto.id}>
+              <p>
+                {moto.model} - {moto.vin}
+              </p>
+              {/* Boutons pour modifier et supprimer */}
+              <Link to={`/motorcycles/update/${moto.id}`}>
+                <button>Edit</button>
+              </Link>
+              <Link to={`/motorcycles/delete/${moto.id}`}>
+                <button>Delete</button>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

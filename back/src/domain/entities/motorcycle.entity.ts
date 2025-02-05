@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Concession } from './concession.entity';
 import { Incident } from './incident.entity';
 import { Warranty } from './warranty.entity';
@@ -32,9 +32,9 @@ export class Motorcycle {
   @Column()
   lastMaintenanceMileage: number;
 
-  // Optionnel : la moto peut être créée par une concession, une company ou un client.
   @ManyToOne(() => Concession, concession => concession.motorcycles, { nullable: true })
-  concession: Concession;
+  @JoinColumn({ name: "concessionId" })
+  concession: Concession | null;
 
   @OneToMany(() => Incident, incident => incident.motorcycle)
   incidents: Incident[];
@@ -49,10 +49,10 @@ export class Motorcycle {
   intervals: Interval[];
 
   // Relations avec les tables d'association
-  @OneToMany(() => CompanyMotorcycle, cm => cm.motorcycle)
+  @OneToMany(() => CompanyMotorcycle, cm => cm.motorcycle, { cascade: true, onDelete: "CASCADE" } )
   companyMotorcycles: CompanyMotorcycle[];
 
-  @OneToMany(() => ClientMotorcycle, cm => cm.motorcycle)
+  @OneToMany(() => ClientMotorcycle, cm => cm.motorcycle, { cascade: true, onDelete: "CASCADE" } )
   clientMotorcycles: ClientMotorcycle[];
 
   @OneToMany(() => MotorcyclePart, mp => mp.motorcycle)

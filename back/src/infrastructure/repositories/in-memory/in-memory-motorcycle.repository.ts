@@ -25,4 +25,8 @@ export class InMemoryMotorcycleRepository {
     if (!motorcycle) throw new Error('Motorcycle not found');
     return motorcycle;
   }
+
+  async delete(id: string): Promise<void> {
+    this.motorcycles = this.motorcycles.filter(m => m.id !== id);
+  }
 }

@@ -23,4 +23,8 @@ export class SQLMotorcycleRepository {
     if (!motorcycle) throw new Error('Motorcycle not found');
     return motorcycle;
   }
+
+  async delete(id: string): Promise<void> {
+    await this.ormRepository.delete(id);
+  }
 }

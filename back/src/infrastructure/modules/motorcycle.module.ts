@@ -12,6 +12,8 @@ import { InMemoryCompanyMotorcycleRepository } from '../repositories/in-memory/i
 import { SQLCompanyMotorcycleRepository } from '../repositories/sql/sql-company-motorcycle.repository';
 import { InMemoryClientMotorcycleRepository } from '../repositories/in-memory/in-memory-client-motorcycle.repository';
 import { SQLClientMotorcycleRepository } from '../repositories/sql/sql-client-motorcycle.repository';
+import { UpdateMotorcycleUseCase } from 'src/application/use-cases/update-motorcycle.use-case';
+import { DeleteMotorcycleUseCase } from 'src/application/use-cases/delete-motorcycle.use-case';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
@@ -35,7 +37,9 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     },
     CreateMotorcycleUseCase,
     GetMotorcyclesUseCase,
+    UpdateMotorcycleUseCase,
+    DeleteMotorcycleUseCase,
   ],
-  exports: [CreateMotorcycleUseCase, GetMotorcyclesUseCase],
+  exports: [CreateMotorcycleUseCase, GetMotorcyclesUseCase, UpdateMotorcycleUseCase, DeleteMotorcycleUseCase],
 })
 export class MotorcycleModule {}

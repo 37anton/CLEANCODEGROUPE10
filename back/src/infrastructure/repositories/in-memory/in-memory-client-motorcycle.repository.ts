@@ -15,4 +15,9 @@ export class InMemoryClientMotorcycleRepository {
     const records = this.clientMotorcycles.filter(cm => cm.client.id === clientId);
     return records.map(cm => cm.motorcycle);
   }
+
+  async findOneByMotorcycleAndClient(motorcycleId: string, clientId: string): Promise<ClientMotorcycle | null> {
+    const record = this.clientMotorcycles.find(cm => cm.motorcycle.id === motorcycleId && cm.client.id === clientId);
+    return record || null;
+  }
 }

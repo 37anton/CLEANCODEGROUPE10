@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
+import { Concession } from '../../domain/entities/concession.entity';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -29,10 +30,20 @@ export class CreateMotorcycleUseCase {
     motorcycle.mileage = motorcycleData.mileage;
     motorcycle.lastMaintenanceMileage = motorcycleData.lastMaintenanceMileage;
 
+    // Si l'utilisateur a une concession, on crée une instance de Concession
+    if (user.concession && user.concession.id) {
+      const concessionEntity = new Concession();
+      concessionEntity.id = user.concession.id;
+      motorcycle.concession = concessionEntity;
+    } else {
+      motorcycle.concession = null;
+    }
+
+    // Sauvegarde de la moto
     const createdMotorcycle = await this.motorcycleRepository.create(motorcycle);
     console.log('Created motorcycle:', createdMotorcycle);
 
-    // Récupération de l'identifiant company ou client depuis l'objet user
+    // Vérification pour company et client
     const companyId = user.companyId || (user.company && user.company.id);
     const clientId = user.clientId || (user.client && user.client.id);
 
@@ -55,6 +66,7 @@ export class CreateMotorcycleUseCase {
     } else {
       console.warn('No company or client identifier found in user:', user);
     }
+
     return createdMotorcycle;
   }
 }

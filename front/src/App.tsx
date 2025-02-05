@@ -11,6 +11,8 @@ import Notifications from "./pages/Notifications";
 import Stock from "./pages/Stock"; //
 import Orders from "./pages/Orders";
 import  Motorcycles  from "./pages/Motorcycles"
+import UpdateMotorcycle from './components/UpdateMotorcycle';
+import DeleteMotorcycle from './components/DeleteMotorcycle';
 
 const App = () => {
 
@@ -40,6 +42,8 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/motorcycles" element={<Motorcycles />} />
+              <Route path="/motorcycles/update/:id" element={<UpdateMotorcycle />} />
+              <Route path="/motorcycles/delete/:id" element={<DeleteMotorcycle />} />
               <Route path="/orders" element={<Orders />} />
             </Route>
 
