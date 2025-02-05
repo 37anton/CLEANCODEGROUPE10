@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Put, Delete, Body, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Get, Put, Delete, Body, Param, UseGuards, Req, NotFoundException } from '@nestjs/common';
 import { CreateMotorcycleUseCase } from '../../application/use-cases/create-motorcycle.use-case';
 import { GetMotorcyclesUseCase } from '../../application/use-cases/get-motorcycles.use-case';
 import { UpdateMotorcycleUseCase } from '../../application/use-cases/update-motorcycle.use-case';
@@ -41,6 +41,19 @@ export class MotorcycleController {
     const user = req.user;
     return this.getMotorcyclesUseCase.execute(user);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getMotorcycle(@Param('id') id: string): Promise<Motorcycle> {
+    const motorcycle = await this.getMotorcyclesUseCase.findById(id);
+    
+    if (!motorcycle) {
+      throw new NotFoundException(`Moto avec l'ID ${id} non trouvée.`);
+    }
+
+    return motorcycle;
+  }
+
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')

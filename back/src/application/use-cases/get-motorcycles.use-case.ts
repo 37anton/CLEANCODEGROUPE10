@@ -1,9 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
+import { MotorcycleRepository } from 'src/infrastructure/repositories/motorcycle.repository';
 
 @Injectable()
 export class GetMotorcyclesUseCase {
   constructor(
+    @Inject('CustomMotorcycleRepository') // 🔹 Assure-toi que cette clé correspond bien à ton provider
+    private readonly motorcycleRepository: MotorcycleRepository,
+    
     @Inject('CustomCompanyMotorcycleRepository')
     private readonly companyMotorcycleRepository: {
       findAllByCompanyId(companyId: string): Promise<Motorcycle[]>;
@@ -13,6 +17,7 @@ export class GetMotorcyclesUseCase {
       findAllByClientId(clientId: string): Promise<Motorcycle[]>;
     },
   ) {}
+  
 
   async execute(user: any): Promise<Motorcycle[]> {
     if (user.companyId || (user.company && user.company.id)) {
@@ -23,5 +28,9 @@ export class GetMotorcyclesUseCase {
       return this.clientMotorcycleRepository.findAllByClientId(clientId);
     }
     return [];
+  }
+
+  async findById(id: string): Promise<Motorcycle | null> {
+    return this.motorcycleRepository.findById(id);
   }
 }
