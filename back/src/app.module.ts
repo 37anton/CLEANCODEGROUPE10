@@ -14,6 +14,8 @@ import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
 import { MotorcycleModule } from './infrastructure/modules/motorcycle.module';
 import { IntervalDefinitionModule } from './infrastructure/modules/interval-definition.module';
+import { CronModule } from './application/cron/cron.module';
+
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { IntervalDefinitionModule } from './infrastructure/modules/interval-defi
     PartStockModule,
     MotorcycleModule,
     IntervalDefinitionModule,
+    CronModule,
   ],
   controllers: [AppController],
   providers: [AppService], // ❌ Retire NotificationService ici

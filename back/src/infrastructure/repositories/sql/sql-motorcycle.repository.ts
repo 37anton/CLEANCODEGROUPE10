@@ -30,4 +30,10 @@ export class SQLMotorcycleRepository {
   async delete(id: string): Promise<void> {
     await this.ormRepository.delete(id);
   }
+
+  async findAll(): Promise<Motorcycle[]> {
+    return this.ormRepository.find({
+      relations: ['intervals', 'companyMotorcycles', 'clientMotorcycles', 'concession'],
+    });
+  }
 }

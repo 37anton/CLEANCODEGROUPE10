@@ -27,4 +27,6 @@ export interface MotorcycleRepository {
    * Supprime une moto par son identifiant.
    */
   delete(id: string): Promise<void>;
+
+  findAll(): Promise<Motorcycle[]>;
 }

@@ -37,9 +37,9 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Motorcycle, CompanyMotorcycle, ClientMotorcycle, Interval]),
-    IntervalDefinitionModule, // Pour accéder aux définitions d'intervalles
-    UserModule,               // Pour accéder à CustomUserRepository (exporté par UserModule)
-    NotificationModule,       // Pour accéder à NotificationService et CustomNotificationRepository
+    IntervalDefinitionModule,
+    UserModule,
+    NotificationModule,
   ],
   controllers: [MotorcycleController],
   providers: [
@@ -59,11 +59,6 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
       provide: 'CustomIntervalRepository',
       useClass: isInMemory ? InMemoryIntervalRepository : SQLIntervalRepository,
     },
-    // → SUPPRIMEZ le bloc ci-dessous :
-    // {
-    //   provide: 'CustomUserRepository',
-    //   useExisting: 'CustomUserRepository',
-    // },
     CreateMotorcycleUseCase,
     GetMotorcyclesUseCase,
     UpdateMotorcycleUseCase,
@@ -76,6 +71,8 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     GetMotorcyclesUseCase,
     UpdateMotorcycleUseCase,
     DeleteMotorcycleUseCase,
+    GetMaintenancePlanUseCase,  // <-- EXPORT ajouté pour le use case de maintenance
+    'CustomMotorcycleRepository', // Exporter le provider pour qu'il soit disponible dans d'autres modules
     TypeOrmModule,
   ],
 })

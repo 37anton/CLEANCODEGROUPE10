@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, Req, UseGuards,Put, Param } from "@nestjs/common";
 import { NotificationService } from "../../../application/services/notification.service";
 import { JwtAuthGuard } from "../../../common/guards/jwt-auth.guard";
 import { Request } from "express";
@@ -35,5 +35,21 @@ export class NotificationController {
     }
 
     return this.notificationService.getNotificationsForUser(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async getMyNotifications(@Req() req: AuthenticatedRequest) {
+    if (!req.user || !req.user.id) {
+      throw new Error("Utilisateur non authentifié.");
+    }
+    return this.notificationService.getNotificationsForUser(req.user.id);
+  }
+
+  // Endpoint pour marquer une notification comme lue
+  @UseGuards(JwtAuthGuard)
+  @Put(':id/read')
+  async markNotificationAsRead(@Param('id') id: string) {
+    return this.notificationService.markNotificationAsRead(id);
   }
 }

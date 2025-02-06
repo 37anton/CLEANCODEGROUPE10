@@ -1,24 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from '../../../domain/entities/notification.entity';
 
 @Injectable()
-export class NotificationRepository extends Repository<Notification> { // ✅ Hérite de Repository<Notification>
+export class NotificationRepository {
   constructor(
-    @InjectRepository(Notification)
     private readonly notificationRepo: Repository<Notification>,
-  ) {
-    super(notificationRepo.target, notificationRepo.manager, notificationRepo.queryRunner); // ✅ Corrige l'héritage
-  }
+  ) {}
 
   async createNotification(userId: string, message: string): Promise<Notification> {
     const notification = this.notificationRepo.create({
-      user: { id: userId }, // Associe la notification à un utilisateur
+      user: { id: userId },
       message,
       isRead: false,
       createdAt: new Date(),
     });
     return this.notificationRepo.save(notification);
+  }
+
+  async find(options: any): Promise<Notification[]> {
+    return this.notificationRepo.find(options);
+  }
+
+  async update(id: number | string, partialEntity: Partial<Notification>): Promise<void> {
+    await this.notificationRepo.update(id, partialEntity);
   }
 }
