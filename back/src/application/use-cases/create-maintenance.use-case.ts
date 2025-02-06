@@ -42,15 +42,17 @@ export class CreateMaintenanceUseCase {
     maintenance.cost = data.cost;
     maintenance.technicianRecommendations = data.technicianRecommendations;
     if (motorcycle.intervals) {
-        maintenance.interval = motorcycle.intervals[0];
-      }
+      maintenance.interval = motorcycle.intervals[0];
+    }
 
     // Création de la maintenance
     const createdMaintenance = await this.maintenanceRepository.create(maintenance);
 
     // Mise à jour de la moto avec les nouvelles valeurs
+    // On met à jour la dernière maintenance et on met à jour le kilométrage actuel de la moto
     motorcycle.lastMaintenanceDate = maintenance.scheduledDate;
     motorcycle.lastMaintenanceMileage = computedScheduledMileage;
+    motorcycle.mileage = computedScheduledMileage; // Mise à jour du kilométrage actuel
     await this.motorcycleRepository.update(motorcycle);
 
     return createdMaintenance;
