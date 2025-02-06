@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PartStock } from 'src/domain/entities/part-stock.entity';
-import { PartStockController } from './part-stock.controller';
-import { PartStockService } from '../../../application/services/part-stock.service';
-import { UpdatePartStockUseCase } from '../../../application/use-cases/update-part-stock.use-case';
-import { FindPartStockUseCase } from '../../../application/use-cases/find-part-stock.use-case';
-import { PartStockSqlRepository } from '../../repositories/sql/part-stock.repository.sql';
-import { PartStockInMemoryRepository } from '../../repositories/in-memory/part-stock.repository.in-memory';
-import { PART_STOCK_REPOSITORY } from '../../repositories/part-stock.repository';
+import { PartStockController } from '../../interfaces/controllers/part-stock.controller';
+import { PartStockService } from '../../application/services/part-stock.service';
+import { UpdatePartStockUseCase } from '../../application/use-cases/update-part-stock.use-case';
+import { FindPartStockUseCase } from '../../application/use-cases/find-part-stock.use-case';
+import { PartStockSqlRepository } from '../repositories/sql/part-stock.repository.sql';
+import { PartStockInMemoryRepository } from '../repositories/in-memory/part-stock.repository.in-memory';
+import { PART_STOCK_REPOSITORY } from '../repositories/part-stock.repository';
 import { User } from 'src/domain/entities/user.entity';
 import { Part } from 'src/domain/entities/part.entity';
-import { UserModule } from '../nestjs/user.module'; 
+import { UserModule } from './user.module';
 
 @Module({
   imports: [

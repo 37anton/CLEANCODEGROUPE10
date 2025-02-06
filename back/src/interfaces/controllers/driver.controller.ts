@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Param, Req, UseGuards, Patch } from '@nestjs/common';
-import { DriverService } from '../../../application/services/driver.service';
+import { DriverService } from '../../application/services/driver.service';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 

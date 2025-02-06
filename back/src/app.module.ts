@@ -1,3 +1,17 @@
+
+
+
+
+import { NotificationService } from "./application/services/notification.service";
+
+
+
+
+
+
+
+
+
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -7,10 +21,11 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/frameworks/nestjs/notification.module";
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
-import { DriverModule  } from "./infrastructure/frameworks/nestjs/driver.module";
-import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
+import { DriverModule } from "./infrastructure/modules/driver.module";
+import { PartStockModule } from "./infrastructure/modules/part-stock.module";
 import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
 import { MotorcycleModule } from './infrastructure/modules/motorcycle.module';
