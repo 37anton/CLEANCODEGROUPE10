@@ -14,7 +14,6 @@ export class CreateMaintenanceUseCase {
   ) {}
 
   async execute(data: Partial<Maintenance>): Promise<Maintenance> {
-    // Récupère la moto à partir de l'identifiant fourni dans data.vehicleId
     if (!data.vehicleId) {
       throw new Error('L\'identifiant du véhicule est requis.');
     }
@@ -23,19 +22,37 @@ export class CreateMaintenanceUseCase {
       throw new Error(`Moto avec l'ID ${data.vehicleId} introuvable.`);
     }
 
+    // On récupère le premier intervalle, s'il existe
+    const intervalValue = (motorcycle.intervals && motorcycle.intervals.length > 0)
+      ? motorcycle.intervals[0]
+      : null;
+    
+    // Calcul du kilométrage prévu : s'il n'est pas fourni, on le calcule en utilisant l'intervalle.
+    // On utilise "??" pour garantir qu'on a une valeur numérique (intervalValue?.km sera undefined si intervalValue est null, alors on renvoie 0)
+    const computedScheduledMileage: number = data.scheduledMileage 
+      ?? (motorcycle.lastMaintenanceMileage + (intervalValue?.km ?? 0));
+
     const maintenance = new Maintenance();
     maintenance.id = crypto.randomUUID();
     maintenance.vehicleId = data.vehicleId;
     maintenance.scheduledDate = data.scheduledDate ? new Date(data.scheduledDate) : new Date();
     maintenance.status = data.status || 'COMPLETED';
-    maintenance.scheduledMileage = data.scheduledMileage;
+    maintenance.scheduledMileage = computedScheduledMileage;
     maintenance.replacedParts = data.replacedParts;
     maintenance.cost = data.cost;
     maintenance.technicianRecommendations = data.technicianRecommendations;
-    // Affecte l'intervalle actuel de la moto à la maintenance
     if (motorcycle.intervals) {
-      maintenance.interval = motorcycle.intervals[0];
-    } 
-    return this.maintenanceRepository.create(maintenance);
+        maintenance.interval = motorcycle.intervals[0];
+      }
+
+    // Création de la maintenance
+    const createdMaintenance = await this.maintenanceRepository.create(maintenance);
+
+    // Mise à jour de la moto avec les nouvelles valeurs
+    motorcycle.lastMaintenanceDate = maintenance.scheduledDate;
+    motorcycle.lastMaintenanceMileage = computedScheduledMileage;
+    await this.motorcycleRepository.update(motorcycle);
+
+    return createdMaintenance;
   }
 }
