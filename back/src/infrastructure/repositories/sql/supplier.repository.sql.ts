@@ -1,0 +1,17 @@
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Supplier } from "../../../domain/entities/supplier.entity";
+import { Injectable } from "@nestjs/common";
+import { SupplierRepository } from "../supplier.repository";
+
+@Injectable()
+export class SupplierSqlRepository implements SupplierRepository {
+  constructor(
+    @InjectRepository(Supplier)
+    private readonly supplierRepository: Repository<Supplier>,
+  ) {}
+
+  async findAll(): Promise<Supplier[]> {
+    return await this.supplierRepository.find();
+  }
+}

@@ -21,6 +21,7 @@ import { PartStockModule } from "./infrastructure/modules/part-stock.module";
 import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
 import { OrderModule } from "./infrastructure/modules/order.module";
+import { SupplierModule } from "./infrastructure/modules/supplier.module";
 
 
 
@@ -51,7 +52,8 @@ import { OrderModule } from "./infrastructure/modules/order.module";
     PartStockModule,
     NotificationModule,
     OrderModule,
-    DriverModule
+    DriverModule,
+    SupplierModule
   ],
   controllers: [AppController],
   providers: [AppService, NotificationService],
