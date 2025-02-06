@@ -5,9 +5,10 @@ import { MaintenanceNotificationCronService } from './maintenance-notification.c
 import { MotorcycleModule } from '../../infrastructure/modules/motorcycle.module';
 
 @Module({
+  // Ne PAS appeler ScheduleModule.forRoot() ici car il est déjà importé dans AppModule
   imports: [
-    ScheduleModule.forRoot(),
-    MotorcycleModule, // Importé, il exporte désormais GetMaintenancePlanUseCase et CustomMotorcycleRepository
+    // ScheduleModule.forRoot(),  <-- Supprimez cette ligne
+    MotorcycleModule, // Permet d'accéder aux providers exportés (CustomMotorcycleRepository, GetMaintenancePlanUseCase, etc.)
   ],
   providers: [MaintenanceNotificationCronService],
   exports: [MaintenanceNotificationCronService],
