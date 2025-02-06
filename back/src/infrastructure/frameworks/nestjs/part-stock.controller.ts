@@ -10,13 +10,18 @@ export class PartStockController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async updateStock(@Request() req, @Body() createPartStockDto: CreatePartStockDto): Promise<PartStock> {
-    return this.partStockService.updateStock(req.user.id, createPartStockDto);
+  async updateStock(@Request() req, @Body() createPartStockDto: { partId: string, quantity: number, alertThreshold: number }) {
+    return this.partStockService.updateStock(
+      req.user.id, 
+      createPartStockDto.partId, 
+      createPartStockDto.quantity, 
+      createPartStockDto.alertThreshold
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(@Request() req): Promise<PartStock[]> {
-    return this.partStockService.findAll(req.user);
+    return this.partStockService.findAll(req.user.id);
   }
 }
