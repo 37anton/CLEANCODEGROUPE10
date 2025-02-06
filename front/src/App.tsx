@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
+import Drivers from "./pages/Drivers";
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import Notifications from "./pages/Notifications";
@@ -64,6 +65,7 @@ const App = () => {
               <Route path="/update-interval/:id" element={<UpdateIntervalDefinition />} />
               <Route path="/interval-definitions" element={<IntervalDefinitionList />} />
               <Route path="/orders" element={<Orders />} />
+              <Route path="/drivers" element={<Drivers />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}

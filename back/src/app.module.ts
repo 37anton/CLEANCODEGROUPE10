@@ -9,6 +9,7 @@ import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/frameworks/nestjs/notification.module";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
+import { DriverModule  } from "./infrastructure/frameworks/nestjs/driver.module";
 import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
 import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
@@ -19,6 +20,7 @@ import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
 import { IncidentModule } from './infrastructure/modules/incident.module';
 import { RepairModule } from './infrastructure/modules/repair.module';
 import { WarrantyModule } from './infrastructure/modules/warranty.module';
+import { OrderModule } from "./infrastructure/frameworks/nestjs/order.module";
 
 
 
@@ -52,6 +54,9 @@ import { WarrantyModule } from './infrastructure/modules/warranty.module';
     RepairModule,
     WarrantyModule,
 
+    NotificationModule,
+    OrderModule,
+    DriverModule
   ],
   controllers: [AppController],
   providers: [AppService], // ❌ Retire NotificationService ici
