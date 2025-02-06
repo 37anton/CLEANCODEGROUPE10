@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Drivers from "./pages/Drivers";
+import Suppliers from "./pages/Suppliers";
 import ProtectedRoute from './components/ProtectedRoute';
 import MaintenanceHistory from './components/MaintenanceHistory';
 import FaultManagementPage from './pages/FaultManagementPage';
@@ -44,6 +45,7 @@ const App = () => {
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/drivers" element={<Drivers />} />
+              <Route path="/suppliers" element={<Suppliers />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}
