@@ -16,6 +16,7 @@ import { GetMaintenancePlanUseCase } from 'src/application/use-cases/get-mainten
 
 // Import du contrôleur
 import { MotorcycleController } from 'src/interfaces/controllers/motorcycle.controller';
+
 // Import des repositories
 import { InMemoryMotorcycleRepository } from 'src/infrastructure/repositories/in-memory/in-memory-motorcycle.repository';
 import { SQLMotorcycleRepository } from 'src/infrastructure/repositories/sql/sql-motorcycle.repository';
@@ -26,15 +27,19 @@ import { SQLClientMotorcycleRepository } from 'src/infrastructure/repositories/s
 import { SQLIntervalRepository } from 'src/infrastructure/repositories/sql/sql-interval.repository';
 import { InMemoryIntervalRepository } from 'src/infrastructure/repositories/in-memory/in-memory-interval.repository';
 
-// Importez le module qui exporte le CustomIntervalDefinitionRepository
+// Import des modules qui exportent d'autres providers
 import { IntervalDefinitionModule } from 'src/infrastructure/modules/interval-definition.module';
+import { UserModule } from '../frameworks/nestjs/user.module';
+import { NotificationModule } from 'src/infrastructure/frameworks/nestjs/notification.module';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Motorcycle, CompanyMotorcycle, ClientMotorcycle, Interval]),
-    IntervalDefinitionModule, // <-- Important : importer IntervalDefinitionModule
+    IntervalDefinitionModule, // Pour accéder aux définitions d'intervalles
+    UserModule,               // Pour accéder à CustomUserRepository (exporté par UserModule)
+    NotificationModule,       // Pour accéder à NotificationService et CustomNotificationRepository
   ],
   controllers: [MotorcycleController],
   providers: [
@@ -54,7 +59,11 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
       provide: 'CustomIntervalRepository',
       useClass: isInMemory ? InMemoryIntervalRepository : SQLIntervalRepository,
     },
-    // Les use cases
+    // → SUPPRIMEZ le bloc ci-dessous :
+    // {
+    //   provide: 'CustomUserRepository',
+    //   useExisting: 'CustomUserRepository',
+    // },
     CreateMotorcycleUseCase,
     GetMotorcyclesUseCase,
     UpdateMotorcycleUseCase,
@@ -67,6 +76,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     GetMotorcyclesUseCase,
     UpdateMotorcycleUseCase,
     DeleteMotorcycleUseCase,
+    TypeOrmModule,
   ],
 })
 export class MotorcycleModule {}

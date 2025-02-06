@@ -22,5 +22,19 @@ export class UserService {
       where: { email },
       relations: ["company", "concession", "client"],
     });
-  }  
+  }
+  async findById(id: string): Promise<User | null> {
+    return this.userRepository.findOne({ 
+      where: { id },
+      relations: ['company', 'client', 'concession'], // Charge les relations
+    });
+  }
+  
+  async findAllByCompanyId(companyId: string): Promise<User[]> {
+    return this.userRepository.find({ where: { company: { id: companyId } } });
+  }
+
+  async findAllByClientId(clientId: string): Promise<User[]> {
+    return this.userRepository.find({ where: { client: { id: clientId } } });
+  }
 }

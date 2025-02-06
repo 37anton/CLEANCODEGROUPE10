@@ -19,11 +19,9 @@ export class SQLMotorcycleRepository {
   }
 
   async findById(id: string): Promise<Motorcycle> {
-    // Si votre entité Motorcycle a une relation "intervals" (OneToMany),
-    // il est utile de la charger ici :
     const motorcycle = await this.ormRepository.findOne({ 
       where: { id },
-      relations: ['intervals']  // Charge la relation "intervals"
+      relations: ['intervals', 'companyMotorcycles', 'clientMotorcycles', 'concession', 'clientMotorcycles.client', 'companyMotorcycles.company']  // Chargement des relations nécessaires
     });
     if (!motorcycle) throw new Error('Motorcycle not found');
     return motorcycle;

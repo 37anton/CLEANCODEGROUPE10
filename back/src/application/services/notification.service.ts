@@ -1,35 +1,38 @@
-import { Injectable } from "@nestjs/common";
-import { Cron } from "@nestjs/schedule";
+// src/application/services/notification.service.ts
+import { Injectable, Inject } from "@nestjs/common";
 import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
 import { Notification } from "../../domain/entities/notification.entity";
 import { User } from "../../domain/entities/user.entity";
+import { NotificationRepository } from "src/infrastructure/repositories/sql/sql-notification.repository";
+NotificationRepository
 
 @Injectable()
 export class NotificationService {
   constructor(
-    @InjectRepository(Notification) private notificationRepo: Repository<Notification>,
-    @InjectRepository(User) private userRepo: Repository<User>
+    @Inject('CustomNotificationRepository')
+    private readonly notificationRepository: NotificationRepository, // Injection via le token
   ) {}
 
-  @Cron("35 16 * * *") // Exécution tous les jours à 2h du matin
-  async generateNotifications() {
-    console.log("Exécution du cron pour générer les notifications");
-
-    const users = await this.userRepo.find();
-
+  async sendMaintenanceNotification(users: User[], message: string): Promise<void> {
     for (const user of users) {
-      await this.notificationRepo.save({
-        user,
-        message: "Entretien à venir pour votre moto !",
-      });
+      if (!user.id) continue;
+      // On utilise la méthode customisée pour créer une notification
+      await this.notificationRepository.createNotification(user.id, message);
+      console.log(`📧 Notification enregistrée pour ${user.email}: ${message}`);
     }
   }
 
+  // Récupérer toutes les notifications d'un utilisateur
   async getNotificationsForUser(userId: string) {
-    return await this.notificationRepo.find({
+    return this.notificationRepository.find({
       where: { user: { id: userId } },
-      order: { createdAt: "DESC" },
+      order: { createdAt: 'DESC' },
     });
+  }
+
+  // Marquer une notification comme lue
+  async markNotificationAsRead(notificationId: string) {
+    await this.notificationRepository.update(notificationId, { isRead: true });
+    return { message: 'Notification marquée comme lue.' };
   }
 }

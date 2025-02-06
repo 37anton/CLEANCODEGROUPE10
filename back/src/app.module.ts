@@ -1,13 +1,9 @@
-// src/app.module.ts
 import { Module } from '@nestjs/common';
-
-
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { ScheduleModule } from "@nestjs/schedule";
-import { NotificationService } from "./application/services/notification.service";
 import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/frameworks/nestjs/notification.module";
@@ -19,18 +15,12 @@ import { PartStock } from './domain/entities/part-stock.entity';
 import { MotorcycleModule } from './infrastructure/modules/motorcycle.module';
 import { IntervalDefinitionModule } from './infrastructure/modules/interval-definition.module';
 
-
-
-
-
 @Module({
   imports: [
+    NotificationModule, // ✅ Il est déjà importé ici, donc inutile de le redéfinir plus bas
+    ScheduleModule.forRoot(),
+    TypeOrmModule.forFeature([User, Notification]),
 
-    NotificationModule,
-    ScheduleModule.forRoot(), // Active le Cron Job
-    TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
-
-    // Configuration globale du ConfigModule
     ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRoot({
@@ -43,14 +33,14 @@ import { IntervalDefinitionModule } from './infrastructure/modules/interval-defi
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+
     AuthModule,
     PartModule,
     PartStockModule,
-    NotificationModule,
     MotorcycleModule,
     IntervalDefinitionModule,
   ],
   controllers: [AppController],
-  providers: [AppService, NotificationService],
+  providers: [AppService], // ❌ Retire NotificationService ici
 })
 export class AppModule {}
