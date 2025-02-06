@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Drivers from "./pages/Drivers";
+import Suppliers from "./pages/Suppliers";
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import Notifications from "./pages/Notifications";
@@ -66,6 +67,7 @@ const App = () => {
               <Route path="/interval-definitions" element={<IntervalDefinitionList />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/drivers" element={<Drivers />} />
+              <Route path="/suppliers" element={<Suppliers />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}

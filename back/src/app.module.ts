@@ -22,6 +22,7 @@ import { IncidentModule } from './infrastructure/modules/incident.module';
 import { RepairModule } from './infrastructure/modules/repair.module';
 import { WarrantyModule } from './infrastructure/modules/warranty.module';
 import { OrderModule } from "./infrastructure/modules/order.module";
+import { SupplierModule } from "./infrastructure/modules/supplier.module";
 
 @Module({
   imports: [
@@ -52,7 +53,8 @@ import { OrderModule } from "./infrastructure/modules/order.module";
     WarrantyModule,
     NotificationModule,
     OrderModule,
-    DriverModule
+    DriverModule,
+    SupplierModule
   ],
   controllers: [AppController],
   providers: [AppService],

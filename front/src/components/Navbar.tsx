@@ -45,6 +45,11 @@ const Navbar = () => {
                       Drivers
                     </Link>
                   </li>
+                  <li className="mr-2">
+                    <Link to="/suppliers" className="btn btn-info">
+                      Suppliers
+                    </Link>
+                  </li>
                   <li>
                     <button onClick={handleLogout} className="btn btn-error">
                       Logout
@@ -109,6 +114,11 @@ const Navbar = () => {
               <li>
                 <Link to="/drivers" className="btn btn-info w-full">
                   Drivers
+                </Link>
+              </li>
+              <li>
+                <Link to="/supppliers" className="btn btn-info w-full">
+                  Suppliers
                 </Link>
               </li>
               <li>
