@@ -1,26 +1,48 @@
-import { Controller, Get, Req, UseGuards, Patch, Param, Body, Post } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Req, UseGuards, Patch } from '@nestjs/common';
 import { DriverService } from '../../../application/services/driver.service';
-import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { Request } from 'express';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('drivers')
-@UseGuards(JwtAuthGuard) // Protège l'accès avec le JWT
+@UseGuards(JwtAuthGuard)
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
-  @Get()
-  async getDrivers(@Req() req: Request) {
-    // Récupérer l'entreprise de l'utilisateur à partir du JWT
-    const user = req.user as any; // Typage du user
+  @Post()
+  async create(
+    @Req() req: Request,
+    @Body() body: { name: string; license: string; experience: number }
+  ) {
+    if (!req.user) {
+      return { message: "Utilisateur non authentifié." };
+    }
+
+    const user = req.user as any;
     const companyId = user.company?.id;
 
     if (!companyId) {
       return { message: "Vous n'êtes pas associé à une entreprise." };
     }
 
-    // Récupération des conducteurs de la même entreprise
-    const drivers = await this.driverService.getDriversByCompany(companyId);
-    return drivers;
+    return this.driverService.create(companyId, body.name, body.license, body.experience);
+  }
+
+
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    return this.driverService.findById(id);
+  }
+
+  @Get()
+  async findByCompany(@Req() req: Request) {
+    const user = req.user as any;
+    const companyId = user.company?.id;
+
+    if (!companyId) {
+      return { message: "Vous n'êtes pas associé à une entreprise." };
+    }
+
+    return this.driverService.findByCompany(companyId);
   }
 
   @Patch(':id')
@@ -29,6 +51,10 @@ export class DriverController {
     @Req() req: Request,
     @Body() updateData: Partial<{ name: string; license: string; experience: number }>
   ) {
+    if (!req.user) {
+      return { message: "Utilisateur non authentifié." };
+    }
+
     const user = req.user as any;
     const companyId = user.company?.id;
 
@@ -37,20 +63,5 @@ export class DriverController {
     }
 
     return await this.driverService.updateDriver(driverId, companyId, updateData);
-  }
-
-  @Post()
-  async createDriver(
-    @Req() req: Request,
-    @Body() driverData: Partial<{ name: string; license: string; experience: number }>
-  ) {
-    const user = req.user as any;
-    const companyId = user.company?.id;
-
-    if (!companyId) {
-      return { message: "Vous n'êtes pas associé à une entreprise." };
-    }
-
-    return await this.driverService.createDriver(companyId, driverData);
   }
 }
