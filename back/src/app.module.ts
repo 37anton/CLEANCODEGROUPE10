@@ -1,17 +1,4 @@
-
-
-
-
 import { NotificationService } from "./application/services/notification.service";
-
-
-
-
-
-
-
-
-
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -20,8 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ScheduleModule } from "@nestjs/schedule";
 import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
-import { NotificationModule } from "./infrastructure/frameworks/nestjs/notification.module";
-
+import { NotificationModule } from "./infrastructure/modules/notification.module";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
 import { DriverModule } from "./infrastructure/modules/driver.module";
@@ -35,18 +21,14 @@ import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
 import { IncidentModule } from './infrastructure/modules/incident.module';
 import { RepairModule } from './infrastructure/modules/repair.module';
 import { WarrantyModule } from './infrastructure/modules/warranty.module';
-import { OrderModule } from "./infrastructure/frameworks/nestjs/order.module";
-
-
+import { OrderModule } from "./infrastructure/modules/order.module";
 
 @Module({
   imports: [
     NotificationModule, // ✅ Il est déjà importé ici, donc inutile de le redéfinir plus bas
     ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([User, Notification]),
-
     ConfigModule.forRoot({ isGlobal: true }),
-
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -68,12 +50,11 @@ import { OrderModule } from "./infrastructure/frameworks/nestjs/order.module";
     IncidentModule,
     RepairModule,
     WarrantyModule,
-
     NotificationModule,
     OrderModule,
     DriverModule
   ],
   controllers: [AppController],
-  providers: [AppService], // ❌ Retire NotificationService ici
+  providers: [AppService],
 })
 export class AppModule {}

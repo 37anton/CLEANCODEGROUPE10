@@ -30,7 +30,7 @@ import { InMemoryIntervalRepository } from 'src/infrastructure/repositories/in-m
 // Import des modules qui exportent d'autres providers
 import { IntervalDefinitionModule } from 'src/infrastructure/modules/interval-definition.module';
 import { UserModule } from '../frameworks/nestjs/user.module';
-import { NotificationModule } from 'src/infrastructure/frameworks/nestjs/notification.module';
+import { NotificationModule } from './notification.module';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 

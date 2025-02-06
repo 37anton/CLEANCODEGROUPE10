@@ -12,7 +12,6 @@ export class GetMaintenancePlanUseCase {
   constructor(
     @Inject('CustomMotorcycleRepository')
     private readonly motorcycleRepository: MotorcycleRepository,
-    @Inject('CustomUserRepository')
     private readonly userRepository: UserService,
     private readonly notificationService: NotificationService,
   ) {}
