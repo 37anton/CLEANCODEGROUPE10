@@ -16,6 +16,9 @@ import { MotorcycleModule } from './infrastructure/modules/motorcycle.module';
 import { IntervalDefinitionModule } from './infrastructure/modules/interval-definition.module';
 import { CronModule } from './application/cron/cron.module';
 import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
+import { IncidentModule } from './infrastructure/modules/incident.module';
+import { RepairModule } from './infrastructure/modules/repair.module';
+import { WarrantyModule } from './infrastructure/modules/warranty.module';
 
 
 
@@ -44,7 +47,10 @@ import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
     MotorcycleModule,
     IntervalDefinitionModule,
     CronModule,
-    MaintenanceModule, // Ajout du module Maintenance
+    MaintenanceModule, 
+    IncidentModule,
+    RepairModule,
+    WarrantyModule,
 
   ],
   controllers: [AppController],

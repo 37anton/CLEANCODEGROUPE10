@@ -19,6 +19,9 @@ import UpdateIntervalDefinition from './pages/UpdateIntervalDefinition';
 import IntervalDefinitionList from './pages/IntervalDefinitionList';
 import MaintenanceHistoryPage from './pages/MaintenanceHistory';
 import CreateMaintenancePage from './pages/CreateMaintenancePage';
+import CreateIncidentPage from './pages/CreateIncident';
+import CreateRepairPage from './pages/CreateRepair';
+import CreateWarrantyPage from './pages/CreateWarranty'; 
 
 const App = () => {
 
@@ -54,7 +57,9 @@ const App = () => {
               <Route path="/maintenance-plan/:motorcycleId" element={<MaintenancePlanPage />} />
               <Route path="/maintenances/vehicle/:vehicleId" element={<MaintenanceHistoryPage />} />
               <Route path="/maintenances/create/:vehicleId" element={<CreateMaintenancePage />} />
-
+              <Route path="/incidents/create/:motorcycleId" element={<CreateIncidentPage />} />
+              <Route path="/repairs/create/:incidentId" element={<CreateRepairPage />} />
+              <Route path="/warranties/create/:motorcycleId" element={<CreateWarrantyPage />} />
               <Route path="/create-interval" element={<CreateIntervalDefinition />} /> {/* Nouvelle route */}
               <Route path="/update-interval/:id" element={<UpdateIntervalDefinition />} />
               <Route path="/interval-definitions" element={<IntervalDefinitionList />} />
