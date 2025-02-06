@@ -10,17 +10,17 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { NotificationService } from "./application/services/notification.service";
 import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
-import { NotificationModule } from "./infrastructure/frameworks/nestjs/notification.module";
+import { NotificationModule } from "./infrastructure/modules/notification.module";
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
 import { FaultModule } from './infrastructure/modules/fault.module';
-import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
-import { DriverModule  } from "./infrastructure/frameworks/nestjs/driver.module";
-import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
+import { PartModule } from "./infrastructure/modules/part.module";
+import { DriverModule  } from "./infrastructure/modules/driver.module";
+import { PartStockModule } from "./infrastructure/modules/part-stock.module";
 import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
-import { OrderModule } from "./infrastructure/frameworks/nestjs/order.module";
+import { OrderModule } from "./infrastructure/modules/order.module";
 
 
 
