@@ -15,6 +15,8 @@ import { PartStock } from './domain/entities/part-stock.entity';
 import { MotorcycleModule } from './infrastructure/modules/motorcycle.module';
 import { IntervalDefinitionModule } from './infrastructure/modules/interval-definition.module';
 import { CronModule } from './application/cron/cron.module';
+import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
+
 
 
 @Module({
@@ -42,6 +44,8 @@ import { CronModule } from './application/cron/cron.module';
     MotorcycleModule,
     IntervalDefinitionModule,
     CronModule,
+    MaintenanceModule, // Ajout du module Maintenance
+
   ],
   controllers: [AppController],
   providers: [AppService], // ❌ Retire NotificationService ici

@@ -52,6 +52,10 @@ const MotorcycleList: React.FC = () => {
               <Link to={`/maintenance-plan/${moto.id}`}>
                 <button>Voir Maintenance</button>
               </Link>
+              {/* Nouveau bouton pour créer une maintenance */}
+              <Link to={`/maintenances/create/${moto.id}`}>
+                <button>Faire Maintenance</button>
+              </Link>
             </li>
           ))}
         </ul>
