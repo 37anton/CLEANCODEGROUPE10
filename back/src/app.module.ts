@@ -54,9 +54,9 @@ import { PartSupplierModule } from "./infrastructure/modules/part-supplier.modul
     RepairModule,
     WarrantyModule,
     NotificationModule,
+    SupplierModule,
     OrderModule,
-    DriverModule,
-    SupplierModule
+    DriverModule
   ],
   controllers: [AppController],
   providers: [AppService],

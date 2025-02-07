@@ -89,7 +89,6 @@ const CreateOrder: React.FC = () => {
       const requestBody = {
         supplierId,
         items: orderItems,
-        expectedDeliveryDate: new Date().toISOString(), // Date actuelle pour l'exemple
       };
 
       await axios.post("http://localhost:3000/orders", requestBody, {

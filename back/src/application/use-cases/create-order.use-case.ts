@@ -6,6 +6,7 @@ import { Injectable, BadRequestException, UnauthorizedException, Inject } from "
 import { PartSupplierRepository } from "../../infrastructure/repositories/part-supplier.repository";
 import { Order, OrderStatus } from "../../domain/entities/order.entity";
 import { OrderItem } from "../../domain/entities/order-item.entity";
+import { SupplierRepository, SUPPLIER_REPOSITORY } from "../../infrastructure/repositories/supplier.repository";
 import { User } from "../../domain/entities/user.entity";
 import { ORDER_REPOSITORY } from "../../infrastructure/repositories/order.repository";
 import { PART_SUPPLIER_REPOSITORY } from "../../infrastructure/repositories/part-supplier.repository";
@@ -13,14 +14,14 @@ import { PART_SUPPLIER_REPOSITORY } from "../../infrastructure/repositories/part
 interface CreateOrderDto {
   supplierId: string;
   items: { partSupplierId: string; quantity: number }[];
-  expectedDeliveryDate: Date;
 }
 
 @Injectable()
 export class CreateOrderUseCase {
   constructor(
     @Inject(ORDER_REPOSITORY) private readonly orderRepository: any,
-    @Inject(PART_SUPPLIER_REPOSITORY) private readonly partSupplierRepository: PartSupplierRepository
+    @Inject(PART_SUPPLIER_REPOSITORY) private readonly partSupplierRepository: PartSupplierRepository,
+    @Inject(SUPPLIER_REPOSITORY) private readonly supplierRepository: SupplierRepository
   ) {}
 
   async execute(user: User, createOrderDto: CreateOrderDto): Promise<Order> {
@@ -30,6 +31,12 @@ export class CreateOrderUseCase {
 
     let totalPrice = 0;
     const orderItems: OrderItem[] = [];
+
+    // Vérifier que le fournisseur existe et récupérer son deliveryTime
+    const supplier = await this.supplierRepository.findById(createOrderDto.supplierId);
+    if (!supplier) {
+      throw new BadRequestException(`Fournisseur avec l'ID ${createOrderDto.supplierId} introuvable.`);
+    }
 
     for (const item of createOrderDto.items) {
       const partSupplier = await this.partSupplierRepository.findById(item.partSupplierId);
@@ -47,11 +54,15 @@ export class CreateOrderUseCase {
       orderItems.push(orderItem);
     }
 
+    // Calcul de la date de livraison estimée (develiretime = now + supplier.deliveryTime en minutes )
+    const now = new Date();
+    const expectedDeliveryDate = new Date(now.getTime() + supplier.deliveryTime * 60 * 1000);
+
     const order = new Order();
     order.supplier = { id: createOrderDto.supplierId } as any;
     order.orderItems = orderItems;
     order.totalPrice = totalPrice;
-    order.expectedDeliveryDate = createOrderDto.expectedDeliveryDate;
+    order.expectedDeliveryDate = expectedDeliveryDate;
     order.status = OrderStatus.PENDING;
 
     // Assigner à l'utilisateur (entreprise, concession ou client)
@@ -64,5 +75,5 @@ export class CreateOrderUseCase {
     }
 
     return this.orderRepository.createOrder(order);
-}
   }
+}
