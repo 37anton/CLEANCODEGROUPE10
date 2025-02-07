@@ -23,12 +23,14 @@ import { RepairModule } from './infrastructure/modules/repair.module';
 import { WarrantyModule } from './infrastructure/modules/warranty.module';
 import { OrderModule } from "./infrastructure/modules/order.module";
 import { SupplierModule } from "./infrastructure/modules/supplier.module";
+import { PartSupplierModule } from "./infrastructure/modules/part-supplier.module";
 
 @Module({
   imports: [
-    NotificationModule, // ✅ Il est déjà importé ici, donc inutile de le redéfinir plus bas
-    ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([User, Notification]),
+    PartSupplierModule,
+    NotificationModule,
+    ScheduleModule.forRoot(), // Active le Cron Job
+    TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
