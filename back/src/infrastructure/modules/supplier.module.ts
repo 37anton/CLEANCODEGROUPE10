@@ -16,7 +16,7 @@ import { SUPPLIER_REPOSITORY } from "../repositories/supplier.repository";
     FindSuppliersUseCase,
     {
       provide: SUPPLIER_REPOSITORY,
-      useClass: process.env.USE_MEMORY_DB === "true" ? SupplierInMemoryRepository : SupplierSqlRepository,
+      useClass: process.env.STORAGE_ADAPTER === "in-memory" ? SupplierInMemoryRepository : SupplierSqlRepository,
     },
   ],
   exports: [SupplierService, SUPPLIER_REPOSITORY],

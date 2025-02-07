@@ -24,7 +24,7 @@ import { UserModule } from './user.module';
     FindPartStockUseCase,
     {
       provide: PART_STOCK_REPOSITORY,
-      useClass: process.env.USE_MEMORY_DB === 'true' ? PartStockInMemoryRepository : PartStockSqlRepository,
+      useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? PartStockInMemoryRepository : PartStockSqlRepository,
     },
   ],
   exports: [PartStockService, PART_STOCK_REPOSITORY],

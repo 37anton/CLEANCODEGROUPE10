@@ -22,12 +22,13 @@ import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
 import { OrderModule } from "./infrastructure/modules/order.module";
 import { SupplierModule } from "./infrastructure/modules/supplier.module";
+import { PartSupplierModule } from "./infrastructure/modules/part-supplier.module";
 
 
 
 @Module({
   imports: [
-
+    PartSupplierModule,
     NotificationModule,
     ScheduleModule.forRoot(), // Active le Cron Job
     TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
