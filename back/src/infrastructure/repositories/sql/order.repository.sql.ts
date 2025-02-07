@@ -49,9 +49,17 @@ export class OrderSqlRepository implements OrderRepository {
 
   async findAllNotShipped(): Promise<Order[]> {
     return await this.orderRepository.find({
-      where: { status: OrderStatus.PENDING }
+      where: { status: OrderStatus.PENDING },
+      relations: [
+        "company", 
+        "concession", 
+        "client",
+        "orderItems",
+        "orderItems.partSupplier",
+        "orderItems.partSupplier.part"
+      ],
     });
-  }
+  }  
 
   async update(order: Order): Promise<Order> {
     return await this.orderRepository.save(order);

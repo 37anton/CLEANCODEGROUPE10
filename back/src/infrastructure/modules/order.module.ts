@@ -12,19 +12,20 @@ import { OrderInMemoryRepository } from '../repositories/in-memory/order.reposit
 import { PartSupplier } from "../../domain/entities/part-supplier.entity";
 import { CreateOrderUseCase } from "../../application/use-cases/create-order.use-case";
 import { PART_SUPPLIER_REPOSITORY } from '../repositories/part-supplier.repository';
-import { SUPPLIER_REPOSITORY } from '../repositories/supplier.repository';
 import { PartSupplierSqlRepository } from '../repositories/sql/part-supplier.repository.sql';
 import { PartSupplierInMemoryRepository } from '../repositories/in-memory/part-supplier.repository.in-memory';
-import { SupplierInMemoryRepository } from '../repositories/in-memory/supplier.repository.in-memory';
-import { SupplierSqlRepository } from '../repositories/sql/supplier.repository.sql';
 import { SupplierModule } from './supplier.module';
 import { UpdateOrderStatusUseCase } from "../../application/use-cases/update-order-status.use-case";
+import { PART_STOCK_REPOSITORY } from '../repositories/part-stock.repository';
+import { PartStockModule } from "./part-stock.module"; 
+
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, User, PartSupplier]),
     UserModule,
-    SupplierModule
+    SupplierModule,
+    PartStockModule
   ],
   controllers: [OrderController],
   providers: [

@@ -1,10 +1,13 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PartStock } from '../../../domain/entities/part-stock.entity';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PartStockRepository } from '../part-stock.repository';
 import { User } from '../../../domain/entities/user.entity';
 import { Part } from '../../../domain/entities/part.entity';
+import { COMPANY_REPOSITORY, CompanyRepository } from "../company.repository";
+import { CONCESSION_REPOSITORY, ConcessionRepository } from "../concession.repository";
+import { CLIENT_REPOSITORY, ClientRepository } from "../client.repository";
 
 @Injectable()
 export class PartStockSqlRepository implements PartStockRepository {
@@ -15,6 +18,9 @@ export class PartStockSqlRepository implements PartStockRepository {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Part)
     private readonly partRepository: Repository<Part>,
+    @Inject(COMPANY_REPOSITORY) private readonly companyRepository: CompanyRepository,
+    @Inject(CONCESSION_REPOSITORY) private readonly concessionRepository: ConcessionRepository,
+    @Inject(CLIENT_REPOSITORY) private readonly clientRepository: ClientRepository
   ) {}
 
   async updateStock(userId: string, partId: string, quantity: number, alertThreshold: number): Promise<PartStock> {
@@ -85,6 +91,53 @@ export class PartStockSqlRepository implements PartStockRepository {
     }
   
     return await query.getMany();
+  }
+
+  async findStock(entityId: string, partId: string): Promise<PartStock | null> {
+    return this.partStockRepository.findOne({
+      where: [
+        { part: { id: partId }, company: { id: entityId } },
+        { part: { id: partId }, concession: { id: entityId } },
+        { part: { id: partId }, client: { id: entityId } }
+      ],
+      relations: ["part", "company", "concession", "client"]
+    });
+  }
+
+  async updateStockWithoutThreshold(stockId: string, newQuantity: number): Promise<void> {
+    await this.partStockRepository.update(stockId, { quantity: newQuantity });
+  }
+
+  async createStock(entityId: string, partId: string, quantity: number): Promise<void> {
+    const part = await this.partRepository.findOne({ where: { id: partId } });
+    if (!part) {
+      console.error(`Impossible de trouver la pièce ID: ${partId}`);
+      return;
+    }
+
+    const stock = this.partStockRepository.create({
+      part,
+      quantity,
+      alertThreshold: 5
+    });
+
+    // Associer au bon type d'entité
+    const company = await this.companyRepository.findOne(entityId);
+    const concession = await this.concessionRepository.findOne(entityId);
+    const client = await this.clientRepository.findOne(entityId);
+
+    if (company) {
+      stock.company = company;
+    } else if (concession) {
+      stock.concession = concession;
+    } else if (client) {
+      stock.client = client;
+    } else {
+      console.error(`Entité ID ${entityId} introuvable`);
+      return;
+    }
+
+    await this.partStockRepository.save(stock);
   }
   
 }
