@@ -17,4 +17,11 @@ export class PartSupplierSqlRepository implements PartSupplierRepository {
       relations: ["part", "supplier"],
     });
   }
+
+  async findById(partSupplierId: string): Promise<PartSupplier | null> {
+    return this.partSupplierRepository.findOne({
+      where: { id: partSupplierId },
+      relations: ["part", "supplier"]
+    });
+  }
 }
