@@ -1,19 +1,20 @@
-// src/infrastructure/repositories/in-memory-maintenance.repository.ts
+// src/infrastructure/repositories/in-memory/in-memory-maintenance.repository.ts
 import { Injectable } from '@nestjs/common';
 import { Maintenance } from '../../../domain/entities/maintenance.entity';
+import { MaintenanceRepository } from '../maintenance.repository';
 
 @Injectable()
-export class InMemoryMaintenanceRepository {
+export class InMemoryMaintenanceRepository implements MaintenanceRepository {
   private maintenances: Maintenance[] = [];
 
-  async save(maintenance: Maintenance): Promise<Maintenance> {
-    console.log('[DEBUG] Saving in memory:', maintenance);
+  async create(maintenance: Maintenance): Promise<Maintenance> {
     this.maintenances.push(maintenance);
     return maintenance;
   }
 
   async findByVehicleId(vehicleId: string): Promise<Maintenance[]> {
-    console.log('[DEBUG] Searching in memory for vehicleId:', vehicleId);
-    return this.maintenances.filter(maintenance => maintenance.vehicleId === vehicleId);
+    return this.maintenances
+      .filter(m => m.vehicleId === vehicleId)
+      .sort((a, b) => new Date(b.scheduledDate).getTime() - new Date(a.scheduledDate).getTime());
   }
 }

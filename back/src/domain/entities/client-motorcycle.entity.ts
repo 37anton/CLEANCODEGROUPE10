@@ -11,6 +11,6 @@ export class ClientMotorcycle {
   @ManyToOne(() => Client, client => client.clientMotorcycles)
   client: Client;
 
-  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.clientMotorcycles)
+  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.clientMotorcycles, { onDelete: "CASCADE" })
   motorcycle: Motorcycle;
 }

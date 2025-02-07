@@ -1,35 +1,33 @@
-import { Injectable } from "@nestjs/common";
-import { Cron } from "@nestjs/schedule";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Injectable, Inject } from "@nestjs/common";
 import { Notification } from "../../domain/entities/notification.entity";
 import { User } from "../../domain/entities/user.entity";
+import { NotificationRepository } from "src/infrastructure/repositories/sql/sql-notification.repository";
 
 @Injectable()
 export class NotificationService {
   constructor(
-    @InjectRepository(Notification) private notificationRepo: Repository<Notification>,
-    @InjectRepository(User) private userRepo: Repository<User>
+    @Inject('CustomNotificationRepository')
+    private readonly notificationRepository: NotificationRepository, // Injections via le token
   ) {}
 
-  @Cron("35 16 * * *") // Exécution tous les jours à 2h du matin
-  async generateNotifications() {
-    console.log("Exécution du cron pour générer les notifications");
-
-    const users = await this.userRepo.find();
-
+  async sendMaintenanceNotification(users: User[], message: string): Promise<void> {
     for (const user of users) {
-      await this.notificationRepo.save({
-        user,
-        message: "Entretien à venir pour votre moto !",
-      });
+      if (!user.id) continue;
+      await this.notificationRepository.createNotification(user.id, message);
+      console.log(`📧 Notification enregistrée pour ${user.email}: ${message}`);
     }
   }
 
-  async getNotificationsForUser(userId: string) {
-    return await this.notificationRepo.find({
+  async getNotificationsForUser(userId: string): Promise<Notification[]> {
+    return this.notificationRepository.find({
       where: { user: { id: userId } },
-      order: { createdAt: "DESC" },
+      order: { createdAt: 'DESC' },
     });
   }
+
+  async markNotificationAsRead(notificationId: string): Promise<{ message: string }> {
+    await this.notificationRepository.update(notificationId, { isRead: true });
+    return { message: 'Notification marquée comme lue.' };
+  }
+  
 }
