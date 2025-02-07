@@ -14,7 +14,7 @@ export class Interval {
   @Column()
   timeInYears: number;
 
-  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.intervals, { nullable: true })
+  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.intervals,  { onDelete: 'CASCADE' })
   motorcycle: Motorcycle;
 
   @OneToMany(() => Maintenance, maintenance => maintenance.interval)

@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserUseCase } from '../use-cases/create-user.use-case';
+import { FindUserByEmailUseCase } from '../use-cases/find-user-by-email.use-case';
+import { FindUserByIdUseCase } from '../use-cases/find-user-by-id.use-case';
 import { Repository } from 'typeorm';
-import { User } from 'src/domain/entities/user.entity';
 import { RegisterDto } from "../../../src/modules/auth/dto/register.dto";
+import { User } from 'src/domain/entities/user.entity';
+
 
 
 @Injectable()
@@ -10,25 +14,28 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly findUserByEmailUseCase: FindUserByEmailUseCase,
+    private readonly findUserByIdUseCase: FindUserByIdUseCase,
   ) {}
 
-  async create(registerDto: RegisterDto): Promise<User> {
-    const user = this.userRepository.create(registerDto);
-    return await this.userRepository.save(user);
+  async create(email: string, password: string, role: string) {
+    return await this.createUserUseCase.execute(email, password, role);
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({
-      where: { email },
-      relations: ["company", "concession", "client"],
-    });
+  async findByEmail(email: string) {
+    return await this.findUserByEmailUseCase.execute(email);
   }
 
-  async findById(id: string, relations: string[] = []) {
-    return this.userRepository.findOne({
-      where: { id },
-      relations,
-    });
+  async findById(id: string, relations?: string[]) {
+    return await this.findUserByIdUseCase.execute(id, relations);
   }
   
+  async findAllByCompanyId(companyId: string): Promise<User[]> {
+    return this.userRepository.find({ where: { company: { id: companyId } } });
+  }
+
+  async findAllByClientId(clientId: string): Promise<User[]> {
+    return this.userRepository.find({ where: { client: { id: clientId } } });
+  }
 }

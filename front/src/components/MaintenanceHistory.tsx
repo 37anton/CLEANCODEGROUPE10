@@ -1,69 +1,78 @@
-// src/components/MaintenanceHistory.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export interface Maintenance {
+interface Maintenance {
   id: string;
-  vehicleId: string;
   scheduledDate: string;
-  status: 'SCHEDULED' | 'COMPLETED' | 'CANCELED';
+  status: string;
   scheduledMileage?: number;
   replacedParts?: string;
   cost?: number;
   technicianRecommendations?: string;
 }
 
-interface MaintenanceHistoryProps {
+interface Props {
   vehicleId: string;
 }
 
-const MaintenanceHistory: React.FC<MaintenanceHistoryProps> = ({ vehicleId }) => {
-  const [history, setHistory] = useState<Maintenance[]>([]);
-  const [error, setError] = useState<string>('');
+const MaintenanceHistory: React.FC<Props> = ({ vehicleId }) => {
+  const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await axios.get<Maintenance[]>(`http://localhost:3000/maintenance/history/${vehicleId}`);
-        setHistory(response.data);
-      } catch (err) {
-        console.error(err);
-        setError("Error fetching maintenance history.");
+        const response = await axios.get(
+          `http://localhost:3000/maintenances/vehicle/${vehicleId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setMaintenances(response.data);
+      } catch (err: any) {
+        console.error('Erreur lors de la récupération de l\'historique des maintenances', err);
+        setError('Erreur lors de la récupération de l\'historique des maintenances');
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (vehicleId) {
-      fetchHistory();
-    }
-  }, [vehicleId]);
+    fetchHistory();
+  }, [vehicleId, token]);
+
+  if (loading) return <p>Chargement...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div>
-      <h2>Maintenance History</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {history.length === 0 ? (
-        <p>No maintenance records found.</p>
+      <h2>Historique des Entretiens</h2>
+      {maintenances.length === 0 ? (
+        <p>Aucun entretien enregistré.</p>
       ) : (
-        <table border={1} cellPadding={8} style={{ borderCollapse: 'collapse', width: '100%' }}>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Replaced Parts</th>
-              <th>Cost</th>
-              <th>Technician Recommendations</th>
-            </tr>
-          </thead>
-          <tbody>
-            {history.map(record => (
-              <tr key={record.id}>
-                <td>{new Date(record.scheduledDate).toLocaleDateString()}</td>
-                <td>{record.replacedParts || 'Not provided'}</td>
-                <td>{record.cost != null ? `${record.cost} €` : 'Not provided'}</td>
-                <td>{record.technicianRecommendations || 'Not provided'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ul>
+          {maintenances.map((m) => (
+            <li key={m.id}>
+              <p>
+                <strong>Date :</strong> {new Date(m.scheduledDate).toLocaleDateString()}
+              </p>
+              <p>
+                <strong>Status :</strong> {m.status}
+              </p>
+              <p>
+                <strong>Kilométrage prévu :</strong> {m.scheduledMileage ?? '-'}
+              </p>
+              <p>
+                <strong>Pièces remplacées :</strong> {m.replacedParts ?? '-'}
+              </p>
+              <p>
+                <strong>Coût :</strong> {m.cost ? m.cost + ' €' : '-'}
+              </p>
+              <p>
+                <strong>Recommandations :</strong> {m.technicianRecommendations ?? '-'}
+              </p>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

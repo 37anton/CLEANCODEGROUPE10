@@ -1,39 +1,35 @@
-// src/app.module.ts
+import { NotificationService } from "./application/services/notification.service";
 import { Module } from '@nestjs/common';
-
-
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { ScheduleModule } from "@nestjs/schedule";
-import { NotificationService } from "./application/services/notification.service";
 import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
-import { NotificationModule } from "./infrastructure/frameworks/nestjs/notification.module";
-
+import { NotificationModule } from "./infrastructure/modules/notification.module";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
-import { FaultModule } from './infrastructure/modules/fault.module';
 import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
-import { DriverModule  } from "./infrastructure/frameworks/nestjs/driver.module";
-import { PartStockModule } from "./infrastructure/frameworks/nestjs/part-stock.module";
+import { DriverModule } from "./infrastructure/modules/driver.module";
+import { PartStockModule } from "./infrastructure/modules/part-stock.module";
 import { Part } from './domain/entities/part.entity';
 import { PartStock } from './domain/entities/part-stock.entity';
-import { OrderModule } from "./infrastructure/frameworks/nestjs/order.module";
-
-
+import { MotorcycleModule } from './infrastructure/modules/motorcycle.module';
+import { IntervalDefinitionModule } from './infrastructure/modules/interval-definition.module';
+import { CronModule } from './application/cron/cron.module';
+import { MaintenanceModule } from './infrastructure/modules/maintenance.module';
+import { IncidentModule } from './infrastructure/modules/incident.module';
+import { RepairModule } from './infrastructure/modules/repair.module';
+import { WarrantyModule } from './infrastructure/modules/warranty.module';
+import { OrderModule } from "./infrastructure/modules/order.module";
+import { SupplierModule } from "./infrastructure/modules/supplier.module";
 
 @Module({
   imports: [
-
-    NotificationModule,
-    ScheduleModule.forRoot(), // Active le Cron Job
-    TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
-
-    // Configuration globale du ConfigModule
+    NotificationModule, // ✅ Il est déjà importé ici, donc inutile de le redéfinir plus bas
+    ScheduleModule.forRoot(),
+    TypeOrmModule.forFeature([User, Notification]),
     ConfigModule.forRoot({ isGlobal: true }),
-
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -44,16 +40,23 @@ import { OrderModule } from "./infrastructure/frameworks/nestjs/order.module";
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+
     AuthModule,
-    MaintenanceModule,
-    FaultModule,
     PartModule,
     PartStockModule,
+    MotorcycleModule,
+    IntervalDefinitionModule,
+    CronModule,
+    MaintenanceModule, 
+    IncidentModule,
+    RepairModule,
+    WarrantyModule,
     NotificationModule,
     OrderModule,
-    DriverModule
+    DriverModule,
+    SupplierModule
   ],
   controllers: [AppController],
-  providers: [AppService, NotificationService],
+  providers: [AppService],
 })
 export class AppModule {}
