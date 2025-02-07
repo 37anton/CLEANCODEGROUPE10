@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface Supplier {
@@ -13,6 +14,7 @@ const Suppliers: React.FC = () => {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchSuppliers();
@@ -27,6 +29,10 @@ const Suppliers: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCreateOrder = (supplierId: string) => {
+    navigate(`/create-order/${supplierId}`);
   };
 
   if (loading) return <p className="text-center text-lg">Chargement des fournisseurs...</p>;
@@ -46,6 +52,12 @@ const Suppliers: React.FC = () => {
             <p><strong>📍 Ville :</strong> {supplier.city}</p>
             <p><strong>📞 Téléphone :</strong> {supplier.phone}</p>
             <p><strong>⏳ Délai de livraison :</strong> {supplier.deliveryTime} jours</p>
+            <button
+              className="btn btn-primary mt-2 w-full"
+              onClick={() => handleCreateOrder(supplier.id)}
+            >
+              🛒 Commander
+            </button>
           </div>
         ))}
       </div>

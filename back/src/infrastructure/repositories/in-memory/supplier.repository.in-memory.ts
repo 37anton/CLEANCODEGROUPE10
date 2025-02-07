@@ -9,4 +9,8 @@ export class SupplierInMemoryRepository implements SupplierRepository {
   async findAll(): Promise<Supplier[]> {
     return this.suppliers;
   }
+
+  async findById(id: string): Promise<Supplier | null> {
+    return this.suppliers.find(supplier => supplier.id === id) || null;
+  }
 }
