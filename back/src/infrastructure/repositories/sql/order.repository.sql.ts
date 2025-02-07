@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from '../../../domain/entities/order.entity';
+import { Order, OrderStatus } from '../../../domain/entities/order.entity';
 import { Injectable } from '@nestjs/common';
 import { OrderRepository } from '../order.repository';
 import { User } from '../../../domain/entities/user.entity';
@@ -44,6 +44,16 @@ export class OrderSqlRepository implements OrderRepository {
   }
 
   async createOrder(order: Order): Promise<Order> {
+    return await this.orderRepository.save(order);
+  }
+
+  async findAllNotShipped(): Promise<Order[]> {
+    return await this.orderRepository.find({
+      where: { status: OrderStatus.PENDING }
+    });
+  }
+
+  async update(order: Order): Promise<Order> {
     return await this.orderRepository.save(order);
   }
 }

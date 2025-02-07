@@ -18,6 +18,7 @@ import { PartSupplierInMemoryRepository } from '../repositories/in-memory/part-s
 import { SupplierInMemoryRepository } from '../repositories/in-memory/supplier.repository.in-memory';
 import { SupplierSqlRepository } from '../repositories/sql/supplier.repository.sql';
 import { SupplierModule } from './supplier.module';
+import { UpdateOrderStatusUseCase } from "../../application/use-cases/update-order-status.use-case";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { SupplierModule } from './supplier.module';
   controllers: [OrderController],
   providers: [
     OrderService,
+    UpdateOrderStatusUseCase,
     FindOrdersUseCase,
     CreateOrderUseCase,
     {
