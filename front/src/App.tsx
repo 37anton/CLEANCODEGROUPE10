@@ -12,8 +12,9 @@ import MaintenanceHistory from './components/MaintenanceHistory';
 import FaultManagementPage from './pages/FaultManagementPage';
 import { AuthProvider } from './context/AuthContext';
 import Notifications from "./pages/Notifications";
-import Stock from "./pages/Stock"; //
+import Stock from "./pages/Stock";
 import Orders from "./pages/Orders";
+import CreateOrder from "./pages/CreateOrder";
 
 const App = () => {
   const vehicleId = 'vehicle1'; // Exemple d'identifiant de véhicule
@@ -46,6 +47,7 @@ const App = () => {
               <Route path="/orders" element={<Orders />} />
               <Route path="/drivers" element={<Drivers />} />
               <Route path="/suppliers" element={<Suppliers />} />
+              <Route path="/create-order/:supplierId" element={<CreateOrder />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}
