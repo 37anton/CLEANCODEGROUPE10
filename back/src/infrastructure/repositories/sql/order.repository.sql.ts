@@ -42,4 +42,8 @@ export class OrderSqlRepository implements OrderRepository {
 
     return await query.getMany();
   }
+
+  async createOrder(order: Order): Promise<Order> {
+    return await this.orderRepository.save(order);
+  }
 }
