@@ -8,13 +8,15 @@ import { CreateMaintenanceUseCase } from '../../application/use-cases/create-mai
 import { GetMaintenanceHistoryUseCase } from '../../application/use-cases/get-maintenance-history.use-case';
 import { MaintenanceController } from 'src/interfaces/controllers/maintenance.controller';
 import { MotorcycleModule } from './motorcycle.module';
+import { PartStockModule } from './part-stock.module';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Maintenance]),
-        MotorcycleModule, // IMPORTANT : importer MotorcycleModule
+        MotorcycleModule,
+        PartStockModule, 
       ],
   controllers: [MaintenanceController],
   providers: [

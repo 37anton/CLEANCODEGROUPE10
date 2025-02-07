@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+interface MaintenancePartDto {
+  id: string;
+  quantity: number;
+  partStock: {
+    id: string;
+    part: {
+      id: string;
+      name: string;
+    };
+  };
+}
+
 interface Maintenance {
   id: string;
   scheduledDate: string;
   status: string;
   scheduledMileage?: number;
-  replacedParts?: string;
+  maintenanceParts?: MaintenancePartDto[];
   cost?: number;
   technicianRecommendations?: string;
 }
@@ -30,8 +42,8 @@ const MaintenanceHistory: React.FC<Props> = ({ vehicleId }) => {
         );
         setMaintenances(response.data);
       } catch (err: any) {
-        console.error('Erreur lors de la récupération de l\'historique des maintenances', err);
-        setError('Erreur lors de la récupération de l\'historique des maintenances');
+        console.error("Erreur lors de la récupération de l'historique des maintenances", err);
+        setError("Erreur lors de la récupération de l'historique des maintenances");
       } finally {
         setLoading(false);
       }
@@ -61,9 +73,20 @@ const MaintenanceHistory: React.FC<Props> = ({ vehicleId }) => {
               <p>
                 <strong>Kilométrage prévu :</strong> {m.scheduledMileage ?? '-'}
               </p>
-              <p>
-                <strong>Pièces remplacées :</strong> {m.replacedParts ?? '-'}
-              </p>
+              <div>
+                <strong>Pièces remplacées :</strong>
+                {m.maintenanceParts && m.maintenanceParts.length > 0 ? (
+                  <ul>
+                    {m.maintenanceParts.map((mp) => (
+                      <li key={mp.id}>
+                        {mp.partStock.part.name} x {mp.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span> -</span>
+                )}
+              </div>
               <p>
                 <strong>Coût :</strong> {m.cost ? m.cost + ' €' : '-'}
               </p>
