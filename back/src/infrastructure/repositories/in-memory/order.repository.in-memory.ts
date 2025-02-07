@@ -13,4 +13,10 @@ export class OrderInMemoryRepository implements OrderRepository {
       order.client?.id === userId
     );
   }
+
+  async createOrder(order: Order): Promise<Order> {
+    order.id = Math.random().toString(36).substring(7);
+    this.orders.push(order);
+    return order;
+  }
 }
