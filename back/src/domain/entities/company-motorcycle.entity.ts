@@ -12,7 +12,7 @@ export class CompanyMotorcycle {
   @ManyToOne(() => Company, company => company.companyMotorcycles)
   company: Company;
 
-  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.companyMotorcycles)
+  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.companyMotorcycles, { onDelete: "CASCADE" })
   motorcycle: Motorcycle;
 
   @OneToMany(() => Driver, driver => driver.companyMotorcycle)

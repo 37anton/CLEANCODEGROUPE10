@@ -1,21 +1,25 @@
-// src/infrastructure/repositories/sql-maintenance.repository.ts
+// src/infrastructure/repositories/sql/sql-maintenance.repo.ts
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Maintenance } from '../../../domain/entities/maintenance.entity';
+import { MaintenanceRepository } from '../maintenance.repository';
 
 @Injectable()
-export class SQLMaintenanceRepository {
+export class SQLMaintenanceRepository implements MaintenanceRepository {
   constructor(
     @InjectRepository(Maintenance)
-    private readonly maintenanceRepository: Repository<Maintenance>,
+    private readonly ormRepository: Repository<Maintenance>,
   ) {}
 
-  async save(maintenance: Maintenance): Promise<Maintenance> {
-    return this.maintenanceRepository.save(maintenance);
+  async create(maintenance: Maintenance): Promise<Maintenance> {
+    return this.ormRepository.save(maintenance);
   }
 
   async findByVehicleId(vehicleId: string): Promise<Maintenance[]> {
-    return this.maintenanceRepository.find({ where: { vehicleId } });
+    return this.ormRepository.find({
+      where: { vehicleId },
+      order: { scheduledDate: 'DESC' },
+    });
   }
 }
