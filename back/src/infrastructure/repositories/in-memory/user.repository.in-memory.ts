@@ -23,4 +23,13 @@ export class UserInMemoryRepository implements UserRepository {
   async findById(id: string, relations?: string[]): Promise<User | null> {
     return this.users.find(user => user.id === id) || null;
   }
+
+  async findByEntity(entityId: string): Promise<User[]> {
+    return this.users.filter(
+      (user) =>
+        user.company?.id === entityId ||
+        user.concession?.id === entityId ||
+        user.client?.id === entityId
+    );
+  }
 }

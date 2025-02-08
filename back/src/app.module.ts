@@ -27,9 +27,11 @@ import { PartSupplierModule } from "./infrastructure/modules/part-supplier.modul
 import { CompanyModule } from "./infrastructure/modules/company.module";
 import { ConcessionModule } from "./infrastructure/modules/concession.module";
 import { ClientModule } from "./infrastructure/modules/client.module";
+import { ThresholdNotificationsCron } from "./application/cron/threshold-notifications.cron";
+import { UserModule } from "./infrastructure/modules/user.module";
 @Module({
   imports: [
-
+    UserModule,
     PartSupplierModule,
     NotificationModule,
     ScheduleModule.forRoot(), 
@@ -67,6 +69,9 @@ import { ClientModule } from "./infrastructure/modules/client.module";
     ClientModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    ThresholdNotificationsCron
+  ],
 })
 export class AppModule {}

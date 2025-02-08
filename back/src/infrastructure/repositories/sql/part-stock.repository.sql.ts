@@ -139,5 +139,14 @@ export class PartStockSqlRepository implements PartStockRepository {
 
     await this.partStockRepository.save(stock);
   }
+
+  async findAllWithoutUser(): Promise<PartStock[]> {
+    return this.partStockRepository.createQueryBuilder("partStock")
+      .leftJoinAndSelect("partStock.part", "part")
+      .leftJoinAndSelect("partStock.company", "company")   // Ajout de company
+      .leftJoinAndSelect("partStock.concession", "concession")  // Ajout de concession
+      .leftJoinAndSelect("partStock.client", "client")   // Ajout de client
+      .getMany();
+  }
   
 }
