@@ -26,7 +26,7 @@ import CreateIncidentPage from './pages/CreateIncident';
 import CreateRepairPage from './pages/CreateRepair';
 import CreateWarrantyPage from './pages/CreateWarranty'; 
 import WarrantyHistoryPage from './pages/WarrantyHistory';
-import IncidentHistoryPage from './pages/IncidentHitory';
+import IncidentHistoryPage from './pages/IncidentHistory';
 
 
 const App = () => {
