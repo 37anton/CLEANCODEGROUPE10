@@ -1,4 +1,3 @@
-// src/infrastructure/modules/notification.module.ts
 import { Module } from "@nestjs/common";
 import { TypeOrmModule, getRepositoryToken } from "@nestjs/typeorm";
 import { NotificationService } from "../../application/services/notification.service";
@@ -14,7 +13,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Notification, User]),
+    ...(!isInMemory ? [TypeOrmModule.forFeature([Notification, User])] : []),
     UserModule, // Pour accéder à User si besoin
   ],
   controllers: [NotificationController],
@@ -27,8 +26,8 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
   ],
   exports: [
     NotificationService,
-    TypeOrmModule,
-    NOTIFICATION_REPOSITORY
+    NOTIFICATION_REPOSITORY,
+    ...(isInMemory ? [] : [TypeOrmModule]),
   ],
 })
 export class NotificationModule {}
