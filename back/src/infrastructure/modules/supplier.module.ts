@@ -8,6 +8,7 @@ import { FindSupplierByIdUseCase  } from "../../application/use-cases/find-suppl
 import { SupplierSqlRepository } from "../repositories/sql/supplier.repository.sql";
 import { SupplierInMemoryRepository } from "../repositories/in-memory/supplier.repository.in-memory";
 import { SUPPLIER_REPOSITORY } from "../repositories/supplier.repository";
+import { CreateSupplierUseCase } from "src/application/use-cases/create-supplier.use-case";
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
@@ -18,6 +19,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     SupplierService,
     FindSuppliersUseCase,
     FindSupplierByIdUseCase,
+    CreateSupplierUseCase,
     {
       provide: SUPPLIER_REPOSITORY,
       useClass: process.env.STORAGE_ADAPTER === "in-memory" ? SupplierInMemoryRepository : SupplierSqlRepository,

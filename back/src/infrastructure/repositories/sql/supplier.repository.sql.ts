@@ -18,4 +18,9 @@ export class SupplierSqlRepository implements SupplierRepository {
   async findById(id: string): Promise<Supplier | null> {
     return await this.supplierRepository.findOne({ where: { id } });
   }
+
+  async createSupplier(supplier: Supplier): Promise<Supplier> {
+    return await this.supplierRepository.save(supplier);
+  }
+
 }
