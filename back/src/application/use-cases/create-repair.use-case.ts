@@ -20,7 +20,6 @@ export class CreateRepairUseCase {
     repair.repairDate = data.repairDate ? new Date(data.repairDate) : new Date();
     repair.description = data.description ?? '';
     repair.incident = data.incident;
-    // On suppose que repairParts sera géré séparément
     repair.repairParts = [];
     return this.repairRepository.create(repair);
   }

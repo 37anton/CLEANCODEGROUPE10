@@ -22,9 +22,7 @@ export class PartStockService {
   }
 
   async deductStock(userId: string, partId: string, quantity: number): Promise<any> {
-    // Récupère tous les stocks pour l'utilisateur
     const stocks = await this.partStockRepository.findAll(userId);
-    // Trouver le stock correspondant à la pièce
     const currentStock = stocks.find((stock: any) => stock.part.id === partId);
     if (!currentStock) {
       throw new Error(`Stock introuvable pour la pièce ${partId}.`);
@@ -32,9 +30,7 @@ export class PartStockService {
     if (currentStock.quantity < quantity) {
       throw new Error(`Quantité insuffisante pour la pièce ${partId}. Stock actuel: ${currentStock.quantity}.`);
     }
-    // Calcul du nouveau stock
     const newQuantity = currentStock.quantity - quantity;
-    // Mettre à jour le stock et retourner l'enregistrement mis à jour
     return await this.partStockRepository.updateStock(userId, partId, newQuantity, currentStock.alertThreshold);
   }
 }

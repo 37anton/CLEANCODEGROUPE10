@@ -1,4 +1,3 @@
-// src/domain/entities/maintenance.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Interval } from './interval.entity';
 import { MaintenancePart } from './maintenance-part.entity';

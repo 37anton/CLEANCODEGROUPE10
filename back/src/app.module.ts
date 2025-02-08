@@ -26,7 +26,7 @@ import { SupplierModule } from "./infrastructure/modules/supplier.module";
 
 @Module({
   imports: [
-    NotificationModule, // ✅ Il est déjà importé ici, donc inutile de le redéfinir plus bas
+    NotificationModule, 
     ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([User, Notification]),
     ConfigModule.forRoot({ isGlobal: true }),

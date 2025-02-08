@@ -1,4 +1,3 @@
-// src/domain/entities/interval.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Motorcycle } from './motorcycle.entity';
 import { Maintenance } from './maintenance.entity';

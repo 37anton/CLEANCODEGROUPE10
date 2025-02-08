@@ -1,4 +1,3 @@
-// src/domain/entities/concession.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { Motorcycle } from './motorcycle.entity';

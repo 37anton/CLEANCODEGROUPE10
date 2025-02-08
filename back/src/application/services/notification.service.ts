@@ -7,7 +7,7 @@ import { NotificationRepository } from "src/infrastructure/repositories/sql/sql-
 export class NotificationService {
   constructor(
     @Inject('CustomNotificationRepository')
-    private readonly notificationRepository: NotificationRepository, // Injections via le token
+    private readonly notificationRepository: NotificationRepository,
   ) {}
 
   async sendMaintenanceNotification(users: User[], message: string): Promise<void> {

@@ -1,4 +1,3 @@
-// src/application/use-cases/create-maintenance.use-case.ts
 import { Injectable, Inject } from '@nestjs/common';
 import { Maintenance } from '../../domain/entities/maintenance.entity';
 import { MaintenanceRepository } from '../../infrastructure/repositories/maintenance.repository';
@@ -27,12 +26,10 @@ export class CreateMaintenanceUseCase {
       throw new Error(`Moto avec l'ID ${data.vehicleId} introuvable.`);
     }
 
-    // Récupération du premier intervalle, s'il existe
     const intervalValue = (motorcycle.intervals && motorcycle.intervals.length > 0)
       ? motorcycle.intervals[0]
       : null;
 
-    // Calcul du kilométrage prévu : si non fourni, on le calcule à partir de lastMaintenanceMileage + interval.km (ou 0)
     const computedScheduledMileage: number = data.scheduledMileage 
       ?? (motorcycle.lastMaintenanceMileage + (intervalValue?.km ?? 0));
 
@@ -49,12 +46,10 @@ export class CreateMaintenanceUseCase {
     }
     maintenance.maintenanceParts = [];
 
-    // Pour chaque pièce remplacée, déduire le stock et créer une entité MaintenancePart
     for (const replaced of data.replacedParts) {
       if (replaced.quantity <= 0) {
         throw new Error(`La quantité pour la pièce ${replaced.partId} doit être supérieure à zéro.`);
       }
-      // Déduction du stock : on utilise data.userId (l'utilisateur connecté)
       const updatedPartStock = await this.partStockService.deductStock(data.userId, replaced.partId, replaced.quantity);
       const maintenancePart = new MaintenancePart();
       maintenancePart.id = crypto.randomUUID();
@@ -63,13 +58,11 @@ export class CreateMaintenanceUseCase {
       maintenance.maintenanceParts.push(maintenancePart);
     }
 
-    // Création de la maintenance
     const createdMaintenance = await this.maintenanceRepository.create(maintenance);
 
-    // Mise à jour de la moto avec les nouvelles valeurs (dernière maintenance)
     motorcycle.lastMaintenanceDate = maintenance.scheduledDate;
     motorcycle.lastMaintenanceMileage = computedScheduledMileage;
-    motorcycle.mileage = computedScheduledMileage; // Mise à jour du kilométrage actuel
+    motorcycle.mileage = computedScheduledMileage; 
     await this.motorcycleRepository.update(motorcycle);
 
     return createdMaintenance;

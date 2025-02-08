@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 interface Motorcycle {
   id: string;
@@ -11,7 +11,6 @@ interface Motorcycle {
   lastMaintenanceDate: string;
   mileage: number;
   lastMaintenanceMileage: number;
-  concession?: { id: string };
 }
 
 const MotorcycleList: React.FC = () => {
@@ -26,7 +25,7 @@ const MotorcycleList: React.FC = () => {
         });
         setMotorcycles(response.data);
       } catch (error) {
-        console.error('Error fetching motorcycles', error);
+        console.error('Erreur lors de la récupération des motos', error);
       }
     };
 
@@ -35,14 +34,16 @@ const MotorcycleList: React.FC = () => {
 
   return (
     <div>
-      <h1>Mes Motos</h1>
+      <h1>Liste des Motos</h1>
       {motorcycles.length === 0 ? (
         <p>Aucune moto trouvée</p>
       ) : (
         <ul>
           {motorcycles.map((moto) => (
             <li key={moto.id}>
-              <p>{moto.model} - {moto.vin}</p>
+              <p>
+                {moto.model} - {moto.vin}
+              </p>
               <Link to={`/motorcycles/update/${moto.id}`}>
                 <button>Modifier</button>
               </Link>
@@ -52,9 +53,17 @@ const MotorcycleList: React.FC = () => {
               <Link to={`/maintenance-plan/${moto.id}`}>
                 <button>Voir Maintenance</button>
               </Link>
-              {/* Nouveau bouton pour créer une maintenance */}
-              <Link to={`/maintenances/create/${moto.id}`}>
-                <button>Faire Maintenance</button>
+              <Link to={`/incidents/create/${moto.id}`}>
+                <button>Créer Incident</button>
+              </Link>
+              <Link to={`/incidents/vehicle/${moto.id}`}>
+                <button>Historique Incidents</button>
+              </Link>
+              <Link to={`/warranties/create/${moto.id}`}>
+                <button>Ajouter Garantie</button>
+              </Link>
+              <Link to={`/warranties/vehicle/${moto.id}`}>
+                <button>Voir Garanties</button>
               </Link>
             </li>
           ))}

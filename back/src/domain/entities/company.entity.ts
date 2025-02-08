@@ -1,4 +1,3 @@
-// src/domain/entities/company.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { CompanyMotorcycle } from './company-motorcycle.entity';
@@ -19,6 +18,6 @@ export class Company {
   companyMotorcycles: CompanyMotorcycle[];
 
   @OneToMany(() => Driver, driver => driver.company)
-  drivers: Driver[]; // Liste des conducteurs associés à cette entreprise
+  drivers: Driver[]; 
 
 }

@@ -19,7 +19,7 @@ export class MotorcycleService {
   ) {}
 
   async createMotorcycle(dto: CreateMotorcycleDto, user: User): Promise<Motorcycle> {
-    // Création de la moto principale
+
     const motorcycle = this.motorcycleRepository.create({
       vin: dto.vin,
       model: dto.model,
@@ -30,7 +30,6 @@ export class MotorcycleService {
     });
     const savedMotorcycle = await this.motorcycleRepository.save(motorcycle);
 
-    // Insertion dans companyMotorcycle ou clientMotorcycle selon le type d’utilisateur
     if (user.company) {
       const companyMoto = this.companyMotorcycleRepository.create({
         company: user.company,
@@ -49,14 +48,12 @@ export class MotorcycleService {
 
   async findMotorcyclesForUser(user: User): Promise<Motorcycle[]> {
     if (user.company) {
-      // Récupère les entrées CompanyMotorcycle pour la compagnie de l’utilisateur et retourne les motos associées
       const companyMotos = await this.companyMotorcycleRepository.find({
         where: { company: { id: user.company.id } },
         relations: ['motorcycle'],
       });
       return companyMotos.map(cm => cm.motorcycle);
     } else if (user.client) {
-      // Pareil pour les clients
       const clientMotos = await this.clientMotorcycleRepository.find({
         where: { client: { id: user.client.id } },
         relations: ['motorcycle'],

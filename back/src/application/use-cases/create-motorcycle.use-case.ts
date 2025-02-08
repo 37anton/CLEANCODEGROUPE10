@@ -30,7 +30,6 @@ export class CreateMotorcycleUseCase {
     motorcycle.mileage = motorcycleData.mileage;
     motorcycle.lastMaintenanceMileage = motorcycleData.lastMaintenanceMileage;
 
-    // Si l'utilisateur a une concession, on crée une instance de Concession
     if (user.concession && user.concession.id) {
       const concessionEntity = new Concession();
       concessionEntity.id = user.concession.id;
@@ -39,11 +38,9 @@ export class CreateMotorcycleUseCase {
       motorcycle.concession = null;
     }
 
-    // Sauvegarde de la moto
     const createdMotorcycle = await this.motorcycleRepository.create(motorcycle);
     console.log('Created motorcycle:', createdMotorcycle);
 
-    // Vérification pour company et client
     const companyId = user.companyId || (user.company && user.company.id);
     const clientId = user.clientId || (user.client && user.client.id);
 
