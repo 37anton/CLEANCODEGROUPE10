@@ -3,15 +3,23 @@ import { UserService } from '../application/services/user.service';
 import { hash } from 'bcryptjs';
 import { Company } from 'src/domain/entities/company.entity';
 import { Concession } from 'src/domain/entities/concession.entity';
+import { Part } from 'src/domain/entities/part.entity';
 
 import { COMPANY_REPOSITORY } from 'src/infrastructure/repositories/company.repository';
 import { CONCESSION_REPOSITORY } from 'src/infrastructure/repositories/concession.repository';
+import { PartRepository, PART_REPOSITORY } from 'src/infrastructure/repositories/part.repository';
 
 export async function loadFixtures(app?: INestApplication): Promise<void> {
   // Si une instance d'app est passée, on l'utilise, sinon on crée un contexte autonome
   const application = app || await (await import('@nestjs/core')).NestFactory.createApplicationContext(require('../../app.module').AppModule);
 
   const companyRepository = application.get(COMPANY_REPOSITORY);
+  const concessionRepository = application.get(CONCESSION_REPOSITORY);
+  const userService = application.get(UserService);
+  const passwordHash = await hash("password123", 10);
+  const partRepository = application.get<PartRepository>(PART_REPOSITORY);
+
+
   console.log("Chargement des companies...");
 
   const company1 = new Company();
@@ -20,12 +28,10 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   console.log("Company 1 créée :", savedCompany1);
 
   const company2 = new Company();
-  company2.name = "Company 2";
+  company2.name = "Company 2";  
   const savedCompany2 = await companyRepository.createCompany(company2);
   console.log("Company 2 créée :", savedCompany2);
 
-  // Récupérer le repository pour Concession et créer deux concessions
-  const concessionRepository = application.get(CONCESSION_REPOSITORY);
   console.log("Chargement des concessions...");
 
   const concession1 = new Concession();
@@ -38,11 +44,8 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   const savedConcession2 = await concessionRepository.createConcession(concession2);
   console.log("Concession 2 créée :", savedConcession2);
   
-  // Création des utilisateurs
-  const userService = application.get(UserService);
   console.log("Chargement des utilisateurs...");
   
-  const passwordHash = await hash("password123", 10);
   const usersData = [
     { email: "user1@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: company1.id } },
     { email: "user2@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: company1.id } },
@@ -59,7 +62,28 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
     console.log(`Utilisateur ${userData.email} créé !`);
   }
 
-  console.log("Toutes les companies, concessions et utilisateurs ont été créés avec succès !");
+  const partsData = [
+    { name: "Filtre à huile" },
+    { name: "Plaquette de frein" },
+    { name: "Pneu" },
+    { name: "Bougie d'allumage" },
+    { name: "Batterie" },
+    { name: "Chaîne de transmission" },
+    { name: "Kit de frein arrière" },
+    { name: "Amortisseur avant" },
+    { name: "Amortisseur arrière" },
+    { name: "Disque de frein" },
+    { name: "Échappement" },
+    { name: "Guidon" },
+    { name: "Rétroviseur" },
+    { name: "Phare avant" },
+    { name: "Clignotant" }
+  ];
+
+  for (const { name } of partsData) {
+    const part = await partRepository.create(name);
+    console.log(`Part '${part.name}' created`);
+  }  
 
   if (!app) {
     await application.close();
