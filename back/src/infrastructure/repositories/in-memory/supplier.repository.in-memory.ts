@@ -13,4 +13,9 @@ export class SupplierInMemoryRepository implements SupplierRepository {
   async findById(id: string): Promise<Supplier | null> {
     return this.suppliers.find(supplier => supplier.id === id) || null;
   }
+
+  async createSupplier(supplier: Supplier): Promise<Supplier> {
+    this.suppliers.push(supplier);
+    return supplier;
+  }
 }
