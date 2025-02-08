@@ -3,6 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../../domain/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../user.repository';
+import { Company } from 'src/domain/entities/company.entity';
+import { Concession } from 'src/domain/entities/concession.entity';
+import { Client } from 'src/domain/entities/client.entity';
 
 @Injectable()
 export class UserSqlRepository implements UserRepository {
@@ -11,8 +14,27 @@ export class UserSqlRepository implements UserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async createUser(email: string, password: string, role: string, isAdmin: boolean): Promise<User> {
+  async createUser(
+    email: string, 
+    password: string, 
+    role: string, 
+    isAdmin: boolean,
+    associations?: { companyId?: string; concessionId?: string; clientId?: string }
+  ): Promise<User> {
     const user = this.userRepository.create({ email, password, role, isAdmin });
+    // Affecter les associations si présentes
+    if (associations) {
+      if (associations.companyId) {
+        // Ici on peut créer un objet partiel Company
+        user.company = { id: associations.companyId } as Company;
+      }
+      if (associations.concessionId) {
+        user.concession = { id: associations.concessionId } as Concession;
+      }
+      if (associations.clientId) {
+        user.client = { id: associations.clientId } as Client;
+      }
+    }
     return await this.userRepository.save(user);
   }
 

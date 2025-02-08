@@ -31,4 +31,9 @@ export class CompanyInMemoryRepository implements CompanyRepository {
   async delete(companyId: string): Promise<void> {
     this.companies = this.companies.filter(company => company.id !== companyId);
   }
+
+  async createCompany(company: Company): Promise<Company> {
+    this.companies.push(company);
+    return company;
+  }
 }

@@ -14,4 +14,8 @@ export class ConcessionSqlRepository implements ConcessionRepository {
   async findOne(id: string): Promise<Concession | null> {
     return this.concessionRepository.findOne({ where: { id } });
   }
+
+  async createConcession(concession: Concession): Promise<Concession> {
+    return this.concessionRepository.save(concession);
+  }
 }

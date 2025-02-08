@@ -14,4 +14,9 @@ export class ConcessionInMemoryRepository implements ConcessionRepository {
   async addConcession(concession: Concession): Promise<void> {
     this.concessions.push(concession);
   }
+
+  async createConcession(concession: Concession): Promise<Concession> {
+    this.concessions.push(concession);
+    return concession;
+  }
 }

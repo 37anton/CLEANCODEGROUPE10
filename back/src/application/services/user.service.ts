@@ -20,8 +20,14 @@ export class UserService {
     private readonly findUserByIdUseCase: FindUserByIdUseCase,
   ) {}
 
-  async create(email: string, password: string, role: string, isAdmin: boolean) {
-    return await this.createUserUseCase.execute(email, password, role, isAdmin);
+  async create(
+    email: string, 
+    password: string, 
+    role: string, 
+    isAdmin: boolean,
+    associations?: { companyId?: string; concessionId?: string; clientId?: string }
+  ) {
+    return await this.createUserUseCase.execute(email, password, role, isAdmin, associations);
   }
 
   async findByEmail(email: string) {

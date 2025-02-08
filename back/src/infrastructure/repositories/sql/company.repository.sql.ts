@@ -14,4 +14,8 @@ export class CompanySqlRepository implements CompanyRepository {
   async findOne(id: string): Promise<Company | null> {
     return this.companyRepository.findOne({ where: { id } });
   }
+
+  async createCompany(company: Company): Promise<Company> {
+    return this.companyRepository.save(company);
+  }
 }
