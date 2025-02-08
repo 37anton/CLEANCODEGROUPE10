@@ -32,5 +32,8 @@ export class UserSqlRepository implements UserRepository {
       .where("company.id = :entityId OR concession.id = :entityId OR client.id = :entityId", { entityId })
       .getMany();
   }
-  
+
+  async find(options: any): Promise<User[]> {
+    return await this.userRepository.find(options);
+  }
 }
