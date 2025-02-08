@@ -3,12 +3,13 @@ import { UserService } from '../application/services/user.service';
 import { hash } from 'bcryptjs';
 import { Company } from 'src/domain/entities/company.entity';
 import { Concession } from 'src/domain/entities/concession.entity';
-
 import { SupplierService } from 'src/application/services/supplier.service';
 import { PartService } from 'src/application/services/part.service';
 import { CompanyService } from 'src/application/services/company.service';
-import { ConcessionService } from '../application/services/concession.service';
+import { ConcessionService } from 'src/application/services/concession.service';
 import { DriverService } from 'src/application/services/driver.service';
+import { PartSupplierService } from 'src/application/services/part-supplier.service';
+import { Supplier } from 'src/domain/entities/supplier.entity';
 
 export async function loadFixtures(app?: INestApplication): Promise<void> {
   // Si une instance d'app est passée, on l'utilise, sinon on crée un contexte autonome
@@ -21,6 +22,8 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   const companyService = application.get(CompanyService);
   const concessionService = application.get(ConcessionService);
   const driverService = application.get(DriverService);
+  const partSupplierService = application.get(PartSupplierService);
+
 
   console.log("Chargement des companies...");
 
@@ -30,7 +33,7 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   console.log("Company 1 créée :", savedCompany1);
 
   const company2 = new Company();
-  company2.name = "Company 2";  
+  company2.name = "Company 2";
   const savedCompany2 = await companyService.createCompany(company2);
   console.log("Company 2 créée :", savedCompany2);
 
@@ -45,9 +48,9 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   concession2.name = "Concession 2";
   const savedConcession2 = await concessionService.createConcession(concession2);
   console.log("Concession 2 créée :", savedConcession2);
-  
-  console.log("Chargement des utilisateurs..."); 
-  
+
+  console.log("Chargement des utilisateurs...");
+
   const usersData = [
     { email: "user1@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany1.id } },
     { email: "user2@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany1.id } },
@@ -82,22 +85,29 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
     { name: "Phare avant" },
     { name: "Clignotant" }
   ];
-
+  // On stocke les parts créées dans une map pour pouvoir les retrouver par nom
+  const partsMap: { [key: string]: any } = {};
   for (const { name } of partsData) {
     const part = await partService.create(name);
+    partsMap[name] = part;
     console.log(`Part '${part.name}' created`);
-  } 
+  }
 
   // Création des suppliers
   const suppliersData = [
     { name: "Supplier A", phone: "0123456789", deliveryTime: 1, city: "Paris" },
     { name: "Supplier B", phone: "0987654321", deliveryTime: 2, city: "Lyon" }
   ];
+
   
+  const savedSuppliers: Supplier[] = [];
   for (const supplierData of suppliersData) {
-    await supplierService.createSupplier(supplierData);
-    console.log(`Supplier ${supplierData.name} created!`);
+    const supplier = await supplierService.createSupplier(supplierData);
+    savedSuppliers.push(supplier);
+    console.log(`Supplier ${supplier.name} created!`);
   }
+  const supplierA = savedSuppliers[0];
+  const supplierB = savedSuppliers[1];
 
   // Création de 2 drivers qu'on lie à companu 1 et 2
   const driversDataForCompany1 = [
@@ -118,6 +128,25 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   for (const driverData of driversDataForCompany2) {
     const driver = await driverService.create(savedCompany2.id, driverData.name, driverData.license, driverData.experience);
     console.log(`Driver '${driver.name}' créé pour Company 2:`, driver);
+  }
+
+  // Création des PartSupplier
+  // Supplier A: "Filtre à huile" à 10€ et "Plaquette de frein" à 15€
+  // Supplier B: "Filtre à huile" à 12€ et "Plaquette de frein" à 18€
+  const partSupplierData = [
+    { supplier: supplierA, partName: "Filtre à huile", price: 10 },
+    { supplier: supplierA, partName: "Plaquette de frein", price: 15 },
+    { supplier: supplierB, partName: "Filtre à huile", price: 12 },
+    { supplier: supplierB, partName: "Plaquette de frein", price: 18 }
+  ];
+
+  for (const data of partSupplierData) {
+    await partSupplierService.createPartSupplier({
+      supplierId: data.supplier.id,
+      partId: partsMap[data.partName].id,
+      price: data.price
+    });
+    console.log(`PartSupplier created: ${data.supplier.name} - ${data.partName} at ${data.price} euros`);
   }
 
   if (!app) {
