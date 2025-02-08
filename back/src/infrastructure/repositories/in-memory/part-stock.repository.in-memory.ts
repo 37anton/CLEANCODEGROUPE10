@@ -58,4 +58,9 @@ export class PartStockInMemoryRepository implements PartStockRepository {
 
     this.stocks.push(newStock);
   }
+
+  async findAllWithoutUser(): Promise<PartStock[]> {
+    return this.stocks; // 🔹 Retourne tous les stocks en mémoire
+  }
+  
 }

@@ -11,8 +11,8 @@ export class UserSqlRepository implements UserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async createUser(email: string, password: string, role: string): Promise<User> {
-    const user = this.userRepository.create({ email, password, role });
+  async createUser(email: string, password: string, role: string, isAdmin: boolean): Promise<User> {
+    const user = this.userRepository.create({ email, password, role, isAdmin });
     return await this.userRepository.save(user);
   }
 
@@ -23,4 +23,14 @@ export class UserSqlRepository implements UserRepository {
   async findById(id: string, relations?: string[]): Promise<User | null> {
     return await this.userRepository.findOne({ where: { id }, relations });
   }
+
+  async findByEntity(entityId: string): Promise<User[]> {
+    return this.userRepository.createQueryBuilder("user")
+      .leftJoinAndSelect("user.company", "company")
+      .leftJoinAndSelect("user.concession", "concession")
+      .leftJoinAndSelect("user.client", "client")
+      .where("company.id = :entityId OR concession.id = :entityId OR client.id = :entityId", { entityId })
+      .getMany();
+  }
+  
 }

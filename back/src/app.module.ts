@@ -27,16 +27,12 @@ import { PartSupplierModule } from "./infrastructure/modules/part-supplier.modul
 import { CompanyModule } from "./infrastructure/modules/company.module";
 import { ConcessionModule } from "./infrastructure/modules/concession.module";
 import { ClientModule } from "./infrastructure/modules/client.module";
-@Module({
-  imports: [
+import { ThresholdNotificationsCron } from "./application/cron/threshold-notifications.cron";
+import { UserModule } from "./infrastructure/modules/user.module";
 
-    PartSupplierModule,
-    NotificationModule,
-    ScheduleModule.forRoot(), 
-    TypeOrmModule.forFeature([User, Notification]), 
-    ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
+const databaseConfig: any = process.env.STORAGE_ADAPTER === 'postgres'
+  ? {
+    type: 'postgres',
       host: process.env.POSTGRES_HOST,
       port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
       username: process.env.POSTGRES_USER,
@@ -44,7 +40,18 @@ import { ClientModule } from "./infrastructure/modules/client.module";
       database: process.env.POSTGRES_DB,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-    }),
+  }
+  : undefined;
+
+@Module({
+  imports: [
+    UserModule,
+    PartSupplierModule,
+    NotificationModule,
+    ScheduleModule.forRoot(), 
+    TypeOrmModule.forFeature([User, Notification]), 
+    ConfigModule.forRoot({ isGlobal: true }),
+    ...(databaseConfig ? [TypeOrmModule.forRoot(databaseConfig)] : []),
     CompanyModule,
     ConcessionModule,
     ClientModule,
@@ -67,6 +74,9 @@ import { ClientModule } from "./infrastructure/modules/client.module";
     ClientModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    ThresholdNotificationsCron
+  ],
 })
 export class AppModule {}

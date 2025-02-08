@@ -6,4 +6,5 @@ export interface PartStockRepository {
   findAll(userId: string): Promise<any>;
   findStock(entityId: string, partId: string): Promise<any>;
   createStock(entityId: string, partId: string, quantity: number): Promise<void>;
+  findAllWithoutUser(): Promise<any>;
 }

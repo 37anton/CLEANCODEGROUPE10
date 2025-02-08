@@ -7,7 +7,7 @@ export class CreateUserUseCase {
     @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository,
   ) {}
 
-  async execute(email: string, password: string, role: string) {
-    return await this.userRepository.createUser(email, password, role);
+  async execute(email: string, password: string, role: string, isAdmin: boolean) {
+    return await this.userRepository.createUser(email, password, role, isAdmin);
   }
 }
