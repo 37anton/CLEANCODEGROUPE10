@@ -15,6 +15,11 @@ export class InMemoryMaintenanceRepository implements MaintenanceRepository {
   async findByVehicleId(vehicleId: string): Promise<Maintenance[]> {
     return this.maintenances
       .filter(m => m.vehicleId === vehicleId)
+      .map(m => ({
+        ...m,
+        // S'assurer que maintenanceParts est défini
+        maintenanceParts: m.maintenanceParts ? m.maintenanceParts : [],
+      }))
       .sort((a, b) => new Date(b.scheduledDate).getTime() - new Date(a.scheduledDate).getTime());
   }
 }

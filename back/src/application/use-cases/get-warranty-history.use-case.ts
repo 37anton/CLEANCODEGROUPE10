@@ -1,4 +1,3 @@
-// src/application/use-cases/get-warranty-history.use-case.ts
 import { Injectable, Inject } from '@nestjs/common';
 import { WarrantyRepository } from '../../infrastructure/repositories/warranty.repository';
 import { Warranty } from '../../domain/entities/warranty.entity';

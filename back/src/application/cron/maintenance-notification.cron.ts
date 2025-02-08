@@ -1,4 +1,3 @@
-// src/application/cron/maintenance-notification.cron.ts
 import { Injectable, Logger, Inject } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';

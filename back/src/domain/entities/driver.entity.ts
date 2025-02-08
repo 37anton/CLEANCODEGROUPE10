@@ -1,4 +1,3 @@
-// src/domain/entities/driver.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { CompanyMotorcycle } from './company-motorcycle.entity';
 import { Company } from './company.entity';
@@ -12,10 +11,10 @@ export class Driver {
   name: string;
 
   @Column()
-  license: string; // Type de permis de conduire (ex: A1, A2, A)
+  license: string; 
 
   @Column()
-  experience: number; // Années d'expérience en moto
+  experience: number;
 
   @ManyToOne(() => Company, company => company.drivers, { nullable: false })
   company: Company;

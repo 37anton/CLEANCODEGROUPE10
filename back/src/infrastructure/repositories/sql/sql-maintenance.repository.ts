@@ -19,6 +19,11 @@ export class SQLMaintenanceRepository implements MaintenanceRepository {
   async findByVehicleId(vehicleId: string): Promise<Maintenance[]> {
     return this.ormRepository.find({
       where: { vehicleId },
+      relations: [
+        'maintenanceParts', 
+        'maintenanceParts.partStock', 
+        'maintenanceParts.partStock.part'
+      ],
       order: { scheduledDate: 'DESC' },
     });
   }

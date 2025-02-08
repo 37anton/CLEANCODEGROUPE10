@@ -29,10 +29,11 @@ import { ConcessionModule } from "./infrastructure/modules/concession.module";
 import { ClientModule } from "./infrastructure/modules/client.module";
 @Module({
   imports: [
+
     PartSupplierModule,
     NotificationModule,
-    ScheduleModule.forRoot(), // Active le Cron Job
-    TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
+    ScheduleModule.forRoot(), 
+    TypeOrmModule.forFeature([User, Notification]), 
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',

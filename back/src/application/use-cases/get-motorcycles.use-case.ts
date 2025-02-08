@@ -5,7 +5,7 @@ import { MotorcycleRepository } from 'src/infrastructure/repositories/motorcycle
 @Injectable()
 export class GetMotorcyclesUseCase {
   constructor(
-    @Inject('CustomMotorcycleRepository') // 🔹 Assure-toi que cette clé correspond bien à ton provider
+    @Inject('CustomMotorcycleRepository') 
     private readonly motorcycleRepository: MotorcycleRepository,
     
     @Inject('CustomCompanyMotorcycleRepository')

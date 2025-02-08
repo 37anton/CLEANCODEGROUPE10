@@ -6,8 +6,9 @@ import { NotificationRepository, NOTIFICATION_REPOSITORY } from "src/infrastruct
 @Injectable()
 export class NotificationService {
   constructor(
+
     @Inject(NOTIFICATION_REPOSITORY)
-    private readonly notificationRepository: NotificationRepository, // Injections via le token
+    private readonly notificationRepository: NotificationRepository, 
   ) {}
 
   async sendMaintenanceNotification(users: User[], message: string): Promise<void> {

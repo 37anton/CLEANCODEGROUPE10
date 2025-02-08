@@ -1,8 +1,9 @@
 // src/infrastructure/interfaces/controllers/warranty.controller.ts
-import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, UseGuards, Request } from '@nestjs/common';
 import { CreateWarrantyUseCase } from 'src/application/use-cases/create-warranty.use-case';
 import { GetWarrantyHistoryUseCase } from 'src/application/use-cases/get-warranty-history.use-case';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { CreateWarrantyDto } from 'src/application/dto/create-warranty.dto';
 
 @Controller('warranties')
 @UseGuards(JwtAuthGuard)
@@ -13,8 +14,7 @@ export class WarrantyController {
   ) {}
 
   @Post()
-  async create(@Body() data: any) {
-    // data doit contenir startDate, endDate et motorcycle (ou son id, selon votre logique)
+  async create(@Request() req, @Body() data: CreateWarrantyDto) {
     return this.createWarrantyUseCase.execute(data);
   }
 

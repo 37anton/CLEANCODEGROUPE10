@@ -18,16 +18,13 @@ export class SetMotorcycleIntervalUseCase {
   ) {}
 
   async execute(motorcycleId: string): Promise<Interval> {
-    // Récupération de la moto avec sa relation 'intervals'
     const motorcycle: Motorcycle = await this.motorcycleRepository.findById(motorcycleId);
     
-    // Recherche de la définition d'intervalle pour le modèle de la moto
     const definition = await this.intervalDefinitionRepository.findByModel(motorcycle.model);
     if (!definition) {
       throw new Error(`Aucune définition d'intervalle trouvée pour le modèle ${motorcycle.model}`);
     }
 
-    // Création de l'entité Interval à partir de la définition
     const interval = new Interval();
     interval.id = crypto.randomUUID();
     interval.km = definition.km;

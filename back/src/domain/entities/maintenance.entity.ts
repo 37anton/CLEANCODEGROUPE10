@@ -1,6 +1,6 @@
-// src/domain/entities/maintenance.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Interval } from './interval.entity';
+import { MaintenancePart } from './maintenance-part.entity';
 
 @Entity()
 export class Maintenance {
@@ -19,8 +19,6 @@ export class Maintenance {
   @Column({ type: 'int', nullable: true })
   scheduledMileage?: number;
 
-  @Column({ type: 'text', nullable: true })
-  replacedParts?: string;
 
   @Column({ type: 'float', nullable: true })
   cost?: number;
@@ -30,4 +28,7 @@ export class Maintenance {
 
   @ManyToOne(() => Interval, interval => interval.maintenances, { nullable: true })
   interval: Interval;
+
+  @OneToMany(() => MaintenancePart, maintenancePart => maintenancePart.maintenance, { cascade: true })
+  maintenanceParts: MaintenancePart[];
 }

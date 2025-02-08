@@ -14,8 +14,8 @@ export class OrderItem {
   partSupplier: PartSupplier;
 
   @Column()
-  quantity: number; // Quantité commandée
+  quantity: number; 
 
   @Column("decimal", { precision: 10, scale: 2 })
-  price: number; // Prix unitaire au moment de la commande
+  price: number; 
 }
