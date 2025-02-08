@@ -10,8 +10,9 @@ import Suppliers from "./pages/Suppliers";
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import Notifications from "./pages/Notifications";
-import Stock from "./pages/Stock"; //
+import Stock from "./pages/Stock";
 import Orders from "./pages/Orders";
+import CreateOrder from "./pages/CreateOrder";
 import  Motorcycles  from "./pages/Motorcycles"
 import UpdateMotorcycle from './components/UpdateMotorcycle';
 import DeleteMotorcycle from './components/DeleteMotorcycle';
@@ -73,6 +74,7 @@ const App = () => {
               <Route path="/orders" element={<Orders />} />
               <Route path="/drivers" element={<Drivers />} />
               <Route path="/suppliers" element={<Suppliers />} />
+              <Route path="/create-order/:supplierId" element={<CreateOrder />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}

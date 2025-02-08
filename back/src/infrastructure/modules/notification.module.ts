@@ -5,9 +5,10 @@ import { NotificationService } from "../../application/services/notification.ser
 import { NotificationController } from "../../interfaces/controllers/notification.controller";
 import { Notification } from "../../domain/entities/notification.entity";
 import { User } from "../../domain/entities/user.entity";
-import { NotificationRepository } from "../../infrastructure/repositories/sql/sql-notification.repository";
+import { NotificationRepository, NOTIFICATION_REPOSITORY } from "../repositories/notification.repository";
 import { InMemoryNotificationRepository } from "../../infrastructure/repositories/in-memory/in-memory-notification.repository";
 import { UserModule } from "./user.module";
+import { SqlNotificationRepository } from "../repositories/sql/sql-notification.repository";
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
@@ -20,19 +21,14 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
   providers: [
     NotificationService,
     {
-      provide: 'CustomNotificationRepository',
-      useFactory: (notificationRepo: any) => {
-        return isInMemory
-          ? new InMemoryNotificationRepository()
-          : new NotificationRepository(notificationRepo);
-      },
-      inject: [getRepositoryToken(Notification)],
+      provide: NOTIFICATION_REPOSITORY,
+      useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? InMemoryNotificationRepository : SqlNotificationRepository,
     },
   ],
   exports: [
     NotificationService,
-    'CustomNotificationRepository',
     TypeOrmModule,
+    NOTIFICATION_REPOSITORY
   ],
 })
 export class NotificationModule {}

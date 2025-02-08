@@ -23,12 +23,17 @@ import { RepairModule } from './infrastructure/modules/repair.module';
 import { WarrantyModule } from './infrastructure/modules/warranty.module';
 import { OrderModule } from "./infrastructure/modules/order.module";
 import { SupplierModule } from "./infrastructure/modules/supplier.module";
-
+import { PartSupplierModule } from "./infrastructure/modules/part-supplier.module";
+import { CompanyModule } from "./infrastructure/modules/company.module";
+import { ConcessionModule } from "./infrastructure/modules/concession.module";
+import { ClientModule } from "./infrastructure/modules/client.module";
 @Module({
   imports: [
-    NotificationModule, 
-    ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([User, Notification]),
+
+    PartSupplierModule,
+    NotificationModule,
+    ScheduleModule.forRoot(), 
+    TypeOrmModule.forFeature([User, Notification]), 
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -40,7 +45,9 @@ import { SupplierModule } from "./infrastructure/modules/supplier.module";
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-
+    CompanyModule,
+    ConcessionModule,
+    ClientModule,
     AuthModule,
     PartModule,
     PartStockModule,
@@ -52,9 +59,12 @@ import { SupplierModule } from "./infrastructure/modules/supplier.module";
     RepairModule,
     WarrantyModule,
     NotificationModule,
+    SupplierModule,
     OrderModule,
     DriverModule,
-    SupplierModule
+    CompanyModule,   
+    ConcessionModule,
+    ClientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

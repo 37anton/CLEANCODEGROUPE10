@@ -11,11 +11,17 @@ import { PART_STOCK_REPOSITORY } from '../repositories/part-stock.repository';
 import { User } from 'src/domain/entities/user.entity';
 import { Part } from 'src/domain/entities/part.entity';
 import { UserModule } from './user.module';
+import { CompanyModule } from './company.module';
+import { ConcessionModule } from './concession.module';
+import { ClientModule } from './client.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([PartStock, Part, User]),
-    UserModule
+    UserModule,
+    CompanyModule,
+    ConcessionModule,
+    ClientModule
   ],
   controllers: [PartStockController],
   providers: [
@@ -24,7 +30,7 @@ import { UserModule } from './user.module';
     FindPartStockUseCase,
     {
       provide: PART_STOCK_REPOSITORY,
-      useClass: process.env.USE_MEMORY_DB === 'true' ? PartStockInMemoryRepository : PartStockSqlRepository,
+      useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? PartStockInMemoryRepository : PartStockSqlRepository,
     },
   ],
   exports: [PartStockService, PART_STOCK_REPOSITORY],

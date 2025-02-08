@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Param } from "@nestjs/common";
 import { SupplierService } from "../../application/services/supplier.service";
 import { Supplier } from "../../domain/entities/supplier.entity";
 
@@ -9,5 +9,10 @@ export class SupplierController {
   @Get()
   async findAll(): Promise<Supplier[]> {
     return this.supplierService.findAll();
+  }
+
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    return this.supplierService.findById(id);
   }
 }
