@@ -4,21 +4,21 @@ import { hash } from 'bcryptjs';
 import { Company } from 'src/domain/entities/company.entity';
 import { Concession } from 'src/domain/entities/concession.entity';
 
-import { CONCESSION_REPOSITORY } from 'src/infrastructure/repositories/concession.repository';
 import { SupplierService } from 'src/application/services/supplier.service';
 import { PartService } from 'src/application/services/part.service';
 import { CompanyService } from 'src/application/services/company.service';
+import { ConcessionService } from '../application/services/concession.service';
 
 export async function loadFixtures(app?: INestApplication): Promise<void> {
   // Si une instance d'app est passée, on l'utilise, sinon on crée un contexte autonome
   const application = app || await (await import('@nestjs/core')).NestFactory.createApplicationContext(require('../../app.module').AppModule);
 
-  const concessionRepository = application.get(CONCESSION_REPOSITORY);
   const userService = application.get(UserService);
   const passwordHash = await hash("password123", 10);
   const partService = application.get(PartService);
   const supplierService = application.get(SupplierService);
   const companyService = application.get(CompanyService);
+  const concessionService = application.get(ConcessionService);
 
   console.log("Chargement des companies...");
 
@@ -36,25 +36,25 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
 
   const concession1 = new Concession();
   concession1.name = "Concession 1";
-  const savedConcession1 = await concessionRepository.createConcession(concession1);
+  const savedConcession1 = await concessionService.createConcession(concession1);
   console.log("Concession 1 créée :", savedConcession1);
 
   const concession2 = new Concession();
   concession2.name = "Concession 2";
-  const savedConcession2 = await concessionRepository.createConcession(concession2);
+  const savedConcession2 = await concessionService.createConcession(concession2);
   console.log("Concession 2 créée :", savedConcession2);
   
-  console.log("Chargement des utilisateurs...");
+  console.log("Chargement des utilisateurs..."); 
   
   const usersData = [
-    { email: "user1@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: company1.id } },
-    { email: "user2@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: company1.id } },
-    { email: "user1@company2.com", password: passwordHash, isAdmin: false, associations: { companyId: company2.id } },
-    { email: "user2@company2.com", password: passwordHash, isAdmin: false, associations: { companyId: company2.id } },
-    { email: "user1@concession1.com", password: passwordHash, isAdmin: false, associations: { concessionId: concession1.id } },
-    { email: "user2@concession1.com", password: passwordHash, isAdmin: false, associations: { concessionId: concession1.id } },
-    { email: "user1@concession2.com", password: passwordHash, isAdmin: false, associations: { concessionId: concession2.id } },
-    { email: "user2@concession2.com", password: passwordHash, isAdmin: false, associations: { concessionId: concession2.id } },
+    { email: "user1@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany1.id } },
+    { email: "user2@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany1.id } },
+    { email: "user1@company2.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany2.id } },
+    { email: "user2@company2.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany2.id } },
+    { email: "user1@concession1.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession1.id } },
+    { email: "user2@concession1.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession1.id } },
+    { email: "user1@concession2.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession2.id } },
+    { email: "user2@concession2.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession2.id } },
   ];
 
   for (const userData of usersData) {
