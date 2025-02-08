@@ -11,8 +11,10 @@ import { DriverInMemoryRepository } from '../repositories/in-memory/driver.repos
 import { DRIVER_REPOSITORY } from '../repositories/driver.repository';
 import { UpdateDriverUseCase } from '../../application/use-cases/update-driver.use-case'; 
 
+const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([Driver])],
+  imports: [...(!isInMemory ? [TypeOrmModule.forFeature([Driver])] : []),],
   controllers: [DriverController],
   providers: [
     DriverService,

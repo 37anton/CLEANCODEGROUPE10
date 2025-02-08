@@ -1,19 +1,19 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
 import { Interval } from '../../domain/entities/interval.entity';
-import { IntervalRepository } from '../../infrastructure/repositories/interval.repository';
-import { IntervalDefinitionRepository } from '../../infrastructure/repositories/interval-definition.repository';
-import { MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
+import { INTERVAL_REPOSITORY, IntervalRepository } from '../../infrastructure/repositories/interval.repository';
+import { INTERVAL_DEFINITION_REPOSITORY, IntervalDefinitionRepository } from '../../infrastructure/repositories/interval-definition.repository';
+import { MOTORCYCLE_REPOSITORY, MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
 import * as crypto from 'crypto';
 
 @Injectable()
 export class SetMotorcycleIntervalUseCase {
   constructor(
-    @Inject('CustomMotorcycleRepository')
+    @Inject(MOTORCYCLE_REPOSITORY)
     private readonly motorcycleRepository: MotorcycleRepository,
-    @Inject('CustomIntervalRepository')
+    @Inject(INTERVAL_REPOSITORY)
     private readonly intervalRepository: IntervalRepository,
-    @Inject('CustomIntervalDefinitionRepository')
+    @Inject(INTERVAL_DEFINITION_REPOSITORY)
     private readonly intervalDefinitionRepository: IntervalDefinitionRepository,
   ) {}
 

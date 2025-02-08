@@ -7,18 +7,19 @@ import { CreateIncidentUseCase } from '../../application/use-cases/create-incide
 import { GetIncidentHistoryUseCase } from '../../application/use-cases/get-incident-history.use-case';
 import { IncidentController } from 'src/interfaces/controllers/incident.controller';
 import { MotorcycleModule } from './motorcycle.module';
+import { INCIDENT_REPOSITORY } from '../repositories/incident.repository';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Incident]),
+    ...(!isInMemory ? [TypeOrmModule.forFeature([Incident])] : []),
     MotorcycleModule,
   ],
   controllers: [IncidentController],
   providers: [
     {
-      provide: 'CustomIncidentRepository',
+      provide: INCIDENT_REPOSITORY,
       useClass: isInMemory ? InMemoryIncidentRepository : SQLIncidentRepository,
     },
     CreateIncidentUseCase,
@@ -27,8 +28,8 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
   exports: [
     CreateIncidentUseCase,
     GetIncidentHistoryUseCase,
-    'CustomIncidentRepository',
-    TypeOrmModule,
+    INCIDENT_REPOSITORY,
+    ...(!isInMemory ? [TypeOrmModule] : []),
   ],
 })
 export class IncidentModule {}

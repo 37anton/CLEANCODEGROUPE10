@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repair } from '../../domain/entities/repair.entity';
-import { RepairRepository } from '../../infrastructure/repositories/repair.repository';
+import { REPAIR_REPOSITORY, RepairRepository } from '../../infrastructure/repositories/repair.repository';
 import * as crypto from 'crypto';
 
 @Injectable()
 export class CreateRepairUseCase {
   constructor(
-    @Inject('CustomRepairRepository')
+    @Inject(REPAIR_REPOSITORY)
     private readonly repairRepository: RepairRepository,
   ) {}
 

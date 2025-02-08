@@ -1,19 +1,22 @@
 import { Injectable, ForbiddenException, NotFoundException, Inject } from '@nestjs/common';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
+import { COMPANY_MOTORCYCLE_REPOSITORY } from 'src/infrastructure/repositories/company-motorcycle.repository';
+import { MOTORCYCLE_REPOSITORY } from 'src/infrastructure/repositories/motorcycle.repository';
+import { CLIENT_MOTORCYCLE_REPOSITORY } from 'src/infrastructure/repositories/client-motorcycle.repository';
 
 @Injectable()
 export class UpdateMotorcycleUseCase {
   constructor(
-    @Inject('CustomMotorcycleRepository')
+    @Inject(MOTORCYCLE_REPOSITORY)
     private readonly motorcycleRepository: {
       findById(id: string): Promise<Motorcycle>;
       update(motorcycle: Motorcycle): Promise<Motorcycle>;
     },
-    @Inject('CustomCompanyMotorcycleRepository')
+    @Inject(COMPANY_MOTORCYCLE_REPOSITORY)
     private readonly companyMotorcycleRepository: {
       findOneByMotorcycleAndCompany(motorcycleId: string, companyId: string): Promise<any>;
     },
-    @Inject('CustomClientMotorcycleRepository')
+    @Inject(CLIENT_MOTORCYCLE_REPOSITORY)
     private readonly clientMotorcycleRepository: {
       findOneByMotorcycleAndClient(motorcycleId: string, clientId: string): Promise<any>;
     },

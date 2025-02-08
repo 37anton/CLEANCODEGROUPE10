@@ -24,7 +24,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     FindUserByIdUseCase,
     {
       provide: USER_REPOSITORY,
-      useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? UserInMemoryRepository : UserSqlRepository,
+      useClass: isInMemory ? UserInMemoryRepository : UserSqlRepository,
     },
   ],
   exports: [

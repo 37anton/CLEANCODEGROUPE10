@@ -5,11 +5,13 @@ import { COMPANY_REPOSITORY } from "../repositories/company.repository";
 import { CompanySqlRepository } from "../repositories/sql/company.repository.sql";
 import { CompanyInMemoryRepository } from "../repositories/in-memory/company.in-memory";
 
+const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([Company])],
+  imports: [...(!isInMemory ? [TypeOrmModule.forFeature([Company])] : []),],
   providers: [
     { provide: COMPANY_REPOSITORY,
-      useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? CompanyInMemoryRepository : CompanySqlRepository,
+      useClass: isInMemory ? CompanyInMemoryRepository : CompanySqlRepository,
     }
   ],
   exports: [COMPANY_REPOSITORY],

@@ -9,8 +9,10 @@ import { PART_REPOSITORY } from "../repositories/part.repository";
 import { PartSqlRepository } from '../repositories/sql/part.repository.sql';
 import { PartInMemoryRepository } from '../repositories/in-memory/part.repository.in-memory';
 
+const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([Part])],
+  imports: [...(!isInMemory ? [TypeOrmModule.forFeature([Part])] : [])],
   controllers: [PartController],
   providers: [
     PartService,
@@ -18,7 +20,7 @@ import { PartInMemoryRepository } from '../repositories/in-memory/part.repositor
     FindPartsUseCase,
     {
       provide: PART_REPOSITORY,
-      useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? PartInMemoryRepository : PartSqlRepository,
+      useClass: isInMemory ? PartInMemoryRepository : PartSqlRepository,
     },
   ],
   exports: [PartService, PART_REPOSITORY],

@@ -1,16 +1,16 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Warranty } from '../../domain/entities/warranty.entity';
-import { WarrantyRepository } from '../../infrastructure/repositories/warranty.repository';
-import { MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
+import { WARRANTY_REPOSITORY, WarrantyRepository } from '../../infrastructure/repositories/warranty.repository';
+import { MOTORCYCLE_REPOSITORY, MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
 import * as crypto from 'crypto';
 import { CreateWarrantyDto } from '../dto/create-warranty.dto';
 
 @Injectable()
 export class CreateWarrantyUseCase {
   constructor(
-    @Inject('CustomWarrantyRepository')
+    @Inject(WARRANTY_REPOSITORY)
     private readonly warrantyRepository: WarrantyRepository,
-    @Inject('CustomMotorcycleRepository')
+    @Inject(MOTORCYCLE_REPOSITORY)
     private readonly motorcycleRepository: MotorcycleRepository,
   ) {}
 

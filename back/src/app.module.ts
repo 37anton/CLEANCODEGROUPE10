@@ -9,7 +9,7 @@ import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/modules/notification.module";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
+import { PartModule } from "./infrastructure/modules/part.module";
 import { DriverModule } from "./infrastructure/modules/driver.module";
 import { PartStockModule } from "./infrastructure/modules/part-stock.module";
 import { Part } from './domain/entities/part.entity';

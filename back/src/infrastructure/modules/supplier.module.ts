@@ -9,8 +9,10 @@ import { SupplierSqlRepository } from "../repositories/sql/supplier.repository.s
 import { SupplierInMemoryRepository } from "../repositories/in-memory/supplier.repository.in-memory";
 import { SUPPLIER_REPOSITORY } from "../repositories/supplier.repository";
 
+const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([Supplier])],
+  imports: [...(!isInMemory ? [TypeOrmModule.forFeature([Supplier])] : []),],
   controllers: [SupplierController],
   providers: [
     SupplierService,

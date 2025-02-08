@@ -19,10 +19,11 @@ import { UpdateOrderStatusUseCase } from "../../application/use-cases/update-ord
 import { PART_STOCK_REPOSITORY } from '../repositories/part-stock.repository';
 import { PartStockModule } from "./part-stock.module"; 
 
+const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Order, User, PartSupplier]),
+    ...(!isInMemory ? [TypeOrmModule.forFeature([Order, User, PartSupplier])] : []),
     UserModule,
     SupplierModule,
     PartStockModule

@@ -29,14 +29,18 @@ import { InMemoryIntervalRepository } from 'src/infrastructure/repositories/in-m
 
 // Import des modules qui exportent d'autres providers
 import { IntervalDefinitionModule } from 'src/infrastructure/modules/interval-definition.module';
-import { UserModule } from '../frameworks/nestjs/user.module';
+import { UserModule } from './user.module';
 import { NotificationModule } from './notification.module';
+import { MOTORCYCLE_REPOSITORY } from '../repositories/motorcycle.repository';
+import { COMPANY_MOTORCYCLE_REPOSITORY } from '../repositories/company-motorcycle.repository';
+import { CLIENT_MOTORCYCLE_REPOSITORY } from '../repositories/client-motorcycle.repository';
+import { INTERVAL_REPOSITORY } from '../repositories/interval.repository';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Motorcycle, CompanyMotorcycle, ClientMotorcycle, Interval]),
+    ...(!isInMemory ? [TypeOrmModule.forFeature([Motorcycle, CompanyMotorcycle, ClientMotorcycle, Interval])] : []),
     IntervalDefinitionModule,
     UserModule,
     NotificationModule,
@@ -44,19 +48,19 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
   controllers: [MotorcycleController],
   providers: [
     {
-      provide: 'CustomMotorcycleRepository',
+      provide: MOTORCYCLE_REPOSITORY,
       useClass: isInMemory ? InMemoryMotorcycleRepository : SQLMotorcycleRepository,
     },
     {
-      provide: 'CustomCompanyMotorcycleRepository',
+      provide: COMPANY_MOTORCYCLE_REPOSITORY,
       useClass: isInMemory ? InMemoryCompanyMotorcycleRepository : SQLCompanyMotorcycleRepository,
     },
     {
-      provide: 'CustomClientMotorcycleRepository',
+      provide: CLIENT_MOTORCYCLE_REPOSITORY,
       useClass: isInMemory ? InMemoryClientMotorcycleRepository : SQLClientMotorcycleRepository,
     },
     {
-      provide: 'CustomIntervalRepository',
+      provide: INTERVAL_REPOSITORY,
       useClass: isInMemory ? InMemoryIntervalRepository : SQLIntervalRepository,
     },
     CreateMotorcycleUseCase,
@@ -72,8 +76,8 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     UpdateMotorcycleUseCase,
     DeleteMotorcycleUseCase,
     GetMaintenancePlanUseCase,  // <-- EXPORT ajouté pour le use case de maintenance
-    'CustomMotorcycleRepository', // Exporter le provider pour qu'il soit disponible dans d'autres modules
-    TypeOrmModule,
+    MOTORCYCLE_REPOSITORY,
+    ...(!isInMemory ? [TypeOrmModule] : []),
   ],
 })
 export class MotorcycleModule {}
