@@ -6,12 +6,13 @@ import { UserRepository } from '../user.repository';
 export class UserInMemoryRepository implements UserRepository {
   private users: User[] = [];
 
-  async createUser(email: string, password: string, role: string): Promise<User> {
+  async createUser(email: string, password: string, role: string, isAdmin: boolean): Promise<User> {
     const user = new User();
     user.id = Math.random().toString(36).substring(7);
     user.email = email;
     user.password = password;
     user.role = role;
+    user.isAdmin = isAdmin;
     this.users.push(user);
     return user;
   }

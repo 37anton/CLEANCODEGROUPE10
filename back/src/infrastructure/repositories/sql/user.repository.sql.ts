@@ -11,8 +11,8 @@ export class UserSqlRepository implements UserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async createUser(email: string, password: string, role: string): Promise<User> {
-    const user = this.userRepository.create({ email, password, role });
+  async createUser(email: string, password: string, role: string, isAdmin: boolean): Promise<User> {
+    const user = this.userRepository.create({ email, password, role, isAdmin });
     return await this.userRepository.save(user);
   }
 

@@ -29,6 +29,20 @@ import { ConcessionModule } from "./infrastructure/modules/concession.module";
 import { ClientModule } from "./infrastructure/modules/client.module";
 import { ThresholdNotificationsCron } from "./application/cron/threshold-notifications.cron";
 import { UserModule } from "./infrastructure/modules/user.module";
+
+const databaseConfig: any = process.env.STORAGE_ADAPTER === 'postgres'
+  ? {
+    type: 'postgres',
+      host: process.env.POSTGRES_HOST,
+      port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+  }
+  : undefined;
+
 @Module({
   imports: [
     UserModule,
@@ -37,16 +51,7 @@ import { UserModule } from "./infrastructure/modules/user.module";
     ScheduleModule.forRoot(), 
     TypeOrmModule.forFeature([User, Notification]), 
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-    }),
+    ...(databaseConfig ? [TypeOrmModule.forRoot(databaseConfig)] : []),
     CompanyModule,
     ConcessionModule,
     ClientModule,

@@ -8,8 +8,11 @@ import { PartSupplierSqlRepository } from "../repositories/sql/part-supplier.rep
 import { PartSupplierInMemoryRepository } from "../repositories/in-memory/part-supplier.repository.in-memory";
 import { PART_SUPPLIER_REPOSITORY } from "../repositories/part-supplier.repository";
 
+// Vérifie si on utilise In-Memory ou PostgreSQL
+const isInMemory = process.env.STORAGE_ADAPTER === "in-memory";
+
 @Module({
-  imports: [TypeOrmModule.forFeature([PartSupplier])],
+  imports: isInMemory ? [] : [TypeOrmModule.forFeature([PartSupplier])],
   controllers: [PartSupplierController],
   providers: [
     PartSupplierService,
