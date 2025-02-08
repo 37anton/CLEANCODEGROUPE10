@@ -8,6 +8,7 @@ import { SupplierService } from 'src/application/services/supplier.service';
 import { PartService } from 'src/application/services/part.service';
 import { CompanyService } from 'src/application/services/company.service';
 import { ConcessionService } from '../application/services/concession.service';
+import { DriverService } from 'src/application/services/driver.service';
 
 export async function loadFixtures(app?: INestApplication): Promise<void> {
   // Si une instance d'app est passée, on l'utilise, sinon on crée un contexte autonome
@@ -19,6 +20,7 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   const supplierService = application.get(SupplierService);
   const companyService = application.get(CompanyService);
   const concessionService = application.get(ConcessionService);
+  const driverService = application.get(DriverService);
 
   console.log("Chargement des companies...");
 
@@ -95,7 +97,28 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   for (const supplierData of suppliersData) {
     await supplierService.createSupplier(supplierData);
     console.log(`Supplier ${supplierData.name} created!`);
-  }  
+  }
+
+  // Création de 2 drivers qu'on lie à companu 1 et 2
+  const driversDataForCompany1 = [
+    { name: "Jean Dupont", license: "A2", experience: 3 },
+    { name: "Sophie Martin", license: "A", experience: 5 },
+  ];
+  
+  const driversDataForCompany2 = [
+    { name: "Alice Durand", license: "B", experience: 2 },
+    { name: "Marc Lefevre", license: "B1", experience: 4 },
+  ];
+
+  for (const driverData of driversDataForCompany1) {
+    const driver = await driverService.create(savedCompany1.id, driverData.name, driverData.license, driverData.experience);
+    console.log(`Driver '${driver.name}' créé pour Company 1:`, driver);
+  }
+  
+  for (const driverData of driversDataForCompany2) {
+    const driver = await driverService.create(savedCompany2.id, driverData.name, driverData.license, driverData.experience);
+    console.log(`Driver '${driver.name}' créé pour Company 2:`, driver);
+  }
 
   if (!app) {
     await application.close();
