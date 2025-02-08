@@ -24,7 +24,9 @@ import { WarrantyModule } from './infrastructure/modules/warranty.module';
 import { OrderModule } from "./infrastructure/modules/order.module";
 import { SupplierModule } from "./infrastructure/modules/supplier.module";
 import { PartSupplierModule } from "./infrastructure/modules/part-supplier.module";
-
+import { CompanyModule } from "./infrastructure/modules/company.module";
+import { ConcessionModule } from "./infrastructure/modules/concession.module";
+import { ClientModule } from "./infrastructure/modules/client.module";
 @Module({
   imports: [
     PartSupplierModule,
@@ -42,7 +44,9 @@ import { PartSupplierModule } from "./infrastructure/modules/part-supplier.modul
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-
+    CompanyModule,
+    ConcessionModule,
+    ClientModule,
     AuthModule,
     PartModule,
     PartStockModule,
@@ -56,7 +60,10 @@ import { PartSupplierModule } from "./infrastructure/modules/part-supplier.modul
     NotificationModule,
     SupplierModule,
     OrderModule,
-    DriverModule
+    DriverModule,
+    CompanyModule,   
+    ConcessionModule,
+    ClientModule,
   ],
   controllers: [AppController],
   providers: [AppService],
