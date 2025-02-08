@@ -1,16 +1,16 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Incident } from '../../domain/entities/incident.entity';
-import { IncidentRepository } from '../../infrastructure/repositories/incident.repository';
+import { INCIDENT_REPOSITORY, IncidentRepository } from '../../infrastructure/repositories/incident.repository';
 import * as crypto from 'crypto';
-import { MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
+import { MOTORCYCLE_REPOSITORY, MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
 import { CreateIncidentDto } from '../dto/create-incident.dto';
 
 @Injectable()
 export class CreateIncidentUseCase {
   constructor(
-    @Inject('CustomIncidentRepository')
+    @Inject(INCIDENT_REPOSITORY)
     private readonly incidentRepository: IncidentRepository,
-    @Inject('CustomMotorcycleRepository')
+    @Inject(MOTORCYCLE_REPOSITORY)
     private readonly motorcycleRepository: MotorcycleRepository,
   ) {}
 

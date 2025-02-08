@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
+import { MOTORCYCLE_REPOSITORY, MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
 import { MaintenancePlan } from '../../domain/models/maintenance-plan.model';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
 import { NotificationService } from '../services/notification.service';
@@ -9,7 +9,7 @@ import { UserService } from '../services/user.service';
 @Injectable()
 export class GetMaintenancePlanUseCase {
   constructor(
-    @Inject('CustomMotorcycleRepository')
+    @Inject(MOTORCYCLE_REPOSITORY)
     private readonly motorcycleRepository: MotorcycleRepository,
     private readonly userRepository: UserService,
     private readonly notificationService: NotificationService,

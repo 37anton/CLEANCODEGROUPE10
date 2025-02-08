@@ -9,19 +9,20 @@ import { GetMaintenanceHistoryUseCase } from '../../application/use-cases/get-ma
 import { MaintenanceController } from 'src/interfaces/controllers/maintenance.controller';
 import { MotorcycleModule } from './motorcycle.module';
 import { PartStockModule } from './part-stock.module';
+import { MAINTENANCE_REPOSITORY } from '../repositories/maintenance.repository';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Maintenance]),
+      ...(!isInMemory ? [TypeOrmModule.forFeature([Maintenance])] : []),
         MotorcycleModule,
         PartStockModule, 
       ],
   controllers: [MaintenanceController],
   providers: [
     {
-      provide: 'CustomMaintenanceRepository',
+      provide: MAINTENANCE_REPOSITORY,
       useClass: isInMemory ? InMemoryMaintenanceRepository : SQLMaintenanceRepository,
     },
     CreateMaintenanceUseCase,
@@ -30,8 +31,8 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
   exports: [
     CreateMaintenanceUseCase,
     GetMaintenanceHistoryUseCase,
-    'CustomMaintenanceRepository',
-    TypeOrmModule,
+    MAINTENANCE_REPOSITORY,
+    ...(!isInMemory ? [TypeOrmModule] : []),
   ],
 })
 export class MaintenanceModule {}

@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IncidentRepository } from '../../infrastructure/repositories/incident.repository';
+import { INCIDENT_REPOSITORY, IncidentRepository } from '../../infrastructure/repositories/incident.repository';
 import { Incident } from '../../domain/entities/incident.entity';
 
 @Injectable()
 export class GetIncidentHistoryUseCase {
   constructor(
-    @Inject('CustomIncidentRepository')
+    @Inject(INCIDENT_REPOSITORY)
     private readonly incidentRepository: IncidentRepository,
   ) {}
 

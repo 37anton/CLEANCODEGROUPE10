@@ -33,4 +33,14 @@ export class UserInMemoryRepository implements UserRepository {
         user.client?.id === entityId
     );
   }
+
+  async find(options: any): Promise<User[]> {
+    if (options?.where?.company?.id) {
+      return this.users.filter(user => user.company && user.company.id === options.where.company.id);
+    }
+    if (options?.where?.client?.id) {
+      return this.users.filter(user => user.client && user.client.id === options.where.client.id);
+    }
+    return [];
+  }
 }

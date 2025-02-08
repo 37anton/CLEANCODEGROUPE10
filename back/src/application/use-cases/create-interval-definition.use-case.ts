@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IntervalDefinition } from '../../domain/entities/interval-definition.entity';
-import { IntervalDefinitionRepository } from '../../infrastructure/repositories/interval-definition.repository';
+import { INTERVAL_DEFINITION_REPOSITORY, IntervalDefinitionRepository } from '../../infrastructure/repositories/interval-definition.repository';
 import * as crypto from 'crypto';
 
 @Injectable()
 export class CreateIntervalDefinitionUseCase {
   constructor(
-    @Inject('CustomIntervalDefinitionRepository')
+    @Inject(INTERVAL_DEFINITION_REPOSITORY)
     private readonly repository: IntervalDefinitionRepository,
   ) {}
 

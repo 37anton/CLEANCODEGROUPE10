@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Maintenance } from '../../domain/entities/maintenance.entity';
-import { MaintenanceRepository } from '../../infrastructure/repositories/maintenance.repository';
+import { MAINTENANCE_REPOSITORY, MaintenanceRepository } from '../../infrastructure/repositories/maintenance.repository';
 import * as crypto from 'crypto';
-import { MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
+import { MOTORCYCLE_REPOSITORY, MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
 import { PartStockService } from '../../application/services/part-stock.service';
 import { MaintenancePart } from '../../domain/entities/maintenance-part.entity';
 import { CreateMaintenanceDto } from '../dto/create-maintenance.dto';
@@ -10,9 +10,9 @@ import { CreateMaintenanceDto } from '../dto/create-maintenance.dto';
 @Injectable()
 export class CreateMaintenanceUseCase {
   constructor(
-    @Inject('CustomMaintenanceRepository')
+    @Inject(MAINTENANCE_REPOSITORY)
     private readonly maintenanceRepository: MaintenanceRepository,
-    @Inject('CustomMotorcycleRepository')
+    @Inject(MOTORCYCLE_REPOSITORY)
     private readonly motorcycleRepository: MotorcycleRepository,
     private readonly partStockService: PartStockService,
   ) {}

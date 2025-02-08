@@ -15,9 +15,11 @@ import { CompanyModule } from './company.module';
 import { ConcessionModule } from './concession.module';
 import { ClientModule } from './client.module';
 
+const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
+
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PartStock, Part, User]),
+    ...(!isInMemory ? [TypeOrmModule.forFeature([PartStock, Part, User])] : []),
     UserModule,
     CompanyModule,
     ConcessionModule,

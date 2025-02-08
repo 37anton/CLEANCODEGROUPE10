@@ -1,6 +1,8 @@
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
 import { User } from '../../domain/entities/user.entity';
 
+export const MOTORCYCLE_REPOSITORY = 'MOTORCYCLE_REPOSITORY'
+
 export interface MotorcycleRepository {
   /**
    * Crée une moto et enregistre la liaison dans CompanyMotorcycle ou ClientMotorcycle

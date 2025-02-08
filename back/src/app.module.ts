@@ -9,7 +9,7 @@ import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/modules/notification.module";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
+import { PartModule } from "./infrastructure/modules/part.module";
 import { DriverModule } from "./infrastructure/modules/driver.module";
 import { PartStockModule } from "./infrastructure/modules/part-stock.module";
 import { Part } from './domain/entities/part.entity';
@@ -45,13 +45,13 @@ const databaseConfig: any = process.env.STORAGE_ADAPTER === 'postgres'
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ...(databaseConfig ? [TypeOrmModule.forFeature([User, Notification])] : []),
+    ...(databaseConfig ? [TypeOrmModule.forRoot(databaseConfig)] : []),
     UserModule,
     PartSupplierModule,
     NotificationModule,
     ScheduleModule.forRoot(), 
-    TypeOrmModule.forFeature([User, Notification]), 
-    ConfigModule.forRoot({ isGlobal: true }),
-    ...(databaseConfig ? [TypeOrmModule.forRoot(databaseConfig)] : []),
     CompanyModule,
     ConcessionModule,
     ClientModule,
@@ -65,7 +65,6 @@ const databaseConfig: any = process.env.STORAGE_ADAPTER === 'postgres'
     IncidentModule,
     RepairModule,
     WarrantyModule,
-    NotificationModule,
     SupplierModule,
     OrderModule,
     DriverModule,

@@ -12,7 +12,9 @@ import { PART_SUPPLIER_REPOSITORY } from "../repositories/part-supplier.reposito
 const isInMemory = process.env.STORAGE_ADAPTER === "in-memory";
 
 @Module({
-  imports: isInMemory ? [] : [TypeOrmModule.forFeature([PartSupplier])],
+  imports: [
+    ...(!isInMemory ? [TypeOrmModule.forFeature([PartSupplier])] : []),
+  ],
   controllers: [PartSupplierController],
   providers: [
     PartSupplierService,
