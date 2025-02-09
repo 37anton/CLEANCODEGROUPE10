@@ -1,4 +1,3 @@
-// src/infrastructure/modules/interval-definition.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IntervalDefinition } from 'src/domain/entities/interval-definition.entity';
@@ -27,7 +26,6 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     ListIntervalDefinitionsUseCase,
     DeleteIntervalDefinitionUseCase,
   ],
-  // IMPORTANT : exporter le provider afin qu'il soit accessible dans d'autres modules
   exports: [
     INTERVAL_DEFINITION_REPOSITORY,
     CreateIntervalDefinitionUseCase,

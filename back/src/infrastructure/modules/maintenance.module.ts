@@ -1,4 +1,3 @@
-// src/infrastructure/modules/maintenance.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Maintenance } from '../../domain/entities/maintenance.entity';

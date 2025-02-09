@@ -15,17 +15,15 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // 📌 Charger les notifications au montage du composant
   useEffect(() => {
     if (!token) {
-      navigate("/login"); // Redirige vers login si l'utilisateur n'est pas connecté
+      navigate("/login"); 
       return;
     }
 
     fetchNotifications();
   }, [token, navigate]);
 
-  // 📌 Fonction pour récupérer les notifications depuis l'API
   const fetchNotifications = () => {
     axios
       .get("http://localhost:3000/notifications/me", {
@@ -41,7 +39,6 @@ const Notifications = () => {
       });
   };
 
-  // 📌 Fonction pour marquer une notification comme lue
   const markAsRead = (id: number) => {
     axios
       .put(`http://localhost:3000/notifications/${id}/read`, {}, {

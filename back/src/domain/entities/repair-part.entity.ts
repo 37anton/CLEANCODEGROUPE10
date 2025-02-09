@@ -1,4 +1,3 @@
-// src/domain/entities/repair-part.entity.ts
 import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Repair } from './repair.entity';
 import { Part } from './part.entity';

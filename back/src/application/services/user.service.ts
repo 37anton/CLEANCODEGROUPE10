@@ -39,7 +39,6 @@ export class UserService {
   }
   
   async findAllByCompanyId(companyId: string): Promise<User[]> {
-    // Vous pouvez filtrer dans le service ou dans la méthode du repository
     const users = await this.userRepository.findByEntity(companyId);
     return users.filter(user => user.company && user.company.id === companyId);
   }

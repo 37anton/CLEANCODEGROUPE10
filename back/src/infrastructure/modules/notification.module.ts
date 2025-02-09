@@ -14,7 +14,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 @Module({
   imports: [
     ...(!isInMemory ? [TypeOrmModule.forFeature([Notification, User])] : []),
-    UserModule, // Pour accéder à User si besoin
+    UserModule, 
   ],
   controllers: [NotificationController],
   providers: [

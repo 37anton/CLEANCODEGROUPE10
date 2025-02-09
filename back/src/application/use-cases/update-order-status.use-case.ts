@@ -14,18 +14,15 @@ export class UpdateOrderStatusUseCase {
   async execute(): Promise<void> {
     const now = new Date();
 
-    // 🔍 Récupérer toutes les commandes qui ne sont pas encore SHIPPED
     const orders = await this.orderRepository.findAllNotShipped();
 
     for (const order of orders) {
       if (order.expectedDeliveryDate <= now) {
         console.log(`🚚 Commande ${order.id} passée en SHIPPED !`);
 
-        // ✅ Mise à jour du statut
         order.status = OrderStatus.SHIPPED;
         await this.orderRepository.update(order);
 
-        // 📦 Mise à jour des stocks
         await this.updateStock(order);
       }
     }
@@ -46,13 +43,10 @@ export class UpdateOrderStatusUseCase {
 
       console.log(`Ajout de ${quantityToAdd} unités de ${orderItem.partSupplier.part.name} au stock`);
 
-      // Vérifier si le stock existe déjà
       const stock = await this.partStockRepository.findStock(entityId, partId);
       if (stock) {
-        // Augmenter la quantité
         await this.partStockRepository.updateStockWithoutThreshold(stock.id, stock.quantity + quantityToAdd);
       } else {
-        // Créer un nouveau stock
         await this.partStockRepository.createStock(entityId, partId, quantityToAdd);
       }
     }
