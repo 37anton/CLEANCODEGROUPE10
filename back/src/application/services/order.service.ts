@@ -4,6 +4,7 @@ import { CreateOrderUseCase } from '../use-cases/create-order.use-case';
 import { User } from "../../domain/entities/user.entity";
 import { Cron } from "@nestjs/schedule";
 import { UpdateOrderStatusUseCase } from "../use-cases/update-order-status.use-case";
+import { Order } from 'src/domain/entities/order.entity';
 
 interface CreateOrderDto {
   supplierId: string;
@@ -18,10 +19,6 @@ export class OrderService {
     private readonly updateOrderStatusUseCase: UpdateOrderStatusUseCase
   ) {}
 
-  async getOrdersByUser(userId: string) {
-    return await this.findOrdersUseCase.execute(userId);
-  }
-
   async createOrder(user: User, createOrderDto: CreateOrderDto) {
     return this.createOrderUseCase.execute(user, createOrderDto);
   }
@@ -30,5 +27,9 @@ export class OrderService {
   async checkOrdersStatus() {
     console.log("Vérification des commandes...");
     await this.updateOrderStatusUseCase.execute();
+  }
+
+  async findOrders(user: User): Promise<Order[]> {
+    return await this.findOrdersUseCase.execute(user);
   }
 }

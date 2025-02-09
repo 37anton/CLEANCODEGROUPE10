@@ -6,11 +6,11 @@ import { OrderRepository } from '../order.repository';
 export class OrderInMemoryRepository implements OrderRepository {
   private orders: Order[] = [];
 
-  async getOrdersByUser(userId: string): Promise<Order[]> {
+  async getOrdersByUser(userAssociationId: string): Promise<Order[]> {
     return this.orders.filter(order =>
-      order.company?.id === userId ||
-      order.concession?.id === userId ||
-      order.client?.id === userId
+      order.company?.id === userAssociationId ||
+      order.concession?.id === userAssociationId ||
+      order.client?.id === userAssociationId
     );
   }
 

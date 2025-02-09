@@ -14,34 +14,20 @@ export class OrderSqlRepository implements OrderRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async getOrdersByUser(userId: string): Promise<Order[]> {
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ["company", "concession", "client"],
-    });
-
-    if (!user) {
-      throw new Error("Utilisateur non trouvé");
-    }
-
+  async getOrdersByUser(userAssociationId: string): Promise<Order[]> {
     let query = this.orderRepository.createQueryBuilder('order')
       .leftJoinAndSelect('order.supplier', 'supplier')
       .leftJoinAndSelect('order.orderItems', 'orderItems')
       .leftJoinAndSelect('orderItems.partSupplier', 'partSupplier')
       .leftJoinAndSelect('partSupplier.part', 'part');
 
-    if (user.company) {
-      query = query.where('order.companyId = :companyId', { companyId: user.company.id });
-    } else if (user.concession) {
-      query = query.where('order.concessionId = :concessionId', { concessionId: user.concession.id });
-    } else if (user.client) {
-      query = query.where('order.clientId = :clientId', { clientId: user.client.id });
-    } else {
-      return [];
-    }
+    query = query.where(
+      'order.companyId = :userAssociationId OR order.concessionId = :userAssociationId OR order.clientId = :userAssociationId',
+      { userAssociationId }
+    );
 
     return await query.getMany();
-  }
+}
 
   async createOrder(order: Order): Promise<Order> {
     return await this.orderRepository.save(order);
