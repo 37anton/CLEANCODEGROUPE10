@@ -10,12 +10,6 @@ export class CompanyInMemoryRepository implements CompanyRepository {
     return this.companies.find(company => company.id === companyId) || null;
   }
 
-  async create(company: Company): Promise<Company> {
-    company.id = Math.random().toString(36).substring(7); // Génération d'un faux ID unique
-    this.companies.push(company);
-    return company;
-  }
-
   async findAll(): Promise<Company[]> {
     return this.companies;
   }
@@ -33,6 +27,7 @@ export class CompanyInMemoryRepository implements CompanyRepository {
   }
 
   async createCompany(company: Company): Promise<Company> {
+    company.id = Math.random().toString(36).substring(7);
     this.companies.push(company);
     return company;
   }

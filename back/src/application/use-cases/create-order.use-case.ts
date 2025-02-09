@@ -25,8 +25,11 @@ export class CreateOrderUseCase {
   ) {}
 
   async execute(user: User, createOrderDto: CreateOrderDto): Promise<Order> {
+    // Vérifier que l'utilisateur est lié à une entreprise, une concession ou un client
     if (!user.company && !user.concession && !user.client) {
-      throw new UnauthorizedException("L'utilisateur doit être rattaché à une entreprise, une concession ou un client.");
+      throw new UnauthorizedException(
+        "L'utilisateur doit être rattaché à une entreprise, une concession ou un client."
+      );
     }
 
     let totalPrice = 0;
@@ -38,6 +41,7 @@ export class CreateOrderUseCase {
       throw new BadRequestException(`Fournisseur avec l'ID ${createOrderDto.supplierId} introuvable.`);
     }
 
+    // Pour chaque item de commande, récupérer le PartSupplier et calculer le total
     for (const item of createOrderDto.items) {
       const partSupplier = await this.partSupplierRepository.findById(item.partSupplierId);
       if (!partSupplier) {
@@ -54,10 +58,11 @@ export class CreateOrderUseCase {
       orderItems.push(orderItem);
     }
 
-    // Calcul de la date de livraison estimée (develiretime = now + supplier.deliveryTime en minutes )
+    // Calcul de la date de livraison estimée (en ajoutant le délai de livraison du fournisseur en minutes)
     const now = new Date();
     const expectedDeliveryDate = new Date(now.getTime() + supplier.deliveryTime * 60 * 1000);
 
+    // Création de l'ordre
     const order = new Order();
     order.supplier = { id: createOrderDto.supplierId } as any;
     order.orderItems = orderItems;
@@ -65,15 +70,15 @@ export class CreateOrderUseCase {
     order.expectedDeliveryDate = expectedDeliveryDate;
     order.status = OrderStatus.PENDING;
 
-    // Assigner à l'utilisateur (entreprise, concession ou client)
+    // Affecter l'order à une entreprise, concession ou client
     if (user.company) {
       order.company = user.company;
     } else if (user.concession) {
       order.concession = user.concession;
-    } else if (user.client){
+    } else if (user.client) {
       order.client = user.client;
     }
 
-    return this.orderRepository.createOrder(order);
+    return await this.orderRepository.createOrder(order);
   }
 }

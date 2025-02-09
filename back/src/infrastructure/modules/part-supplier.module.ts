@@ -23,7 +23,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === "in-memory";
     CreatePartSupplierUseCase,
     {
       provide: PART_SUPPLIER_REPOSITORY,
-      useClass: process.env.STORAGE_ADAPTER === "in-memory" ? PartSupplierInMemoryRepository : PartSupplierSqlRepository,
+      useClass: isInMemory ? PartSupplierInMemoryRepository : PartSupplierSqlRepository,
     },
   ],
   exports: [PartSupplierService, PART_SUPPLIER_REPOSITORY],

@@ -10,10 +10,15 @@ import { ConcessionService } from 'src/application/services/concession.service';
 import { DriverService } from 'src/application/services/driver.service';
 import { PartSupplierService } from 'src/application/services/part-supplier.service';
 import { Supplier } from 'src/domain/entities/supplier.entity';
+import { OrderService } from 'src/application/services/order.service';
+import { User } from 'src/domain/entities/user.entity';
+
 
 export async function loadFixtures(app?: INestApplication): Promise<void> {
   // Si une instance d'app est passée, on l'utilise, sinon on crée un contexte autonome
   const application = app || await (await import('@nestjs/core')).NestFactory.createApplicationContext(require('../../app.module').AppModule);
+  const usersMap: { [email: string]: User } = {}; // Pour stocker les users
+
 
   const userService = application.get(UserService);
   const passwordHash = await hash("password123", 10);
@@ -23,7 +28,7 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   const concessionService = application.get(ConcessionService);
   const driverService = application.get(DriverService);
   const partSupplierService = application.get(PartSupplierService);
-
+  const orderService = application.get(OrderService);
 
   console.log("Chargement des companies...");
 
@@ -63,7 +68,8 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   ];
 
   for (const userData of usersData) {
-    await userService.create(userData.email, userData.password, 'role_test', userData.isAdmin, userData.associations);
+    const createdUser = await userService.create(userData.email, userData.password, 'role_test', userData.isAdmin, userData.associations);
+    usersMap[userData.email] = createdUser;
     console.log(`Utilisateur ${userData.email} créé !`);
   }
 
@@ -133,6 +139,7 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   // Création des PartSupplier
   // Supplier A: "Filtre à huile" à 10€ et "Plaquette de frein" à 15€
   // Supplier B: "Filtre à huile" à 12€ et "Plaquette de frein" à 18€
+  // Création des PartSupplier et stockage dans une map
   const partSupplierData = [
     { supplier: supplierA, partName: "Filtre à huile", price: 10 },
     { supplier: supplierA, partName: "Plaquette de frein", price: 15 },
@@ -140,14 +147,30 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
     { supplier: supplierB, partName: "Plaquette de frein", price: 18 }
   ];
 
+  // Création d'une map pour stocker les PartSupplier créés par clé (par exemple "Supplier A-Filtre à huile")
+  const partSuppliersMap: { [key: string]: any } = {};
+
   for (const data of partSupplierData) {
-    await partSupplierService.createPartSupplier({
+    const partSupplier = await partSupplierService.createPartSupplier({
       supplierId: data.supplier.id,
       partId: partsMap[data.partName].id,
       price: data.price
     });
+    const key = `${data.supplier.name}-${data.partName}`;
+    partSuppliersMap[key] = partSupplier;
     console.log(`PartSupplier created: ${data.supplier.name} - ${data.partName} at ${data.price} euros`);
   }
+
+  const createOrderDto = {
+    supplierId: supplierA.id,
+    items: [
+      { partSupplierId: partSuppliersMap["Supplier A-Filtre à huile"].id, quantity: 2 },
+      { partSupplierId: partSuppliersMap["Supplier A-Plaquette de frein"].id, quantity: 1 },
+    ]  
+  };
+  
+  const createdOrder = await orderService.createOrder(usersMap["user1@company1.com"], createOrderDto);
+  console.log("Commande créée :", createdOrder); 
 
   if (!app) {
     await application.close();

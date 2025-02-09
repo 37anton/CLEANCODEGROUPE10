@@ -5,5 +5,6 @@ export interface OrderRepository {
   getOrdersByUser(userId: string): Promise<any>;
   createOrder(order: Order): Promise<Order>;
   findAllNotShipped(): Promise<Order[]>;
-  update(order: Order): Promise<Order>; 
+  update(order: Order): Promise<Order>;
+  findById(id: string): Promise<Order | null>;
 }

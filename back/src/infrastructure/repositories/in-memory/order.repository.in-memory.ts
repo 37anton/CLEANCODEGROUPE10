@@ -31,4 +31,8 @@ export class OrderInMemoryRepository implements OrderRepository {
     }
     return order;
   }
+
+  async findById(id: string): Promise<Order | null> {
+    return this.orders.find(o => o.id === id) || null;
+  }
 }

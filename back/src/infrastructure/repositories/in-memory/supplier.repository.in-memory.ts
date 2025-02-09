@@ -15,6 +15,7 @@ export class SupplierInMemoryRepository implements SupplierRepository {
   }
 
   async createSupplier(supplier: Supplier): Promise<Supplier> {
+    supplier.id = Math.random().toString(36).substring(7);
     this.suppliers.push(supplier);
     return supplier;
   }

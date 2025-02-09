@@ -8,7 +8,6 @@ import { UpdateOrderStatusUseCase } from "../use-cases/update-order-status.use-c
 interface CreateOrderDto {
   supplierId: string;
   items: { partSupplierId: string; quantity: number }[];
-  expectedDeliveryDate: Date;
 }
 
 @Injectable()

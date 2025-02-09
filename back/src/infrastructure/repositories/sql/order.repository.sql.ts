@@ -64,4 +64,11 @@ export class OrderSqlRepository implements OrderRepository {
   async update(order: Order): Promise<Order> {
     return await this.orderRepository.save(order);
   }
+
+  async findById(id: string): Promise<Order | null> {
+    return await this.orderRepository.findOne({
+      where: { id },
+      relations: ['orderItems', 'supplier', 'company', 'concession', 'client'],
+    });
+  }
 }
