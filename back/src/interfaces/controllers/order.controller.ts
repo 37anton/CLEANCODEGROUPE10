@@ -1,15 +1,22 @@
 import { Controller, Get, Request, UseGuards, Post, Body } from '@nestjs/common';
 import { OrderService } from '../../application/services/order.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { UserService } from 'src/application/services/user.service';
+
 
 @Controller('orders')
 @UseGuards(JwtAuthGuard)
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly userService: UserService
+  ) {}
 
   @Get()
   async getOrders(@Request() req) {
-    return this.orderService.getOrdersByUser(req.user.id);
+    console.log("ID utilisateur reçu dans la requête :", req.user.id);
+    const user = await this.userService.findById(req.user.id, ['company', 'concession', 'client']);
+    return this.orderService.findOrders(user);
   }
 
   @UseGuards(JwtAuthGuard)

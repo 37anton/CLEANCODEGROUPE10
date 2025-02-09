@@ -18,6 +18,7 @@ import { SupplierModule } from './supplier.module';
 import { UpdateOrderStatusUseCase } from "../../application/use-cases/update-order-status.use-case";
 import { PART_STOCK_REPOSITORY } from '../repositories/part-stock.repository';
 import { PartStockModule } from "./part-stock.module"; 
+import { PartSupplierModule } from './part-supplier.module';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
@@ -26,7 +27,8 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     ...(!isInMemory ? [TypeOrmModule.forFeature([Order, User, PartSupplier])] : []),
     UserModule,
     SupplierModule,
-    PartStockModule
+    PartStockModule,
+    PartSupplierModule,
   ],
   controllers: [OrderController],
   providers: [
@@ -38,11 +40,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
       provide: ORDER_REPOSITORY,
       useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? OrderInMemoryRepository : OrderSqlRepository,
     },
-    {
-      provide: PART_SUPPLIER_REPOSITORY,
-      useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? PartSupplierInMemoryRepository : PartSupplierSqlRepository,
-    }    
   ],
-  exports: [OrderService, ORDER_REPOSITORY, PART_SUPPLIER_REPOSITORY],
+  exports: [OrderService, ORDER_REPOSITORY],
 })
 export class OrderModule {}

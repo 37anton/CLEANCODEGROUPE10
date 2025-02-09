@@ -24,4 +24,13 @@ export class PartSupplierSqlRepository implements PartSupplierRepository {
       relations: ["part", "supplier"]
     });
   }
+
+  async createPartSupplier(data: { supplierId: string; partId: string; price: number }): Promise<PartSupplier> {
+    const partSupplier = this.partSupplierRepository.create({
+      price: data.price,
+      supplier: { id: data.supplierId } as any,
+      part: { id: data.partId } as any,
+    });
+    return await this.partSupplierRepository.save(partSupplier);
+  }
 }

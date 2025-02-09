@@ -7,6 +7,7 @@ import { FindPartsBySupplierUseCase } from "../../application/use-cases/find-par
 import { PartSupplierSqlRepository } from "../repositories/sql/part-supplier.repository.sql";
 import { PartSupplierInMemoryRepository } from "../repositories/in-memory/part-supplier.repository.in-memory";
 import { PART_SUPPLIER_REPOSITORY } from "../repositories/part-supplier.repository";
+import { CreatePartSupplierUseCase } from "src/application/use-cases/create-part-supplier.use-case";
 
 // Vérifie si on utilise In-Memory ou PostgreSQL
 const isInMemory = process.env.STORAGE_ADAPTER === "in-memory";
@@ -19,9 +20,10 @@ const isInMemory = process.env.STORAGE_ADAPTER === "in-memory";
   providers: [
     PartSupplierService,
     FindPartsBySupplierUseCase,
+    CreatePartSupplierUseCase,
     {
       provide: PART_SUPPLIER_REPOSITORY,
-      useClass: process.env.STORAGE_ADAPTER === "in-memory" ? PartSupplierInMemoryRepository : PartSupplierSqlRepository,
+      useClass: isInMemory ? PartSupplierInMemoryRepository : PartSupplierSqlRepository,
     },
   ],
   exports: [PartSupplierService, PART_SUPPLIER_REPOSITORY],
