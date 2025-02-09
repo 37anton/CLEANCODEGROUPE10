@@ -27,9 +27,12 @@ import CreateRepairPage from './pages/CreateRepair';
 import CreateWarrantyPage from './pages/CreateWarranty'; 
 import WarrantyHistoryPage from './pages/WarrantyHistory';
 import IncidentHistoryPage from './pages/IncidentHistory';
+import AdminDashboard from './pages/AdminDashboard';
+// import { useAuth } from './context/AuthContext';
 
 
 const App = () => {
+  // const { user } = useAuth(); 
 
 
 
@@ -44,10 +47,12 @@ const App = () => {
             <Link to="/">Home</Link> |{' '}
             <Link to="/login">Login</Link> |{' '}
             <Link to="/register">Register</Link> |{' '}
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/stock">Stock</Link>
-            <Link to="/motorcycles">moto</Link>
-            <Link to="/interval-definitions">Liste des Intervalles</Link>
+            <Link to="/dashboard">Dashboard</Link> |{' '}
+            <Link to="/stock">Stock</Link> |{' '}
+            <Link to="/motorcycles">Moto</Link> |{' '}
+            <Link to="/interval-definitions">Liste des Intervalles</Link>  |{' '}
+          {/* {user?.isAdmin && <Link to="/admin">Administration</Link>} */}
+
           </nav>
           <Routes>
             {/* Routes existantes */}
@@ -56,6 +61,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/motorcycles" element={<Motorcycles />} />
               <Route path="/motorcycles/update/:id" element={<UpdateMotorcycle />} />
@@ -75,6 +81,9 @@ const App = () => {
               <Route path="/drivers" element={<Drivers />} />
               <Route path="/suppliers" element={<Suppliers />} />
               <Route path="/create-order/:supplierId" element={<CreateOrder />} />
+            </Route>
+            <Route element={<ProtectedRoute requireAdmin={true} />}>
+              <Route path="/admin" element={<AdminDashboard />} />
             </Route>
 
             {/* Nouvelles routes ajoutées */}

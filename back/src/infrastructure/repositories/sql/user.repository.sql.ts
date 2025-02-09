@@ -55,7 +55,14 @@ export class UserSqlRepository implements UserRepository {
       .getMany();
   }
 
-  async find(options: any): Promise<User[]> {
+  async findOneBy(options: any): Promise<User[]> {
     return await this.userRepository.find(options);
+  }
+  async find(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
+  async save(user: User): Promise<User> {
+    return this.userRepository.save(user);
   }
 }

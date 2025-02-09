@@ -1,12 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const ProtectedRoute = () => {
-  const { token } = useAuth();
+const ProtectedRoute = ({ requireAdmin }: { requireAdmin?: boolean }) => {
+  const { token, user } = useAuth();
+  
+  if (!token || !user) return <Navigate to="/login" replace />;
+  if (requireAdmin && !user.isAdmin) return <Navigate to="/dashboard" replace />;
 
-  console.log("Vérification du token dans ProtectedRoute :", token);
-
-  return token ? <Outlet /> : <Navigate to="/" replace />;
+  return <Outlet />;
 };
+
 
 export default ProtectedRoute;

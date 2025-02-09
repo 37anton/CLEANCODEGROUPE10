@@ -7,7 +7,7 @@ import { Part } from "../../domain/entities/part.entity";
 export class PartController {
   constructor(private readonly partService: PartService) {}
 
-  @UseGuards(JwtAuthGuard) // Vérifie que l'utilisateur est bien connecté via JWT
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() body: { name: string }): Promise<Part> {
     return this.partService.create(body.name);

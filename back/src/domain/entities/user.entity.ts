@@ -28,7 +28,7 @@ export class User {
   updatedAt: Date;
 
 
-  @Column()
+  @Column({ default: false })
   isAdmin: boolean;
 
   @ManyToOne(() => Company, company => company.users, { nullable: true })

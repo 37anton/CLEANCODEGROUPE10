@@ -9,6 +9,7 @@ import { FindUserByIdUseCase } from '../../application/use-cases/find-user-by-id
 import { UserSqlRepository } from '../repositories/sql/user.repository.sql';
 import { UserInMemoryRepository } from '../repositories/in-memory/user.repository.in-memory';
 import { USER_REPOSITORY } from '../repositories/user.repository';
+import { FindUsersUseCase } from 'src/application/use-cases/find-users.use-case';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
@@ -22,6 +23,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     CreateUserUseCase,
     FindUserByEmailUseCase,
     FindUserByIdUseCase,
+    FindUsersUseCase,
     {
       provide: USER_REPOSITORY,
       useClass: isInMemory ? UserInMemoryRepository : UserSqlRepository,

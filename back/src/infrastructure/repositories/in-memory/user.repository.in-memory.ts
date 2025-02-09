@@ -54,7 +54,7 @@ export class UserInMemoryRepository implements UserRepository {
     );
   }
 
-  async find(options: any): Promise<User[]> {
+  async findOneBy(options: any): Promise<User[]> {
     if (options?.where?.company?.id) {
       return this.users.filter(user => user.company && user.company.id === options.where.company.id);
     }
@@ -63,4 +63,18 @@ export class UserInMemoryRepository implements UserRepository {
     }
     return [];
   }
+
+  async find(): Promise<User[]> {
+    return this.users;
+  }
+
+  async save(user: User): Promise<User> {
+    const index = this.users.findIndex(u => u.id === user.id);
+    if (index === -1) {
+      throw new Error('User not found');
+    }
+    this.users[index] = user; 
+    return this.users[index];  
+  }
+  
 }

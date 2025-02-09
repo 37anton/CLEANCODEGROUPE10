@@ -29,7 +29,18 @@ export class UserService {
   ) {
     return await this.createUserUseCase.execute(email, password, role, isAdmin, associations);
   }
+  async update (id: string, updateUserDto: { email: string; role: string; isAdmin: boolean }): Promise<User> {
+    const user = await this.userRepository.findById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
 
+    user.email = updateUserDto.email;
+    user.role = updateUserDto.role;
+    user.isAdmin = updateUserDto.isAdmin;
+
+    return await this.userRepository.save(user);
+  }
   async findByEmail(email: string) {
     return await this.findUserByEmailUseCase.execute(email);
   }
@@ -45,6 +56,11 @@ export class UserService {
   }
 
   async findAllByClientId(clientId: string): Promise<User[]> {
-    return this.userRepository.find({ where: { client: { id: clientId } } });
+    return this.userRepository.findById(clientId );
+  }
+
+  async findAllUsers(): Promise<User[]> {
+    const users = await this.userRepository.find();
+    return users;
   }
 }

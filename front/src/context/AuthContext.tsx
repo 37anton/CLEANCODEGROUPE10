@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-// Définition de l'interface utilisateur
 interface User {
   id: string;
   email: string;
   role: string;
-  company?: { id: string }; // Ajout des relations en tant qu'objet
+  isAdmin: boolean;
+  company?: { id: string }; 
   concession?: { id: string };
   client?: { id: string };
 }
@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null
   );
 
-  // Charger le token et l'utilisateur au démarrage
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
