@@ -19,4 +19,8 @@ export class SupplierInMemoryRepository implements SupplierRepository {
     this.suppliers.push(supplier);
     return supplier;
   }
+
+  findByIdSync(id: string): Supplier | null {
+    return this.suppliers.find(supplier => supplier.id === id) || null;
+  }
 }

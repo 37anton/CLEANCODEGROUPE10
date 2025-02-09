@@ -26,4 +26,9 @@ export class PartSupplierInMemoryRepository implements PartSupplierRepository {
     console.log('id du part supplier créé : ', partSupplier.id);
     return partSupplier;
   }
+
+  findByIdSync(id: string): PartSupplier | null {
+    return this.partSuppliers.find(ps => ps.id === id) || null;
+  }
+  
 }

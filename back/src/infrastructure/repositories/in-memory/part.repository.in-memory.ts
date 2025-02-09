@@ -17,4 +17,14 @@ export class PartInMemoryRepository implements PartRepository {
   async findAll(): Promise<Part[]> {
     return this.parts;
   }
+
+  findByIdSync(id: string): Part | null {
+    return this.parts.find(part => part.id === id) || null;
+  }
+
+  async findById(id: string): Promise<Part | null> {
+    return this.parts.find(part => part.id === id) || null;
+  }
+  
+  
 }
