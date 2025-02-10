@@ -12,6 +12,8 @@ import { PartSupplierService } from 'src/application/services/part-supplier.serv
 import { Supplier } from 'src/domain/entities/supplier.entity';
 import { OrderService } from 'src/application/services/order.service';
 import { User } from 'src/domain/entities/user.entity';
+import { Client } from 'src/domain/entities/client.entity';
+import { ClientService } from 'src/application/services/client.service';
 
 
 export async function loadFixtures(app?: INestApplication): Promise<void> {
@@ -28,9 +30,14 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   const driverService = application.get(DriverService);
   const partSupplierService = application.get(PartSupplierService);
   const orderService = application.get(OrderService);
+  const clientService = application.get(ClientService);
+
+  console.log("Création d'un Client");
+  const client1 = new Client();
+  client1.name = "Jean Michel";
+  const savedClient = await clientService.createClient(client1);
 
   console.log("Chargement des companies...");
-
   const company1 = new Company();
   company1.name = "Company 1";
   const savedCompany1 = await companyService.createCompany(company1);
@@ -64,6 +71,7 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
     { email: "user2@concession1.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession1.id } },
     { email: "user1@concession2.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession2.id } },
     { email: "user2@concession2.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession2.id } },
+    { email: "user@client.com", password: passwordHash, isAdmin: false, associations: { clientId: savedClient.id } },
   ];
 
   for (const userData of usersData) {
