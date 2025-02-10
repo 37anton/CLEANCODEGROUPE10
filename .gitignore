@@ -6,6 +6,8 @@
 /build
 /dist-ssr
 
+Project.code-workspace
+
 logs
 *.log
 .npm
