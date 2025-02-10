@@ -63,7 +63,6 @@ export class PartStockSqlRepository implements PartStockRepository {
   }
 
   async findAll(userId: string): Promise<PartStock[]> {
-    // Vérifier que `userId` est bien une chaîne UUID
     if (typeof userId !== 'string') {
       throw new Error("Invalid userId: Expected a string UUID.");
     }
@@ -121,7 +120,6 @@ export class PartStockSqlRepository implements PartStockRepository {
       alertThreshold: 5
     });
 
-    // Associer au bon type d'entité
     const company = await this.companyRepository.findOne(entityId);
     const concession = await this.concessionRepository.findOne(entityId);
     const client = await this.clientRepository.findOne(entityId);
@@ -143,9 +141,9 @@ export class PartStockSqlRepository implements PartStockRepository {
   async findAllWithoutUser(): Promise<PartStock[]> {
     return this.partStockRepository.createQueryBuilder("partStock")
       .leftJoinAndSelect("partStock.part", "part")
-      .leftJoinAndSelect("partStock.company", "company")   // Ajout de company
-      .leftJoinAndSelect("partStock.concession", "concession")  // Ajout de concession
-      .leftJoinAndSelect("partStock.client", "client")   // Ajout de client
+      .leftJoinAndSelect("partStock.company", "company")  
+      .leftJoinAndSelect("partStock.concession", "concession")  
+      .leftJoinAndSelect("partStock.client", "client")   
       .getMany();
   }
   

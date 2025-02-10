@@ -24,7 +24,6 @@ export class OrderInMemoryRepository implements OrderRepository {
                 order.client?.id === userAssociationId
             )
             .map(async order => {
-                // Récupérer le fournisseur complet
                 const supplier = await this.supplierRepository.findById(order.supplier.id);
                 if (supplier) {
                     order.supplier = {
@@ -45,8 +44,6 @@ export class OrderInMemoryRepository implements OrderRepository {
                         partSuppliers: []
                     };
                 }
-
-                // Associe le fournisseur et les pièces aux items de commande
                 order.orderItems = await Promise.all(
                     order.orderItems.map(async orderItem => {
                         const partSupplier = await this.partSupplierRepository.findById(orderItem.partSupplier.id);

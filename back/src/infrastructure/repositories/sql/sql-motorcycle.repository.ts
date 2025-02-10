@@ -21,7 +21,7 @@ export class SQLMotorcycleRepository {
   async findById(id: string): Promise<Motorcycle> {
     const motorcycle = await this.ormRepository.findOne({ 
       where: { id },
-      relations: ['intervals', 'companyMotorcycles', 'clientMotorcycles', 'concession', 'clientMotorcycles.client', 'companyMotorcycles.company']  // Chargement des relations nécessaires
+      relations: ['intervals', 'companyMotorcycles', 'clientMotorcycles', 'concession', 'clientMotorcycles.client', 'companyMotorcycles.company'] 
     });
     if (!motorcycle) throw new Error('Motorcycle not found');
     return motorcycle;

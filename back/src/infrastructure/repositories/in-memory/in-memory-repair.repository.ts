@@ -16,4 +16,10 @@ export class InMemoryRepairRepository implements RepairRepository {
       .filter(r => r.incident && r.incident.id === incidentId)
       .sort((a, b) => new Date(b.repairDate).getTime() - new Date(a.repairDate).getTime());
   }
+
+  async findByVehicleId(vehicleId: string): Promise<Repair[]> {
+    return this.repairs
+      .filter(r => r.incident && r.incident.motorcycle && r.incident.motorcycle.id === vehicleId)
+      .sort((a, b) => new Date(b.repairDate).getTime() - new Date(a.repairDate).getTime());
+  }
 }

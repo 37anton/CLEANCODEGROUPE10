@@ -44,6 +44,7 @@ const MotorcycleList: React.FC = () => {
               <p>
                 {moto.model} - {moto.vin}
               </p>
+              {/* Boutons existants */}
               <Link to={`/motorcycles/update/${moto.id}`}>
                 <button>Modifier</button>
               </Link>
@@ -64,6 +65,13 @@ const MotorcycleList: React.FC = () => {
               </Link>
               <Link to={`/warranties/vehicle/${moto.id}`}>
                 <button>Voir Garanties</button>
+              </Link>
+              {/* Nouveaux boutons */}
+              <Link to={`/maintenances/create/${moto.id}`}>
+                <button>Faire Maintenance</button>
+              </Link>
+              <Link to={`/repairs/create/${moto.id}`}>
+                <button>Créer Réparation</button>
               </Link>
             </li>
           ))}

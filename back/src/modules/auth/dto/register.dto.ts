@@ -9,5 +9,5 @@ export class RegisterDto {
   password: string;
 
   @IsNotEmpty()
-  role: string; // "admin", "company", "client", etc.
+  role: string;
 }

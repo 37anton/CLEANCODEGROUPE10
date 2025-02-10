@@ -27,6 +27,7 @@ import CreateRepairPage from './pages/CreateRepair';
 import CreateWarrantyPage from './pages/CreateWarranty'; 
 import WarrantyHistoryPage from './pages/WarrantyHistory';
 import IncidentHistoryPage from './pages/IncidentHistory';
+import RepairHistoryPage from './pages/RepairHistory';
 
 
 const App = () => {
@@ -50,7 +51,6 @@ const App = () => {
             <Link to="/interval-definitions">Liste des Intervalles</Link>
           </nav>
           <Routes>
-            {/* Routes existantes */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -64,7 +64,8 @@ const App = () => {
               <Route path="/maintenances/vehicle/:vehicleId" element={<MaintenanceHistoryPage />} />
               <Route path="/maintenances/create/:vehicleId" element={<CreateMaintenancePage />} />
               <Route path="/incidents/create/:motorcycleId" element={<CreateIncidentPage />} />
-              <Route path="/repairs/create/:incidentId" element={<CreateRepairPage />} />
+              <Route path="/repairs/create/:incidentId/:motorcycleId" element={<CreateRepairPage />} />
+              <Route path="/repairs/vehicle/:vehicleId" element={<RepairHistoryPage />} />
               <Route path="/warranties/create/:motorcycleId" element={<CreateWarrantyPage />} />
               <Route path="/warranties/vehicle/:vehicleId" element={<WarrantyHistoryPage />} />
               <Route path="/incidents/vehicle/:vehicleId" element={<IncidentHistoryPage />} />
@@ -77,7 +78,6 @@ const App = () => {
               <Route path="/create-order/:supplierId" element={<CreateOrder />} />
             </Route>
 
-            {/* Nouvelles routes ajoutées */}
 
             <Route path="/stock" element={<Stock />} />
           </Routes>

@@ -71,6 +71,7 @@ const databaseConfig: any = process.env.STORAGE_ADAPTER === 'postgres'
     CompanyModule,   
     ConcessionModule,
     ClientModule,
+    RepairModule,
   ],
   controllers: [AppController],
   providers: [

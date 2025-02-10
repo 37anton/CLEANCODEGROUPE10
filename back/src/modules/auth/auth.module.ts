@@ -26,6 +26,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 })
 export class AuthModule {
   constructor(configService: ConfigService) {
-    console.log("JWT_SECRET:", configService.get('JWT_SECRET')); // Vérification
+    console.log("JWT_SECRET:", configService.get('JWT_SECRET'));
   }
 }

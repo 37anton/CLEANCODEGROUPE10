@@ -16,6 +16,6 @@ export class Repair {
   @ManyToOne(() => Incident, incident => incident.repairs)
   incident: Incident;
 
-  @OneToMany(() => RepairPart, rp => rp.repair)
+  @OneToMany(() => RepairPart, rp => rp.repair, { cascade: true, eager: true })
   repairParts: RepairPart[];
 }

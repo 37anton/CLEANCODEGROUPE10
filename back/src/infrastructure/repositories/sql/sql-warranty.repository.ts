@@ -1,4 +1,3 @@
-// src/infrastructure/repositories/sql/sql-warranty.repository.ts
 import { Injectable } from '@nestjs/common';
 import { Warranty } from '../../../domain/entities/warranty.entity';
 import { Repository } from 'typeorm';

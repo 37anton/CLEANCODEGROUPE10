@@ -3,6 +3,7 @@ import { Part } from "./part.entity";
 import { Company } from "./company.entity";
 import { Concession } from "./concession.entity";
 import { Client } from "./client.entity";
+import { RepairPart } from './repair-part.entity';
 
 @Entity()
 export class PartStock {
@@ -26,4 +27,7 @@ export class PartStock {
 
   @Column({ default: 5 }) 
   alertThreshold: number;
+
+  @OneToMany(() => RepairPart, repairPart => repairPart.partStock)
+  repairParts?: RepairPart[];
 }

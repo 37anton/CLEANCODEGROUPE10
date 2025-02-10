@@ -29,7 +29,6 @@ export class MotorcycleController {
     const user = req.user as any;
     const motorcycle = await this.createMotorcycleUseCase.execute(motorcycleData, user);
 
-    // Dès la création, on définit l'intervalle d'entretien en fonction du modèle
     await this.setMotorcycleIntervalUseCase.execute(motorcycle.id);
 
     return motorcycle;
@@ -77,7 +76,6 @@ export class MotorcycleController {
     return { message: 'Moto supprimée avec succès' };
   }
 
-  // Endpoint pour obtenir le plan d'entretien de la moto
   @UseGuards(JwtAuthGuard)
   @Get(':id/maintenance-plan')
   async getMaintenancePlan(@Param('id') id: string) {

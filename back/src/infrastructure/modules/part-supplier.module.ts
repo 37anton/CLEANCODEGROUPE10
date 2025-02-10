@@ -9,7 +9,6 @@ import { PartSupplierInMemoryRepository } from "../repositories/in-memory/part-s
 import { PART_SUPPLIER_REPOSITORY } from "../repositories/part-supplier.repository";
 import { CreatePartSupplierUseCase } from "src/application/use-cases/create-part-supplier.use-case";
 
-// Vérifie si on utilise In-Memory ou PostgreSQL
 const isInMemory = process.env.STORAGE_ADAPTER === "in-memory";
 
 @Module({

@@ -60,7 +60,7 @@ export class PartStockInMemoryRepository implements PartStockRepository {
   }
 
   async findAllWithoutUser(): Promise<PartStock[]> {
-    return this.stocks; // 🔹 Retourne tous les stocks en mémoire
+    return this.stocks;
   }
   
 }

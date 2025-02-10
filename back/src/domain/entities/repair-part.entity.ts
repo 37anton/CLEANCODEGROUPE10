@@ -1,15 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 import { Repair } from './repair.entity';
-import { Part } from './part.entity';
+import { PartStock } from './part-stock.entity';
 
 @Entity()
 export class RepairPart {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Repair, repair => repair.repairParts)
+  @ManyToOne(() => Repair, repair => repair.repairParts, { nullable: false, onDelete: 'CASCADE' })
   repair: Repair;
 
-  @ManyToOne(() => Part, part => part.repairParts)
-  part: Part;
+  @ManyToOne(() => PartStock, { nullable: false })
+  partStock: PartStock;
+
+  @Column({ type: 'int' })
+  quantity: number;
 }

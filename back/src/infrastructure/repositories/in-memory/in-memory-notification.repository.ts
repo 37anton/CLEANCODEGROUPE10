@@ -5,12 +5,12 @@ import { NotificationRepository } from '../notification.repository';
 @Injectable()
 export class InMemoryNotificationRepository implements NotificationRepository {
   private notifications: Notification[] = [];
-  private idCounter = 1; // 🔹 Utilisation d'un compteur pour les IDs
+  private idCounter = 1;
 
   async createNotification(userId: string, message: string): Promise<Notification> {
     const notification: Notification = {
-      id: this.idCounter++, // 🔹 Génère un ID numérique auto-incrémenté
-      user: { id: userId } as any, // 🔹 Assurer la compatibilité avec User
+      id: this.idCounter++,
+      user: { id: userId } as any,
       message,
       isRead: false,
       createdAt: new Date(),

@@ -10,9 +10,7 @@ export class ClientInMemoryRepository implements ClientRepository {
     return this.clients.find(client => client.id === id) || null;
   }
 
-  // Exemple de méthode pour ajouter un client en mémoire (selon vos besoins)
   async create(client: Client): Promise<Client> {
-    // Vous pouvez générer un identifiant ou vous appuyer sur celui fourni par le client
     this.clients.push(client);
     return client;
   }

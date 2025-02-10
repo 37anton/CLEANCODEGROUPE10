@@ -23,7 +23,6 @@ export class InMemoryMotorcycleRepository {
   }
 
   async findMotorcyclesForUser(user: User): Promise<Motorcycle[]> {
-    // Implémentez la logique pour filtrer les motos associées à l'utilisateur
     return this.motorcycles.filter(m => true);
   }
 

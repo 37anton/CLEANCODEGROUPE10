@@ -17,8 +17,8 @@ export class SQLIncidentRepository implements IncidentRepository {
 
   async findByVehicleId(vehicleId: string): Promise<Incident[]> {
     return this.ormRepository.find({
-      where: { motorcycle: { id: vehicleId } }, // On suppose que l'incident est lié à une moto via la relation 'motorcycle'
-      relations: ['repairs'], // Pour charger les réparations associées
+      where: { motorcycle: { id: vehicleId } }, 
+      relations: ['repairs'], 
       order: { incidentDate: 'DESC' },
     });
   }

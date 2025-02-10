@@ -1,8 +1,7 @@
-// src/pages/IncidentHistoryPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useParams } from 'react-router-dom';
 
 interface Incident {
   id: string;
@@ -32,7 +31,6 @@ const IncidentHistoryPage: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchIncidents();
   }, [vehicleId, token]);
 
@@ -54,6 +52,9 @@ const IncidentHistoryPage: React.FC = () => {
               <p>
                 <strong>Description :</strong> {incident.description}
               </p>
+              <Link to={`/repairs/create/${incident.id}/${vehicleId}`}>
+                <button>Créer Réparation</button>
+              </Link>
             </li>
           ))}
         </ul>
