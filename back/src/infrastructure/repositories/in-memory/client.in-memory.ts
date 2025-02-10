@@ -15,4 +15,10 @@ export class ClientInMemoryRepository implements ClientRepository {
     return client;
   }
 
+  async createClient(client: Client): Promise<Client> {
+    client.id = Math.random().toString(36).substring(7);
+    this.clients.push(client);
+    return client;
+  }
+
 }

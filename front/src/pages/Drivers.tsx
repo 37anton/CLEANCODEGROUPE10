@@ -43,9 +43,9 @@ const DriverPage: React.FC = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold">🚗 Liste des Conducteurs</h1>
       
-      <button className="btn" onClick={() => setShowCreateModal(true)}>Ajouter un Conducteur</button>
+      <button className="btn" onClick={() => setShowCreateModal(true)}>Ajouter un conducteur</button>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         {drivers.map((driver) => (
           <div
             key={driver.id}

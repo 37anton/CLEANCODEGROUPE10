@@ -14,4 +14,8 @@ export class ClientSqlRepository implements ClientRepository {
   async findOne(id: string): Promise<Client | null> {
     return this.clientRepository.findOne({ where: { id } });
   }
+
+  async createClient(client: Client): Promise<Client> {
+    return this.clientRepository.save(client);
+  }
 }
