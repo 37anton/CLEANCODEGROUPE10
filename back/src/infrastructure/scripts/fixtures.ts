@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { UserService } from '../application/services/user.service';
+import { UserService } from '../../application/services/user.service';
 import { hash } from 'bcryptjs';
 import { Company } from 'src/domain/entities/company.entity';
 import { Concession } from 'src/domain/entities/concession.entity';
@@ -15,9 +15,8 @@ import { User } from 'src/domain/entities/user.entity';
 
 
 export async function loadFixtures(app?: INestApplication): Promise<void> {
-  // Si une instance d'app est passée, on l'utilise, sinon on crée un contexte autonome
   const application = app || await (await import('@nestjs/core')).NestFactory.createApplicationContext(require('../../app.module').AppModule);
-  const usersMap: { [email: string]: User } = {}; // Pour stocker les users
+  const usersMap: { [email: string]: User } = {};
 
 
   const userService = application.get(UserService);
@@ -91,7 +90,6 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
     { name: "Phare avant" },
     { name: "Clignotant" }
   ];
-  // On stocke les parts créées dans une map pour pouvoir les retrouver par nom
   const partsMap: { [key: string]: any } = {};
   for (const { name } of partsData) {
     const part = await partService.create(name);
@@ -99,7 +97,6 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
     console.log(`Part '${part.name}' created`);
   }
 
-  // Création des suppliers
   const suppliersData = [
     { name: "Supplier A", phone: "0123456789", deliveryTime: 1, city: "Paris" },
     { name: "Supplier B", phone: "0987654321", deliveryTime: 2, city: "Lyon" }
@@ -115,7 +112,6 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   const supplierA = savedSuppliers[0];
   const supplierB = savedSuppliers[1];
 
-  // Création de 2 drivers qu'on lie à companu 1 et 2
   const driversDataForCompany1 = [
     { name: "Jean Dupont", license: "A2", experience: 3 },
     { name: "Sophie Martin", license: "A", experience: 5 },
@@ -136,10 +132,6 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
     console.log(`Driver '${driver.name}' créé pour Company 2:`, driver);
   }
 
-  // Création des PartSupplier
-  // Supplier A: "Filtre à huile" à 10€ et "Plaquette de frein" à 15€
-  // Supplier B: "Filtre à huile" à 12€ et "Plaquette de frein" à 18€
-  // Création des PartSupplier et stockage dans une map
   const partSupplierData = [
     { supplier: supplierA, partName: "Filtre à huile", price: 10 },
     { supplier: supplierA, partName: "Plaquette de frein", price: 15 },
@@ -147,7 +139,6 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
     { supplier: supplierB, partName: "Plaquette de frein", price: 18 }
   ];
 
-  // Création d'une map pour stocker les PartSupplier créés par clé (par exemple "Supplier A-Filtre à huile")
   const partSuppliersMap: { [key: string]: any } = {};
 
   for (const data of partSupplierData) {

@@ -1,4 +1,3 @@
-// src/components/CreateWarranty.tsx
 import React, { useState, FormEvent } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -8,7 +7,6 @@ interface CreateWarrantyDto {
   motorcycleId: string;
   startDate: string;
   endDate: string;
-  // Vous pouvez ajouter d'autres champs (par exemple, des pièces couvertes)
 }
 
 const CreateWarranty: React.FC = () => {

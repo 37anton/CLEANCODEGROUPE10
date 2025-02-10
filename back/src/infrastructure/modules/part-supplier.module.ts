@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { PartSupplier } from "src/domain/entities/part-supplier.entity";
-import { PartSupplierController } from "../../interfaces/controllers/part-supplier.controller";
+import { PartSupplierController } from "../../application/controllers/part-supplier.controller";
 import { PartSupplierService } from "../../application/services/part-supplier.service";
 import { FindPartsBySupplierUseCase } from "../../application/use-cases/find-parts-by-supplier.use-case";
 import { PartSupplierSqlRepository } from "../repositories/sql/part-supplier.repository.sql";
@@ -9,7 +9,6 @@ import { PartSupplierInMemoryRepository } from "../repositories/in-memory/part-s
 import { PART_SUPPLIER_REPOSITORY } from "../repositories/part-supplier.repository";
 import { CreatePartSupplierUseCase } from "src/application/use-cases/create-part-supplier.use-case";
 
-// Vérifie si on utilise In-Memory ou PostgreSQL
 const isInMemory = process.env.STORAGE_ADAPTER === "in-memory";
 
 @Module({

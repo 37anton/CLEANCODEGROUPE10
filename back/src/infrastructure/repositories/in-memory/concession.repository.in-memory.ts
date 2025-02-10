@@ -10,7 +10,6 @@ export class ConcessionInMemoryRepository implements ConcessionRepository {
     return this.concessions.find(concession => concession.id === id) || null;
   }
 
-  // Méthode pour ajouter une concession en mémoire (utile pour les tests)
   async addConcession(concession: Concession): Promise<void> {
     this.concessions.push(concession);
   }

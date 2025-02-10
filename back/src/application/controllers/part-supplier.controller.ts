@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from "@nestjs/common";
-import { PartSupplierService } from "../../application/services/part-supplier.service";
+import { PartSupplierService } from "../services/part-supplier.service";
 import { PartSupplier } from "../../domain/entities/part-supplier.entity";
 
 @Controller("part-suppliers")

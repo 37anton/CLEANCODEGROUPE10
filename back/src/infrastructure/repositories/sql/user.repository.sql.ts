@@ -22,10 +22,8 @@ export class UserSqlRepository implements UserRepository {
     associations?: { companyId?: string; concessionId?: string; clientId?: string }
   ): Promise<User> {
     const user = this.userRepository.create({ email, password, role, isAdmin });
-    // Affecter les associations si présentes
     if (associations) {
       if (associations.companyId) {
-        // Ici on peut créer un objet partiel Company
         user.company = { id: associations.companyId } as Company;
       }
       if (associations.concessionId) {

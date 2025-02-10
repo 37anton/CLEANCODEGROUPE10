@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule, getRepositoryToken } from "@nestjs/typeorm";
 import { NotificationService } from "../../application/services/notification.service";
-import { NotificationController } from "../../interfaces/controllers/notification.controller";
+import { NotificationController } from "../../application/controllers/notification.controller";
 import { Notification } from "../../domain/entities/notification.entity";
 import { User } from "../../domain/entities/user.entity";
 import { NotificationRepository, NOTIFICATION_REPOSITORY } from "../repositories/notification.repository";
@@ -14,7 +14,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 @Module({
   imports: [
     ...(!isInMemory ? [TypeOrmModule.forFeature([Notification, User])] : []),
-    UserModule, // Pour accéder à User si besoin
+    UserModule, 
   ],
   controllers: [NotificationController],
   providers: [

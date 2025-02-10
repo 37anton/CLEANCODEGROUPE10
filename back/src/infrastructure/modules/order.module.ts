@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from '../../domain/entities/order.entity';
 import { OrderService } from '../../application/services/order.service';
-import { OrderController } from '../../interfaces/controllers/order.controller';
+import { OrderController } from '../../application/controllers/order.controller';
 import { ORDER_REPOSITORY } from '../repositories/order.repository';
 import { User } from 'src/domain/entities/user.entity'; 
 import { UserModule } from './user.module';

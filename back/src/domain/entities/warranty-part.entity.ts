@@ -1,4 +1,3 @@
-// src/domain/entities/warranty-part.entity.ts
 import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Warranty } from './warranty.entity';
 import { Part } from './part.entity';

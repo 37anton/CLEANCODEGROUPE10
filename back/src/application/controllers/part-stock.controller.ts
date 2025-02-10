@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UseGuards, Request, Get } from "@nestjs/common";
-import { PartStockService } from "../../application/services/part-stock.service";
-import { CreatePartStockDto } from "../../application/dto/create-part-stock.dto";
-import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
+import { PartStockService } from "../services/part-stock.service";
+import { CreatePartStockDto } from "../dto/create-part-stock.dto";
+import { JwtAuthGuard } from "../../infrastructure/auth/guards/jwt-auth.guard";
 import { PartStock } from "../../domain/entities/part-stock.entity";
 
 @Controller("part-stock")

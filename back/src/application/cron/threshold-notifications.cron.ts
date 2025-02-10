@@ -15,7 +15,7 @@ export class ThresholdNotificationsCron {
     @Inject(NOTIFICATION_REPOSITORY) private readonly notificationRepository: NotificationRepository
   ) {}
 
-  @Cron("*/30 * * * * *") // Exécution toutes les 30 secondes
+  @Cron("*/30 * * * * *") 
   async checkStockThresholds() {
     console.log("Vérification des seuils d'alerte de stock...");
 
@@ -28,7 +28,6 @@ export class ThresholdNotificationsCron {
 
         console.log(`Stock bas pour ${stock.part.name} - Seuil: ${stock.alertThreshold}, Disponible: ${stock.quantity}`);
 
-        // Récupérer tous les utilisateurs liés à cette entité
         const users = await this.userRepository.findByEntity(entityId);
 
         for (const user of users) {

@@ -12,7 +12,6 @@ export class InMemoryIncidentRepository implements IncidentRepository {
   }
 
   async findByVehicleId(vehicleId: string): Promise<Incident[]> {
-    // On filtre les incidents dont l'incident.motorcycle.id correspond à vehicleId
     return this.incidents
       .filter(i => i.motorcycle && i.motorcycle.id === vehicleId)
       .sort((a, b) => new Date(b.incidentDate).getTime() - new Date(a.incidentDate).getTime());

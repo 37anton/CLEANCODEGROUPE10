@@ -3,11 +3,6 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useParams, useNavigate } from 'react-router-dom';
 
-// On définit l'interface pour le PartStock tel que retourné par l'API.
-// On suppose que l'endpoint /part-stock renvoie des objets contenant :
-// - id (de l'enregistrement de stock)
-// - part : { id, name }
-// - quantity, alertThreshold, etc.
 interface PartStockItem {
   id: string;
   part: {
@@ -48,16 +43,13 @@ const CreateMaintenance: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Récupérer les pièces disponibles via l'endpoint PartStock
   useEffect(() => {
     const fetchPartStocks = async () => {
       try {
-        // L'endpoint /part-stock doit renvoyer uniquement les enregistrements pour l'utilisateur connecté (filtrés côté backend)
         const response = await axios.get<PartStockItem[]>('http://localhost:3000/part-stock', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAvailablePartStocks(response.data);
-        // Initialiser replacedParts pour chaque enregistrement de stock
         const initialReplacedParts = response.data.map((item) => ({
           partId: item.part.id,
           quantity: 0,
@@ -70,7 +62,6 @@ const CreateMaintenance: React.FC = () => {
     fetchPartStocks();
   }, [token]);
 
-  // Met à jour la quantité pour une pièce dans replacedParts
   const handleReplacedPartChange = (partId: string, quantity: number) => {
     setReplacedParts(prev =>
       prev.map(rp => (rp.partId === partId ? { ...rp, quantity } : rp))
@@ -84,7 +75,6 @@ const CreateMaintenance: React.FC = () => {
       return;
     }
 
-    // Filtrer les pièces dont la quantité est supérieure à zéro
     const filteredReplacedParts = replacedParts.filter(rp => rp.quantity > 0);
 
     const dto: CreateMaintenanceDto = {

@@ -4,7 +4,7 @@ import { CreateUserUseCase } from '../use-cases/create-user.use-case';
 import { FindUserByEmailUseCase } from '../use-cases/find-user-by-email.use-case';
 import { FindUserByIdUseCase } from '../use-cases/find-user-by-id.use-case';
 import { Repository } from 'typeorm';
-import { RegisterDto } from "../../../src/modules/auth/dto/register.dto";
+import { RegisterDto } from "../dto/register.dto";
 import { User } from 'src/domain/entities/user.entity';
 import { USER_REPOSITORY, UserRepository } from 'src/infrastructure/repositories/user.repository';
 
@@ -39,7 +39,6 @@ export class UserService {
   }
   
   async findAllByCompanyId(companyId: string): Promise<User[]> {
-    // Vous pouvez filtrer dans le service ou dans la méthode du repository
     const users = await this.userRepository.findByEntity(companyId);
     return users.filter(user => user.company && user.company.id === companyId);
   }

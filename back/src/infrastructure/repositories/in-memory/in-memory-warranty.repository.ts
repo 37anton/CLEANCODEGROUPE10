@@ -1,4 +1,3 @@
-// src/infrastructure/repositories/in-memory/in-memory-warranty.repository.ts
 import { Injectable } from '@nestjs/common';
 import { Warranty } from '../../../domain/entities/warranty.entity';
 import { WarrantyRepository } from '../warranty.repository';

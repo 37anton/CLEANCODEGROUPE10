@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import notyf from "../utils/notyf";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext"; // Import du contexte d'authentification
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // Récupère la fonction login depuis le contexte
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +16,7 @@ const Login = () => {
       const response = await axios.post("http://localhost:3000/auth/login", { email, password });
 
       if (response.data?.accessToken && response.data?.user) {
-        login(response.data.accessToken, response.data.user); // Met à jour le contexte avec le token et l'utilisateur
+        login(response.data.accessToken, response.data.user); 
         notyf.success("Connexion réussie !");
         navigate("/dashboard");
       } else {

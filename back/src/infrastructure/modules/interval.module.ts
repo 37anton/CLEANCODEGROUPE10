@@ -5,7 +5,6 @@ import { INTERVAL_REPOSITORY, IntervalRepository } from '../repositories/interva
 import { InMemoryIntervalRepository } from '../repositories/in-memory/in-memory-interval.repository';
 import { SQLIntervalRepository } from '../repositories/sql/sql-interval.repository';
 
-// Déterminez si l'on est en mode in-memory ou SQL
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({

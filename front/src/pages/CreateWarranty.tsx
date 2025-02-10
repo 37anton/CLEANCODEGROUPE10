@@ -1,4 +1,3 @@
-// src/pages/CreateWarrantyPage.tsx
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import CreateWarranty from '../components/CreateWarranty';

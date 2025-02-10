@@ -1,4 +1,3 @@
-// src/domain/entities/repair.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Incident } from './incident.entity';
 import { RepairPart } from './repair-part.entity';
@@ -17,6 +16,6 @@ export class Repair {
   @ManyToOne(() => Incident, incident => incident.repairs)
   incident: Incident;
 
-  @OneToMany(() => RepairPart, rp => rp.repair)
+  @OneToMany(() => RepairPart, rp => rp.repair, { cascade: true, eager: true })
   repairParts: RepairPart[];
 }

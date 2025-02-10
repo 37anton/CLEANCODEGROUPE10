@@ -21,14 +21,13 @@ interface IntervalDefinition {
 const CreateMotorcycle: React.FC = () => {
   const { token } = useAuth();
   const [vin, setVin] = useState<string>('');
-  const [model, setModel] = useState<string>(''); // sera choisi via dropdown
+  const [model, setModel] = useState<string>(''); 
   const [manufactureDate, setManufactureDate] = useState<string>('');
   const [lastMaintenanceDate, setLastMaintenanceDate] = useState<string>('');
   const [mileage, setMileage] = useState<number>(0);
   const [lastMaintenanceMileage, setLastMaintenanceMileage] = useState<number>(0);
   const [intervalDefinitions, setIntervalDefinitions] = useState<IntervalDefinition[]>([]);
 
-  // Récupère la liste des définitions d'intervalles pour alimenter le dropdown
   useEffect(() => {
     const fetchIntervalDefinitions = async () => {
       try {
@@ -37,7 +36,7 @@ const CreateMotorcycle: React.FC = () => {
         });
         setIntervalDefinitions(response.data);
         if (response.data.length > 0) {
-          setModel(response.data[0].model); // valeur par défaut
+          setModel(response.data[0].model);
         }
       } catch (error) {
         console.error("Erreur lors de la récupération des définitions d'intervalle", error);
@@ -65,7 +64,6 @@ const CreateMotorcycle: React.FC = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log('Moto créée :', response.data);
-      // Réinitialisation ou redirection
     } catch (error) {
       console.error('Erreur lors de la création de la moto', error);
     }

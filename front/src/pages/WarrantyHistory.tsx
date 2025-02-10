@@ -1,4 +1,3 @@
-// src/pages/WarrantyHistoryPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -8,7 +7,6 @@ interface Warranty {
   id: string;
   startDate: string;
   endDate: string;
-  // Vous pouvez ajouter d'autres champs, par exemple les pièces couvertes
 }
 
 const WarrantyHistoryPage: React.FC = () => {

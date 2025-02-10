@@ -27,10 +27,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
 
       notyf.success(mode === "login" ? "Connexion réussie !" : "Inscription réussie !");
       
-      // Si login, stocker le token et rediriger
       if (mode === "login") {
         localStorage.setItem("token", response.data.accessToken);
-        window.location.href = "/dashboard"; // Redirection après connexion
+        window.location.href = "/dashboard"; 
       }
     } catch (error: any) {
       const errorMsg = error.response?.data?.message || "Une erreur est survenue.";

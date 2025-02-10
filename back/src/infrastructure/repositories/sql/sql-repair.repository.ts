@@ -18,8 +18,22 @@ export class SQLRepairRepository implements RepairRepository {
   async findByIncidentId(incidentId: string): Promise<Repair[]> {
     return this.ormRepository.find({
       where: { incident: { id: incidentId } },
-      relations: ['repairParts'],
+      relations: ['incident', 'repairParts', 'repairParts.partStock', 'repairParts.partStock.part'],
       order: { repairDate: 'DESC' },
     });
   }
+
+  async findByVehicleId(vehicleId: string): Promise<Repair[]> {
+    const repairs = await this.ormRepository.createQueryBuilder('repair')
+      .leftJoinAndSelect('repair.incident', 'incident')
+      .leftJoinAndSelect('repair.repairParts', 'repairParts')
+      .leftJoinAndSelect('repairParts.partStock', 'partStock')
+      .leftJoinAndSelect('partStock.part', 'part')
+      .where('incident.motorcycleId = :vehicleId', { vehicleId })
+      .orderBy('repair.repairDate', 'DESC')
+      .getMany();
+    console.log('Repairs récupérées:', repairs);
+    return repairs;
+  }
+  
 }

@@ -1,7 +1,5 @@
-// Order.tsx
 import React, { useEffect, useState } from 'react';
 
-// Définition des types correspondant à vos données
 
 interface Part {
   id: string;
@@ -46,7 +44,6 @@ const OrderList: React.FC = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        // Récupération du token JWT depuis le localStorage (si utilisé)
         const token = localStorage.getItem('token');
         const response = await fetch('http://localhost:3000/orders', {
           headers: {

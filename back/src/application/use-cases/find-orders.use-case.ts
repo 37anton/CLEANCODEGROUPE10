@@ -10,7 +10,6 @@ export class FindOrdersUseCase {
   ) {}
 
   async execute(user: User): Promise<Order[]> {
-    // Extraire l'ID de l'association (company, concession ou client)
     const associationId = user.company?.id || user.concession?.id || user.client?.id;
     console.log("ID d'association extrait de l'utilisateur :", associationId);
     if (!associationId) {

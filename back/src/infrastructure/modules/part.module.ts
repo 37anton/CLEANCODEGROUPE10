@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { PartService } from "../../application/services/part.service";
-import { PartController } from "../../interfaces/controllers/part.controller";
+import { PartController } from "../../application/controllers/part.controller";
 import { Part } from "../../domain/entities/part.entity";
 import { CreatePartUseCase } from "../../application/use-cases/create-part.use-case";
 import { FindPartsUseCase } from "../../application/use-cases/find-parts.use-case";

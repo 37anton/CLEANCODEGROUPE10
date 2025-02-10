@@ -1,7 +1,6 @@
-// src/infrastructure/interfaces/controllers/incident.controller.ts
 import { Controller, Post, Body, UseGuards, Request, Get, Param } from '@nestjs/common';
 import { CreateIncidentUseCase } from 'src/application/use-cases/create-incident.use-case';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/infrastructure/auth/guards/jwt-auth.guard';
 import { CreateIncidentDto } from 'src/application/dto/create-incident.dto';
 import { GetIncidentHistoryUseCase } from 'src/application/use-cases/get-incident-history.use-case';
 

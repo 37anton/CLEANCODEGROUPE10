@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { UserModule } from '../../infrastructure/modules/user.module';
+import { AuthService } from '../../application/services/auth.service';
+import { AuthController } from 'src/application/controllers/auth.controller';
+import { UserModule } from './user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -26,6 +26,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 })
 export class AuthModule {
   constructor(configService: ConfigService) {
-    console.log("JWT_SECRET:", configService.get('JWT_SECRET')); // Vérification
+    console.log("JWT_SECRET:", configService.get('JWT_SECRET'));
   }
 }

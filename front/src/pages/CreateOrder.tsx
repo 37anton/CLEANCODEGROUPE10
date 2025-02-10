@@ -76,7 +76,6 @@ const CreateOrder: React.FC = () => {
         return;
       }
 
-      // Filtrer uniquement les produits dont la quantité > 0
       const orderItems = Object.entries(quantities)
         .filter(([_, quantity]) => quantity > 0)
         .map(([partSupplierId, quantity]) => ({ partSupplierId, quantity }));

@@ -1,4 +1,3 @@
-// src/infrastructure/modules/motorcycle.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Motorcycle } from 'src/domain/entities/motorcycle.entity';
@@ -6,7 +5,6 @@ import { CompanyMotorcycle } from 'src/domain/entities/company-motorcycle.entity
 import { ClientMotorcycle } from 'src/domain/entities/client-motorcycle.entity';
 import { Interval } from 'src/domain/entities/interval.entity';
 
-// Import des use cases
 import { CreateMotorcycleUseCase } from 'src/application/use-cases/create-motorcycle.use-case';
 import { GetMotorcyclesUseCase } from 'src/application/use-cases/get-motorcycles.use-case';
 import { UpdateMotorcycleUseCase } from 'src/application/use-cases/update-motorcycle.use-case';
@@ -14,10 +12,8 @@ import { DeleteMotorcycleUseCase } from 'src/application/use-cases/delete-motorc
 import { SetMotorcycleIntervalUseCase } from 'src/application/use-cases/set-motorcycle-interval.use-case';
 import { GetMaintenancePlanUseCase } from 'src/application/use-cases/get-maintenance-plan.use-case';
 
-// Import du contrôleur
-import { MotorcycleController } from 'src/interfaces/controllers/motorcycle.controller';
+import { MotorcycleController } from 'src/application/controllers/motorcycle.controller';
 
-// Import des repositories
 import { InMemoryMotorcycleRepository } from 'src/infrastructure/repositories/in-memory/in-memory-motorcycle.repository';
 import { SQLMotorcycleRepository } from 'src/infrastructure/repositories/sql/sql-motorcycle.repository';
 import { InMemoryCompanyMotorcycleRepository } from 'src/infrastructure/repositories/in-memory/in-memory-company-motorcycle.repository';
@@ -27,7 +23,6 @@ import { SQLClientMotorcycleRepository } from 'src/infrastructure/repositories/s
 import { SQLIntervalRepository } from 'src/infrastructure/repositories/sql/sql-interval.repository';
 import { InMemoryIntervalRepository } from 'src/infrastructure/repositories/in-memory/in-memory-interval.repository';
 
-// Import des modules qui exportent d'autres providers
 import { IntervalDefinitionModule } from 'src/infrastructure/modules/interval-definition.module';
 import { UserModule } from './user.module';
 import { NotificationModule } from './notification.module';
@@ -75,7 +70,7 @@ const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
     GetMotorcyclesUseCase,
     UpdateMotorcycleUseCase,
     DeleteMotorcycleUseCase,
-    GetMaintenancePlanUseCase,  // <-- EXPORT ajouté pour le use case de maintenance
+    GetMaintenancePlanUseCase, 
     MOTORCYCLE_REPOSITORY,
     ...(!isInMemory ? [TypeOrmModule] : []),
   ],

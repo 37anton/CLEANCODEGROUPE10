@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PartStock } from 'src/domain/entities/part-stock.entity';
-import { PartStockController } from '../../interfaces/controllers/part-stock.controller';
+import { PartStockController } from '../../application/controllers/part-stock.controller';
 import { PartStockService } from '../../application/services/part-stock.service';
 import { UpdatePartStockUseCase } from '../../application/use-cases/update-part-stock.use-case';
 import { FindPartStockUseCase } from '../../application/use-cases/find-part-stock.use-case';
