@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { UserService } from '../application/services/user.service';
+import { UserService } from '../../application/services/user.service';
 import { hash } from 'bcryptjs';
 import { Company } from 'src/domain/entities/company.entity';
 import { Concession } from 'src/domain/entities/concession.entity';

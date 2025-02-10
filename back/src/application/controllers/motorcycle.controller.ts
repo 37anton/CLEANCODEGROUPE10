@@ -1,12 +1,12 @@
 import { Controller, Post, Get, Put, Delete, Body, Param, UseGuards, Req, NotFoundException } from '@nestjs/common';
-import { CreateMotorcycleUseCase } from '../../application/use-cases/create-motorcycle.use-case';
-import { GetMotorcyclesUseCase } from '../../application/use-cases/get-motorcycles.use-case';
-import { UpdateMotorcycleUseCase } from '../../application/use-cases/update-motorcycle.use-case';
-import { DeleteMotorcycleUseCase } from '../../application/use-cases/delete-motorcycle.use-case';
-import { SetMotorcycleIntervalUseCase } from '../../application/use-cases/set-motorcycle-interval.use-case';
-import { GetMaintenancePlanUseCase } from '../../application/use-cases/get-maintenance-plan.use-case';
+import { CreateMotorcycleUseCase } from '../use-cases/create-motorcycle.use-case';
+import { GetMotorcyclesUseCase } from '../use-cases/get-motorcycles.use-case';
+import { UpdateMotorcycleUseCase } from '../use-cases/update-motorcycle.use-case';
+import { DeleteMotorcycleUseCase } from '../use-cases/delete-motorcycle.use-case';
+import { SetMotorcycleIntervalUseCase } from '../use-cases/set-motorcycle-interval.use-case';
+import { GetMaintenancePlanUseCase } from '../use-cases/get-maintenance-plan.use-case';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../infrastructure/auth/guards/jwt-auth.guard';
 import { Request } from 'express';
 
 @Controller('motorcycles')

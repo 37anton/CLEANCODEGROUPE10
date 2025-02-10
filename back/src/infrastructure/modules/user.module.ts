@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/domain/entities/user.entity';
-import { UserController } from '../../interfaces/controllers/user.controller';
+import { UserController } from '../../application/controllers/user.controller';
 import { UserService } from '../../application/services/user.service';
 import { CreateUserUseCase } from '../../application/use-cases/create-user.use-case';
 import { FindUserByEmailUseCase } from '../../application/use-cases/find-user-by-email.use-case';

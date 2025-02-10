@@ -1,6 +1,6 @@
 import { Controller, Post, Get, Body, UseGuards } from "@nestjs/common";
-import { PartService } from "../../application/services/part.service";
-import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
+import { PartService } from "../services/part.service";
+import { JwtAuthGuard } from "../../infrastructure/auth/guards/jwt-auth.guard";
 import { Part } from "../../domain/entities/part.entity";
 
 @Controller("parts")

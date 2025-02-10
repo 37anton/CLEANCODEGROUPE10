@@ -12,7 +12,7 @@ import { DeleteMotorcycleUseCase } from 'src/application/use-cases/delete-motorc
 import { SetMotorcycleIntervalUseCase } from 'src/application/use-cases/set-motorcycle-interval.use-case';
 import { GetMaintenancePlanUseCase } from 'src/application/use-cases/get-maintenance-plan.use-case';
 
-import { MotorcycleController } from 'src/interfaces/controllers/motorcycle.controller';
+import { MotorcycleController } from 'src/application/controllers/motorcycle.controller';
 
 import { InMemoryMotorcycleRepository } from 'src/infrastructure/repositories/in-memory/in-memory-motorcycle.repository';
 import { SQLMotorcycleRepository } from 'src/infrastructure/repositories/sql/sql-motorcycle.repository';

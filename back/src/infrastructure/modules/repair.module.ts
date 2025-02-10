@@ -6,7 +6,7 @@ import { InMemoryRepairRepository } from '../../infrastructure/repositories/in-m
 import { CreateRepairUseCase } from '../../application/use-cases/create-repair.use-case';
 import { GetRepairHistoryUseCase } from '../../application/use-cases/get-repair-history.use-case';
 import { REPAIR_REPOSITORY } from '../repositories/repair.repository';
-import { RepairController } from 'src/interfaces/controllers/repair.controller';
+import { RepairController } from 'src/application/controllers/repair.controller';
 import { PartStockModule } from './part-stock.module';
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 

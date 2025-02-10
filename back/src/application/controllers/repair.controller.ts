@@ -1,8 +1,8 @@
 import { Controller, Post, Body, Get, Param, UseGuards, Request } from '@nestjs/common';
-import { CreateRepairUseCase } from '../../application/use-cases/create-repair.use-case';
-import { GetRepairHistoryUseCase } from '../../application/use-cases/get-repair-history.use-case';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { CreateRepairDto } from '../../application/dto/create-repair.dto';
+import { CreateRepairUseCase } from '../use-cases/create-repair.use-case';
+import { GetRepairHistoryUseCase } from '../use-cases/get-repair-history.use-case';
+import { JwtAuthGuard } from '../../infrastructure/auth/guards/jwt-auth.guard';
+import { CreateRepairDto } from '../dto/create-repair.dto';
 
 @Controller('repairs')
 @UseGuards(JwtAuthGuard)

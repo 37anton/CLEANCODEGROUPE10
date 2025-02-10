@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Get, Param, UseGuards, Request } from '@nestjs/common';
 import { CreateWarrantyUseCase } from 'src/application/use-cases/create-warranty.use-case';
 import { GetWarrantyHistoryUseCase } from 'src/application/use-cases/get-warranty-history.use-case';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/infrastructure/auth/guards/jwt-auth.guard';
 import { CreateWarrantyDto } from 'src/application/dto/create-warranty.dto';
 
 @Controller('warranties')

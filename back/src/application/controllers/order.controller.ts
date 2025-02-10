@@ -1,6 +1,6 @@
 import { Controller, Get, Request, UseGuards, Post, Body } from '@nestjs/common';
-import { OrderService } from '../../application/services/order.service';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { OrderService } from '../services/order.service';
+import { JwtAuthGuard } from '../../infrastructure/auth/guards/jwt-auth.guard';
 import { UserService } from 'src/application/services/user.service';
 
 

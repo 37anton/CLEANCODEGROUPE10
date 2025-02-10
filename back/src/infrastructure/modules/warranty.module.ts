@@ -5,7 +5,7 @@ import { SQLWarrantyRepository } from '../../infrastructure/repositories/sql/sql
 import { InMemoryWarrantyRepository } from '../../infrastructure/repositories/in-memory/in-memory-warranty.repository';
 import { CreateWarrantyUseCase } from '../../application/use-cases/create-warranty.use-case';
 import { GetWarrantyHistoryUseCase } from '../../application/use-cases/get-warranty-history.use-case';
-import { WarrantyController } from 'src/interfaces/controllers/warranty.controller';
+import { WarrantyController } from 'src/application/controllers/warranty.controller';
 import { MotorcycleModule } from './motorcycle.module';
 import { WARRANTY_REPOSITORY } from '../repositories/warranty.repository';
 

@@ -3,7 +3,7 @@ import { CreateIntervalDefinitionUseCase } from 'src/application/use-cases/creat
 import { UpdateIntervalDefinitionUseCase } from 'src/application/use-cases/update-interval-definition.use-case';
 import { ListIntervalDefinitionsUseCase } from 'src/application/use-cases/list-interval-definitions.use-case';
 import { DeleteIntervalDefinitionUseCase } from 'src/application/use-cases/delete-interval-definition.use-case';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/infrastructure/auth/guards/jwt-auth.guard';
 
 @Controller('interval-definitions')
 @UseGuards(JwtAuthGuard)

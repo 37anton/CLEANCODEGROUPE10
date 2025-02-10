@@ -7,7 +7,7 @@ import { CreateIntervalDefinitionUseCase } from 'src/application/use-cases/creat
 import { UpdateIntervalDefinitionUseCase } from 'src/application/use-cases/update-interval-definition.use-case';
 import { ListIntervalDefinitionsUseCase } from 'src/application/use-cases/list-interval-definitions.use-case';
 import { DeleteIntervalDefinitionUseCase } from 'src/application/use-cases/delete-interval-definition.use-case';
-import { IntervalDefinitionController } from 'src/interfaces/controllers/interval-definition.controller';
+import { IntervalDefinitionController } from 'src/application/controllers/interval-definition.controller';
 import { INTERVAL_DEFINITION_REPOSITORY } from '../repositories/interval-definition.repository';
 
 const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';

@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Supplier } from "src/domain/entities/supplier.entity";
-import { SupplierController } from "../../interfaces/controllers/supplier.controller";
+import { SupplierController } from "../../application/controllers/supplier.controller";
 import { SupplierService } from "../../application/services/supplier.service";
 import { FindSuppliersUseCase } from "../../application/use-cases/find-suppliers.use-case";
 import { FindSupplierByIdUseCase  } from "../../application/use-cases/find-supplier-by-id.use-case";

@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { loadFixtures } from './scripts/fixtures';
+import { loadFixtures } from './infrastructure/scripts/fixtures';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
