@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-
 interface Part {
   id: string;
   name: string;
@@ -76,7 +75,9 @@ const OrderList: React.FC = () => {
       {orders.map((order) => (
         <div
           key={order.id}
-          className="border border-gray-300 p-4 mb-4 rounded-xl"
+          className={`border border-gray-300 p-4 mb-4 rounded-xl ${
+            order.status === 'SHIPPED' ? 'bg-green-300' : 'bg-red-300'
+          }`}
         >
           <h2>Commande ID : {order.id}</h2>
           <p>
