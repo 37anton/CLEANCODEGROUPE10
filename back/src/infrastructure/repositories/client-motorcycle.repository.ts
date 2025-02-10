@@ -6,20 +6,20 @@ export const CLIENT_MOTORCYCLE_REPOSITORY = 'CLIENT_MOTORCYCLE_REPOSITORY';
 export interface ClientMotorcycleRepository {
   /**
    * Enregistre une nouvelle association ClientMotorcycle.
-   * @param cm L'objet ClientMotorcycle à créer.
-   */
+   * @param cm 
+   
   create(cm: ClientMotorcycle): Promise<ClientMotorcycle>;
 
   /**
    * Récupère la liste des motos associées à un client donné.
-   * @param clientId L'identifiant du client.
+   * @param clientId 
    */
   findAllByClientId(clientId: string): Promise<Motorcycle[]>;
 
   /**
    * Récupère une association ClientMotorcycle pour une moto et un client donnés.
-   * @param motorcycleId L'identifiant de la moto.
-   * @param clientId L'identifiant du client.
+    @param motorcycleId 
+    @param clientId 
    */
   findOneByMotorcycleAndClient(motorcycleId: string, clientId: string): Promise<ClientMotorcycle | null>;
 }

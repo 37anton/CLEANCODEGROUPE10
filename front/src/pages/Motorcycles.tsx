@@ -1,4 +1,3 @@
-// pages/Motorcycles.tsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CreateMotorcycle from "../components/CreateMotorcycle";
@@ -19,7 +18,6 @@ const Motorcycles: React.FC = () => {
   const { token } = useAuth();
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
 
-  // Fonction pour récupérer la liste des motos depuis l'API
   const fetchMotorcycles = async () => {
     try {
       const response = await axios.get<Motorcycle[]>("http://localhost:3000/motorcycles", {
@@ -37,10 +35,8 @@ const Motorcycles: React.FC = () => {
 
   return (
     <div className="min-h-screen p-6">
-      <h1 className="text-2xl font-bold mb-6">Gestion des Motos</h1>
-      {/* On passe la fonction refresh à CreateMotorcycle */}
+      <h1 className="text-4xl font-bold mb-6">Gestion des Motos</h1>
       <CreateMotorcycle refreshList={fetchMotorcycles} />
-      {/* On passe la liste récupérée à MotorcycleList */}
       <MotorcycleList motorcycles={motorcycles} />
     </div>
   );

@@ -53,7 +53,6 @@ const WarrantyHistoryPage: React.FC = () => {
               <p>
                 <strong>Date de fin :</strong> {new Date(warranty.endDate).toLocaleDateString()}
               </p>
-              {/* Vous pouvez ajouter ici d'autres informations sur la garantie */}
             </li>
           ))}
         </ul>

@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/Navbar';
@@ -39,17 +39,8 @@ const App = () => {
       <Router>
 
         <Navbar />
-        <div className="pt-16">
-          <h1>Vehicle Management System</h1>
-          <nav style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0' }}>
-            <Link to="/">Home</Link> |{' '}
-            <Link to="/login">Login</Link> |{' '}
-            <Link to="/register">Register</Link> |{' '}
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/stock">Stock</Link>
-            <Link to="/motorcycles">moto</Link>
-            <Link to="/interval-definitions">Liste des Intervalles</Link>
-          </nav>
+       
+          
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -81,7 +72,7 @@ const App = () => {
 
             <Route path="/stock" element={<Stock />} />
           </Routes>
-        </div>
+
       </Router>
     </AuthProvider>
 

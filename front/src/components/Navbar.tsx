@@ -14,7 +14,6 @@ const Navbar = () => {
     <div className="drawer">
       <input id="menu-toggle" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-        {/* Navbar */}
         <nav className="navbar bg-base-100 shadow-md fixed top-0 left-0 w-full px-6 z-50">
           <div className="flex-1">
             <Link to="/" className="text-lg font-bold">
@@ -64,7 +63,6 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* Menu burger */}
           <div className="lg:hidden">
             <label htmlFor="menu-toggle" className="btn btn-ghost btn-circle">
               <svg
@@ -86,7 +84,6 @@ const Navbar = () => {
         </nav>
       </div>
 
-      {/* Sidebar Drawer */}
       <div className="drawer-side z-50">
         <label htmlFor="menu-toggle" className="drawer-overlay"></label>
         <ul className="menu p-4 w-60 bg-base-100 h-full flex flex-col space-y-3">
