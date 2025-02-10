@@ -1,6 +1,8 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
+// components/CreateMotorcycle.tsx
+import React, { useState, useEffect, FormEvent } from "react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import notyf from "../utils/notyf";
 
 interface CreateMotorcycleDto {
   vin: string;
@@ -18,12 +20,17 @@ interface IntervalDefinition {
   timeInYears: number;
 }
 
-const CreateMotorcycle: React.FC = () => {
+// Définition des props, notamment le callback refreshList
+interface CreateMotorcycleProps {
+  refreshList: () => void;
+}
+
+const CreateMotorcycle: React.FC<CreateMotorcycleProps> = ({ refreshList }) => {
   const { token } = useAuth();
-  const [vin, setVin] = useState<string>('');
-  const [model, setModel] = useState<string>(''); 
-  const [manufactureDate, setManufactureDate] = useState<string>('');
-  const [lastMaintenanceDate, setLastMaintenanceDate] = useState<string>('');
+  const [vin, setVin] = useState<string>("");
+  const [model, setModel] = useState<string>("");
+  const [manufactureDate, setManufactureDate] = useState<string>("");
+  const [lastMaintenanceDate, setLastMaintenanceDate] = useState<string>("");
   const [mileage, setMileage] = useState<number>(0);
   const [lastMaintenanceMileage, setLastMaintenanceMileage] = useState<number>(0);
   const [intervalDefinitions, setIntervalDefinitions] = useState<IntervalDefinition[]>([]);
@@ -31,9 +38,12 @@ const CreateMotorcycle: React.FC = () => {
   useEffect(() => {
     const fetchIntervalDefinitions = async () => {
       try {
-        const response = await axios.get<IntervalDefinition[]>('http://localhost:3000/interval-definitions', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get<IntervalDefinition[]>(
+          "http://localhost:3000/interval-definitions",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setIntervalDefinitions(response.data);
         if (response.data.length > 0) {
           setModel(response.data[0].model);
@@ -59,13 +69,17 @@ const CreateMotorcycle: React.FC = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/motorcycles/create',
+        "http://localhost:3000/motorcycles/create",
         dto,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log('Moto créée :', response.data);
+      console.log("Moto créée :", response.data);
+      notyf.success("Moto créée !");
+      // Rafraîchir la liste des motos dans le parent
+      refreshList();
+      // Vous pouvez également réinitialiser le formulaire si besoin
     } catch (error) {
-      console.error('Erreur lors de la création de la moto', error);
+      console.error("Erreur lors de la création de la moto", error);
     }
   };
 
@@ -84,7 +98,7 @@ const CreateMotorcycle: React.FC = () => {
       <div>
         <label>Modèle :</label>
         <select value={model} onChange={(e) => setModel(e.target.value)} required>
-          {intervalDefinitions.map(def => (
+          {intervalDefinitions.map((def) => (
             <option key={def.id} value={def.model}>
               {def.model}
             </option>
