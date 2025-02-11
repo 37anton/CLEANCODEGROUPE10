@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/Navbar';
@@ -25,6 +25,10 @@ import CreateMaintenancePage from './pages/CreateMaintenancePage';
 import CreateIncidentPage from './pages/CreateIncident';
 import CreateRepairPage from './pages/CreateRepair';
 import CreateWarrantyPage from './pages/CreateWarranty'; 
+import WarrantyHistoryPage from './pages/WarrantyHistory';
+import IncidentHistoryPage from './pages/IncidentHistory';
+import RepairHistoryPage from './pages/RepairHistory';
+
 
 const App = () => {
 
@@ -35,19 +39,9 @@ const App = () => {
       <Router>
 
         <Navbar />
-        <div className="pt-16">
-          <h1>Vehicle Management System</h1>
-          <nav style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0' }}>
-            <Link to="/">Home</Link> |{' '}
-            <Link to="/login">Login</Link> |{' '}
-            <Link to="/register">Register</Link> |{' '}
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/stock">Stock</Link>
-            <Link to="/motorcycles">moto</Link>
-            <Link to="/interval-definitions">Liste des Intervalles</Link>
-          </nav>
+       
+          
           <Routes>
-            {/* Routes existantes */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -61,9 +55,12 @@ const App = () => {
               <Route path="/maintenances/vehicle/:vehicleId" element={<MaintenanceHistoryPage />} />
               <Route path="/maintenances/create/:vehicleId" element={<CreateMaintenancePage />} />
               <Route path="/incidents/create/:motorcycleId" element={<CreateIncidentPage />} />
-              <Route path="/repairs/create/:incidentId" element={<CreateRepairPage />} />
+              <Route path="/repairs/create/:incidentId/:motorcycleId" element={<CreateRepairPage />} />
+              <Route path="/repairs/vehicle/:vehicleId" element={<RepairHistoryPage />} />
               <Route path="/warranties/create/:motorcycleId" element={<CreateWarrantyPage />} />
-              <Route path="/create-interval" element={<CreateIntervalDefinition />} /> {/* Nouvelle route */}
+              <Route path="/warranties/vehicle/:vehicleId" element={<WarrantyHistoryPage />} />
+              <Route path="/incidents/vehicle/:vehicleId" element={<IncidentHistoryPage />} />
+              <Route path="/create-interval" element={<CreateIntervalDefinition />} /> 
               <Route path="/update-interval/:id" element={<UpdateIntervalDefinition />} />
               <Route path="/interval-definitions" element={<IntervalDefinitionList />} />
               <Route path="/orders" element={<Orders />} />
@@ -72,11 +69,10 @@ const App = () => {
               <Route path="/create-order/:supplierId" element={<CreateOrder />} />
             </Route>
 
-            {/* Nouvelles routes ajoutées */}
 
             <Route path="/stock" element={<Stock />} />
           </Routes>
-        </div>
+
       </Router>
     </AuthProvider>
 

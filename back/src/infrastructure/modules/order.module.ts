@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from '../../domain/entities/order.entity';
 import { OrderService } from '../../application/services/order.service';
-import { OrderController } from '../../interfaces/controllers/order.controller';
+import { OrderController } from '../../application/controllers/order.controller';
 import { ORDER_REPOSITORY } from '../repositories/order.repository';
 import { User } from 'src/domain/entities/user.entity'; 
 import { UserModule } from './user.module';
@@ -14,26 +14,35 @@ import { CreateOrderUseCase } from "../../application/use-cases/create-order.use
 import { PART_SUPPLIER_REPOSITORY } from '../repositories/part-supplier.repository';
 import { PartSupplierSqlRepository } from '../repositories/sql/part-supplier.repository.sql';
 import { PartSupplierInMemoryRepository } from '../repositories/in-memory/part-supplier.repository.in-memory';
+import { SupplierModule } from './supplier.module';
+import { UpdateOrderStatusUseCase } from "../../application/use-cases/update-order-status.use-case";
+import { PART_STOCK_REPOSITORY } from '../repositories/part-stock.repository';
+import { PartStockModule } from "./part-stock.module"; 
+import { PartSupplierModule } from './part-supplier.module';
+import { PartModule } from './part.module';
+
+const isInMemory = process.env.STORAGE_ADAPTER === 'in-memory';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Order, User, PartSupplier]),
-    UserModule
+    PartModule,
+    ...(!isInMemory ? [TypeOrmModule.forFeature([Order, User, PartSupplier])] : []),
+    UserModule,
+    SupplierModule,
+    PartStockModule,
+    PartSupplierModule
   ],
   controllers: [OrderController],
   providers: [
     OrderService,
+    UpdateOrderStatusUseCase,
     FindOrdersUseCase,
     CreateOrderUseCase,
     {
       provide: ORDER_REPOSITORY,
       useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? OrderInMemoryRepository : OrderSqlRepository,
     },
-    {
-      provide: PART_SUPPLIER_REPOSITORY,
-      useClass: process.env.STORAGE_ADAPTER === 'in-memory' ? PartSupplierInMemoryRepository : PartSupplierSqlRepository,
-    },
   ],
-  exports: [OrderService, ORDER_REPOSITORY, PART_SUPPLIER_REPOSITORY],
+  exports: [OrderService, ORDER_REPOSITORY],
 })
 export class OrderModule {}

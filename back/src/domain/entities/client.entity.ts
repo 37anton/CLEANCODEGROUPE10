@@ -1,4 +1,3 @@
-// src/domain/entities/client.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { Trial } from './trial.entity';

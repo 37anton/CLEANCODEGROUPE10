@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { token, logout } = useAuth();
+  const { token, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -14,7 +14,6 @@ const Navbar = () => {
     <div className="drawer">
       <input id="menu-toggle" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-        {/* Navbar */}
         <nav className="navbar bg-base-100 shadow-md fixed top-0 left-0 w-full px-6 z-50">
           <div className="flex-1">
             <Link to="/" className="text-lg font-bold">
@@ -25,6 +24,21 @@ const Navbar = () => {
             <ul className="menu menu-horizontal px-1">
               {token ? (
                 <>
+                  <li className="mr-2">
+                    <Link to="/motorcycles" className="btn btn-info">
+                      Motos
+                    </Link>
+                  </li>
+                  <li className="mr-2">
+                    <Link to="/create-interval" className="btn btn-info">
+                      Créer un modèle moto
+                    </Link>
+                  </li>
+                  <li className="mr-2">
+                    <Link to="/interval-definitions" className="btn btn-info">
+                      Voir les modèles motos
+                    </Link>
+                  </li>
                   <li className="mr-2">
                     <Link to="/notifications" className="btn btn-secondary">
                       Notifications
@@ -37,34 +51,36 @@ const Navbar = () => {
                   </li>
                   <li className="mr-2">
                     <Link to="/orders" className="btn btn-primary">
-                      Orders
+                      Commandes
                     </Link>
                   </li>
-                  <li className="mr-2">
-                    <Link to="/drivers" className="btn btn-info">
-                      Drivers
-                    </Link>
-                  </li>
+                  {/* Afficher le bouton Drivers uniquement si user.company est défini */}
+                  {user?.company && (
+                    <li className="mr-2">
+                      <Link to="/drivers" className="btn btn-info">
+                        Conducteurs
+                      </Link>
+                    </li>
+                  )}
                   <li className="mr-2">
                     <Link to="/suppliers" className="btn btn-info">
-                      Suppliers
+                      Fournisseurs
                     </Link>
                   </li>
                   <li>
                     <button onClick={handleLogout} className="btn btn-error">
-                      Logout
+                      Déconnexion
                     </button>
                   </li>
                 </>
               ) : (
                 <li>
-                  <Link to="/login" className="btn btn-primary">Login</Link>
+                  <Link to="/login" className="btn btn-primary">Se connecter</Link>
                 </li>
               )}
             </ul>
           </div>
 
-          {/* Menu burger */}
           <div className="lg:hidden">
             <label htmlFor="menu-toggle" className="btn btn-ghost btn-circle">
               <svg
@@ -86,7 +102,6 @@ const Navbar = () => {
         </nav>
       </div>
 
-      {/* Sidebar Drawer */}
       <div className="drawer-side z-50">
         <label htmlFor="menu-toggle" className="drawer-overlay"></label>
         <ul className="menu p-4 w-60 bg-base-100 h-full flex flex-col space-y-3">
@@ -108,28 +123,35 @@ const Navbar = () => {
               </li>
               <li>
                 <Link to="/orders" className="btn btn-primary w-full">
-                  Orders
+                  Commandes
+                </Link>
+              </li>
+              {user?.company && (
+                <li>
+                  <Link to="/drivers" className="btn btn-info w-full">
+                    Conducteurs
+                  </Link>
+                </li>
+              )}
+              <li>
+                <Link to="/suppliers" className="btn btn-info w-full">
+                  Fournisseurs
                 </Link>
               </li>
               <li>
-                <Link to="/drivers" className="btn btn-info w-full">
-                  Drivers
-                </Link>
-              </li>
-              <li>
-                <Link to="/supppliers" className="btn btn-info w-full">
-                  Suppliers
+                <Link to="/motorcycles" className="btn btn-info w-full">
+                  Motos
                 </Link>
               </li>
               <li>
                 <button onClick={handleLogout} className="btn btn-error w-full">
-                  Logout
+                  Se déconnecter
                 </button>
               </li>
             </>
           ) : (
             <li>
-              <Link to="/login" className="btn btn-primary w-full">Login</Link>
+              <Link to="/login" className="btn btn-primary w-full">Se connecter</Link>
             </li>
           )}
         </ul>

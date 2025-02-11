@@ -1,4 +1,3 @@
-// src/pages/CreateWarrantyPage.tsx
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import CreateWarranty from '../components/CreateWarranty';
@@ -12,7 +11,6 @@ const CreateWarrantyPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Création d'une Garantie</h1>
       <CreateWarranty />
     </div>
   );

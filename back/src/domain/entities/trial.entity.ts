@@ -1,4 +1,3 @@
-// src/domain/entities/trial.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Client } from './client.entity';
 import { Motorcycle } from './motorcycle.entity';

@@ -22,8 +22,6 @@ const StockPage = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const forceUpdate = () => setRefreshKey((prev) => prev + 1);
 
-
-  // Fonction pour récupérer les pièces et stocks
   const fetchPartsAndStocks = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -36,11 +34,10 @@ const StockPage = () => {
         }),
       ]);
   
-      console.log("Données brutes reçues des stocks :", stocksResponse.data); // 🛠 Ajout de log
+      console.log("Données brutes reçues des stocks :", stocksResponse.data);
   
       setParts(partsResponse.data);
   
-      // Création du mapping des stocks avec un fallback pour partId
       const stockMap = new Map<string, PartStock>(
         stocksResponse.data.map((stock: any) => [stock.part?.id || stock.partId, stock])
       );
@@ -60,7 +57,6 @@ const StockPage = () => {
     }
   };
   
-  // Charger les stocks et pièces au chargement de la page
   useEffect(() => {
     fetchPartsAndStocks();
   }, []);
@@ -110,7 +106,7 @@ const StockPage = () => {
           isOpen={isStockModalOpen}
           onClose={() => setIsStockModalOpen(false)}
           part={selectedPart}
-          refreshStocks={fetchPartsAndStocks} // On passe la fonction pour actualiser
+          refreshStocks={fetchPartsAndStocks}
         />
       )}
     </div>

@@ -1,7 +1,4 @@
-// Order.tsx
 import React, { useEffect, useState } from 'react';
-
-// Définition des types correspondant à vos données
 
 interface Part {
   id: string;
@@ -46,7 +43,6 @@ const OrderList: React.FC = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        // Récupération du token JWT depuis le localStorage (si utilisé)
         const token = localStorage.getItem('token');
         const response = await fetch('http://localhost:3000/orders', {
           headers: {
@@ -79,7 +75,9 @@ const OrderList: React.FC = () => {
       {orders.map((order) => (
         <div
           key={order.id}
-          className="border border-gray-300 p-4 mb-4 rounded-xl"
+          className={`border border-gray-300 p-4 mb-4 rounded-xl ${
+            order.status === 'SHIPPED' ? 'bg-green-300' : 'bg-red-300'
+          }`}
         >
           <h2>Commande ID : {order.id}</h2>
           <p>

@@ -1,6 +1,5 @@
-// src/application/use-cases/get-maintenance-plan.use-case.ts
 import { Injectable, Inject } from '@nestjs/common';
-import { MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
+import { MOTORCYCLE_REPOSITORY, MotorcycleRepository } from '../../infrastructure/repositories/motorcycle.repository';
 import { MaintenancePlan } from '../../domain/models/maintenance-plan.model';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
 import { NotificationService } from '../services/notification.service';
@@ -10,13 +9,12 @@ import { UserService } from '../services/user.service';
 @Injectable()
 export class GetMaintenancePlanUseCase {
   constructor(
-    @Inject('CustomMotorcycleRepository')
+    @Inject(MOTORCYCLE_REPOSITORY)
     private readonly motorcycleRepository: MotorcycleRepository,
     private readonly userRepository: UserService,
     private readonly notificationService: NotificationService,
   ) {}
 
-  // On privilégie l'association "company" ; sinon, on renvoie celle du client
   private async getUsersByCompanyOrClient(motorcycle: Motorcycle): Promise<User[]> {
     if (motorcycle.companyMotorcycles?.length > 0) {
       const companyId = motorcycle.companyMotorcycles[0]?.company?.id;
@@ -33,7 +31,6 @@ export class GetMaintenancePlanUseCase {
   }
 
   async execute(motorcycleId: string): Promise<MaintenancePlan> {
-    // Récupération de la moto avec ses intervalles chargés
     const motorcycle: Motorcycle = await this.motorcycleRepository.findById(motorcycleId);
     
     if (!motorcycle) {
@@ -46,7 +43,6 @@ export class GetMaintenancePlanUseCase {
 
     const interval = motorcycle.intervals[0];
 
-    // Vérifie que la date du dernier entretien est valide
     const lastMaintenance = new Date(motorcycle.lastMaintenanceDate);
     if (isNaN(lastMaintenance.getTime())) {
       return {
@@ -55,14 +51,12 @@ export class GetMaintenancePlanUseCase {
       };
     }
 
-    // Calcul des seuils d'entretien
     const computedNextMileage = motorcycle.lastMaintenanceMileage + interval.km;
     const computedNextDate = new Date(lastMaintenance);
     computedNextDate.setFullYear(lastMaintenance.getFullYear() + interval.timeInYears);
 
     const now = new Date();
 
-    // Si la maintenance est due, notifier les utilisateurs
     if (motorcycle.mileage >= computedNextMileage || now >= computedNextDate) {
       const usersToNotify = await this.getUsersByCompanyOrClient(motorcycle);
       if (usersToNotify.length > 0) {

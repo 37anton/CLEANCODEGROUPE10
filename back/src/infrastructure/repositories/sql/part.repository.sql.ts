@@ -19,4 +19,9 @@ export class PartSqlRepository implements PartRepository {
   async findAll(): Promise<Part[]> {
     return await this.partRepository.find();
   }
+
+  async findById(id: string): Promise<Part | null> {
+    return await this.partRepository.findOne({ where: { id } });
+  }
+  
 }

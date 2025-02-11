@@ -2,19 +2,22 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Motorcycle } from '../../domain/entities/motorcycle.entity';
 import { Concession } from '../../domain/entities/concession.entity';
 import * as crypto from 'crypto';
+import { MOTORCYCLE_REPOSITORY } from 'src/infrastructure/repositories/motorcycle.repository';
+import { COMPANY_MOTORCYCLE_REPOSITORY } from 'src/infrastructure/repositories/company-motorcycle.repository';
+import { CLIENT_MOTORCYCLE_REPOSITORY } from 'src/infrastructure/repositories/client-motorcycle.repository';
 
 @Injectable()
 export class CreateMotorcycleUseCase {
   constructor(
-    @Inject('CustomMotorcycleRepository')
+    @Inject(MOTORCYCLE_REPOSITORY)
     private readonly motorcycleRepository: {
       create(motorcycle: Motorcycle): Promise<Motorcycle>;
     },
-    @Inject('CustomCompanyMotorcycleRepository')
+    @Inject(COMPANY_MOTORCYCLE_REPOSITORY)
     private readonly companyMotorcycleRepository: {
       create(cm: any): Promise<any>;
     },
-    @Inject('CustomClientMotorcycleRepository')
+    @Inject(CLIENT_MOTORCYCLE_REPOSITORY)
     private readonly clientMotorcycleRepository: {
       create(cm: any): Promise<any>;
     },
@@ -30,7 +33,6 @@ export class CreateMotorcycleUseCase {
     motorcycle.mileage = motorcycleData.mileage;
     motorcycle.lastMaintenanceMileage = motorcycleData.lastMaintenanceMileage;
 
-    // Si l'utilisateur a une concession, on crée une instance de Concession
     if (user.concession && user.concession.id) {
       const concessionEntity = new Concession();
       concessionEntity.id = user.concession.id;
@@ -39,11 +41,9 @@ export class CreateMotorcycleUseCase {
       motorcycle.concession = null;
     }
 
-    // Sauvegarde de la moto
     const createdMotorcycle = await this.motorcycleRepository.create(motorcycle);
     console.log('Created motorcycle:', createdMotorcycle);
 
-    // Vérification pour company et client
     const companyId = user.companyId || (user.company && user.company.id);
     const clientId = user.clientId || (user.client && user.client.id);
 

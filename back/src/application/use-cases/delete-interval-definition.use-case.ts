@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IntervalDefinitionRepository } from '../../infrastructure/repositories/interval-definition.repository';
+import { INTERVAL_DEFINITION_REPOSITORY, IntervalDefinitionRepository } from '../../infrastructure/repositories/interval-definition.repository';
 
 @Injectable()
 export class DeleteIntervalDefinitionUseCase {
   constructor(
-    @Inject('CustomIntervalDefinitionRepository')
+    @Inject(INTERVAL_DEFINITION_REPOSITORY)
     private readonly repository: IntervalDefinitionRepository,
   ) {}
 

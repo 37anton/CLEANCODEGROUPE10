@@ -1,4 +1,3 @@
-// src/domain/entities/warranty.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Motorcycle } from './motorcycle.entity';
 import { WarrantyPart } from './warranty-part.entity';
@@ -14,7 +13,7 @@ export class Warranty {
   @Column({ type: 'timestamp' })
   endDate: Date;
 
-  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.warranties)
+  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.warranties, {onDelete: 'SET NULL' })
   motorcycle: Motorcycle;
 
   @OneToMany(() => WarrantyPart, wp => wp.warranty)

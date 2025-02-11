@@ -14,5 +14,5 @@ export class PartSupplier {
   part: Part;
 
   @Column("decimal", { precision: 10, scale: 2 })
-  price: number; // Prix de la pièce fixé par le fournisseur
+  price: number; 
 }

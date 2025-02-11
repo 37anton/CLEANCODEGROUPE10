@@ -48,7 +48,6 @@ export class Motorcycle {
   @OneToMany(() => Interval, interval => interval.motorcycle)
   intervals: Interval[];
 
-  // Relations avec les tables d'association
   @OneToMany(() => CompanyMotorcycle, cm => cm.motorcycle, { cascade: true, onDelete: "CASCADE" } )
   companyMotorcycles: CompanyMotorcycle[];
 

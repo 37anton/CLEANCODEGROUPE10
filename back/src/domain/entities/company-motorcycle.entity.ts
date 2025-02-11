@@ -1,4 +1,3 @@
-// src/domain/entities/company-motorcycle.entity.ts
 import { Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Company } from './company.entity';
 import { Motorcycle } from './motorcycle.entity';

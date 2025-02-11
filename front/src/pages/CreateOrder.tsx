@@ -76,7 +76,6 @@ const CreateOrder: React.FC = () => {
         return;
       }
 
-      // Filtrer uniquement les produits dont la quantité > 0
       const orderItems = Object.entries(quantities)
         .filter(([_, quantity]) => quantity > 0)
         .map(([partSupplierId, quantity]) => ({ partSupplierId, quantity }));
@@ -89,7 +88,6 @@ const CreateOrder: React.FC = () => {
       const requestBody = {
         supplierId,
         items: orderItems,
-        expectedDeliveryDate: new Date().toISOString(), // Date actuelle pour l'exemple
       };
 
       await axios.post("http://localhost:3000/orders", requestBody, {

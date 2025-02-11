@@ -3,13 +3,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthModule } from './infrastructure/modules/auth.module';
 import { ScheduleModule } from "@nestjs/schedule";
 import { Notification } from "./domain/entities/notification.entity";
 import { User } from "./domain/entities/user.entity";
 import { NotificationModule } from "./infrastructure/modules/notification.module";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PartModule } from "./infrastructure/frameworks/nestjs/part.module";
+import { PartModule } from "./infrastructure/modules/part.module";
 import { DriverModule } from "./infrastructure/modules/driver.module";
 import { PartStockModule } from "./infrastructure/modules/part-stock.module";
 import { Part } from './domain/entities/part.entity';
@@ -24,16 +24,15 @@ import { WarrantyModule } from './infrastructure/modules/warranty.module';
 import { OrderModule } from "./infrastructure/modules/order.module";
 import { SupplierModule } from "./infrastructure/modules/supplier.module";
 import { PartSupplierModule } from "./infrastructure/modules/part-supplier.module";
+import { CompanyModule } from "./infrastructure/modules/company.module";
+import { ConcessionModule } from "./infrastructure/modules/concession.module";
+import { ClientModule } from "./infrastructure/modules/client.module";
+import { ThresholdNotificationsCron } from "./application/cron/threshold-notifications.cron";
+import { UserModule } from "./infrastructure/modules/user.module";
 
-@Module({
-  imports: [
-    PartSupplierModule,
-    NotificationModule,
-    ScheduleModule.forRoot(), // Active le Cron Job
-    TypeOrmModule.forFeature([User, Notification]), // Ajoute l'entité Notification et User
-    ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
+const databaseConfig: any = process.env.STORAGE_ADAPTER === 'postgres'
+  ? {
+    type: 'postgres',
       host: process.env.POSTGRES_HOST,
       port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
       username: process.env.POSTGRES_USER,
@@ -41,8 +40,21 @@ import { PartSupplierModule } from "./infrastructure/modules/part-supplier.modul
       database: process.env.POSTGRES_DB,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-    }),
+  }
+  : undefined;
 
+@Module({
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ...(databaseConfig ? [TypeOrmModule.forFeature([User, Notification])] : []),
+    ...(databaseConfig ? [TypeOrmModule.forRoot(databaseConfig)] : []),
+    UserModule,
+    PartSupplierModule,
+    NotificationModule,
+    ScheduleModule.forRoot(), 
+    CompanyModule,
+    ConcessionModule,
+    ClientModule,
     AuthModule,
     PartModule,
     PartStockModule,
@@ -53,12 +65,18 @@ import { PartSupplierModule } from "./infrastructure/modules/part-supplier.modul
     IncidentModule,
     RepairModule,
     WarrantyModule,
-    NotificationModule,
+    SupplierModule,
     OrderModule,
     DriverModule,
-    SupplierModule
+    CompanyModule,   
+    ConcessionModule,
+    ClientModule,
+    RepairModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    ThresholdNotificationsCron
+  ],
 })
 export class AppModule {}

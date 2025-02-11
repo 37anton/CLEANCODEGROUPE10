@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Notification } from '../../../domain/entities/notification.entity';
+import { NotificationRepository } from '../notification.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class NotificationRepository {
+export class SqlNotificationRepository implements NotificationRepository {
   constructor(
+    @InjectRepository(Notification)
     private readonly notificationRepo: Repository<Notification>,
   ) {}
 

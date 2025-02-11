@@ -1,9 +1,9 @@
-// src/infrastructure/repositories/sql/sql-warranty.repository.ts
 import { Injectable } from '@nestjs/common';
 import { Warranty } from '../../../domain/entities/warranty.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WarrantyRepository } from '../warranty.repository';
+import { Motorcycle } from 'src/domain/entities/motorcycle.entity';
 
 @Injectable()
 export class SQLWarrantyRepository implements WarrantyRepository {
@@ -23,4 +23,6 @@ export class SQLWarrantyRepository implements WarrantyRepository {
       order: { startDate: 'DESC' },
     });
   }
+
+  
 }

@@ -1,4 +1,3 @@
-// src/infrastructure/repositories/sql/sql-maintenance.repo.ts
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,6 +18,11 @@ export class SQLMaintenanceRepository implements MaintenanceRepository {
   async findByVehicleId(vehicleId: string): Promise<Maintenance[]> {
     return this.ormRepository.find({
       where: { vehicleId },
+      relations: [
+        'maintenanceParts', 
+        'maintenanceParts.partStock', 
+        'maintenanceParts.partStock.part'
+      ],
       order: { scheduledDate: 'DESC' },
     });
   }

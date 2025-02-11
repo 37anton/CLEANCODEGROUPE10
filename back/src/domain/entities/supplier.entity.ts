@@ -13,7 +13,7 @@ export class Supplier {
   phone: string;
 
   @Column()
-  deliveryTime: number; // Délai de livraison en jours
+  deliveryTime: number; 
 
   @Column()
   city: string;
