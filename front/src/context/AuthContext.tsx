@@ -45,7 +45,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // Mettre à jour le token + user lors de la connexion
   const login = (newToken: string, userData: User) => {
     console.log("Connexion de l'utilisateur :", userData);
     localStorage.setItem("token", newToken);
@@ -54,7 +53,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(userData);
   };
 
-  // Déconnexion : Suppression des données
   const logout = () => {
     console.log("Déconnexion...");
     localStorage.removeItem("token");

@@ -57,18 +57,18 @@ export async function loadFixtures(app?: INestApplication): Promise<void> {
   console.log("Chargement des utilisateurs...");
 
   const usersData = [
-    { email: "user1@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany1.id } },
-    { email: "user2@company1.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany1.id } },
-    { email: "user1@company2.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany2.id } },
-    { email: "user2@company2.com", password: passwordHash, isAdmin: false, associations: { companyId: savedCompany2.id } },
-    { email: "user1@concession1.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession1.id } },
-    { email: "user2@concession1.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession1.id } },
-    { email: "user1@concession2.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession2.id } },
-    { email: "user2@concession2.com", password: passwordHash, isAdmin: false, associations: { concessionId: savedConcession2.id } },
+    { email: "user1@company1.com", password: passwordHash, role: 'role_admin', isAdmin: true, associations: { companyId: savedCompany1.id } },
+    { email: "user2@company1.com", password: passwordHash, role: 'role_test', isAdmin: false, associations: { companyId: savedCompany1.id } },
+    { email: "user1@company2.com", password: passwordHash, role: 'role_test', isAdmin: false, associations: { companyId: savedCompany2.id } },
+    { email: "user2@company2.com", password: passwordHash, role: 'role_test', isAdmin: false, associations: { companyId: savedCompany2.id } },
+    { email: "user1@concession1.com", password: passwordHash, role: 'role_test', isAdmin: false, associations: { concessionId: savedConcession1.id } },
+    { email: "user2@concession1.com", password: passwordHash, role: 'role_test', isAdmin: false, associations: { concessionId: savedConcession1.id } },
+    { email: "user1@concession2.com", password: passwordHash, role: 'role_test', isAdmin: false, associations: { concessionId: savedConcession2.id } },
+    { email: "user2@concession2.com", password: passwordHash, role: 'role_test', isAdmin: false, associations: { concessionId: savedConcession2.id } },
   ];
 
   for (const userData of usersData) {
-    const createdUser = await userService.create(userData.email, userData.password, 'role_test', userData.isAdmin, userData.associations);
+    const createdUser = await userService.create(userData.email, userData.password, userData.role, userData.isAdmin, userData.associations);
     usersMap[userData.email] = createdUser;
     console.log(`Utilisateur ${userData.email} créé !`);
   }
