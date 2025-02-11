@@ -25,8 +25,8 @@ const DeleteMotorcycle: React.FC = () => {
 
   return (
     <div>
-      <h1>Delete Motorcycle</h1>
-      <button onClick={handleDelete}>Confirm Delete</button>
+      <h1>Supprimer la moto ?</h1>
+      <button onClick={handleDelete}>Oui</button>
     </div>
   );
 };
