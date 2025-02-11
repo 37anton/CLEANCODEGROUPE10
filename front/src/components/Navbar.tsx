@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { token, logout } = useAuth();
+  const { token, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -54,11 +54,14 @@ const Navbar = () => {
                       Orders
                     </Link>
                   </li>
-                  <li className="mr-2">
-                    <Link to="/drivers" className="btn btn-info">
-                      Drivers
-                    </Link>
-                  </li>
+                  {/* Afficher le bouton Drivers uniquement si user.company est défini */}
+                  {user?.company && (
+                    <li className="mr-2">
+                      <Link to="/drivers" className="btn btn-info">
+                        Drivers
+                      </Link>
+                    </li>
+                  )}
                   <li className="mr-2">
                     <Link to="/suppliers" className="btn btn-info">
                       Suppliers
@@ -123,11 +126,13 @@ const Navbar = () => {
                   Orders
                 </Link>
               </li>
-              <li>
-                <Link to="/drivers" className="btn btn-info w-full">
-                  Drivers
-                </Link>
-              </li>
+              {user?.company && (
+                <li>
+                  <Link to="/drivers" className="btn btn-info w-full">
+                    Drivers
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link to="/suppliers" className="btn btn-info w-full">
                   Suppliers
