@@ -60,7 +60,7 @@ export class UserService {
   }
 
   async findAllUsers(): Promise<User[]> {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find(['company']);
     return users;
   }
 }

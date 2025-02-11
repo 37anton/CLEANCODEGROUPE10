@@ -6,7 +6,7 @@ interface User {
   email: string;
   role: string;
   isAdmin: boolean;
-  company?: {name: string};
+  company?: {id: string};
   concession?: { id: string };
   client?: { id: string };
 }
@@ -85,7 +85,7 @@ const Users: React.FC = () => {
           >
             <h2 className="text-lg font-semibold">{user.email}</h2>
             <p>Rôle : {user.isAdmin ? "Admin" : "Utilisateur"}</p>
-            <p>Entreprise : {user.company?.name}</p>
+            <p>Entreprise : {user.company?.id ?? "Aucune"}</p>
 
             {/* Edit Button */}
             <button

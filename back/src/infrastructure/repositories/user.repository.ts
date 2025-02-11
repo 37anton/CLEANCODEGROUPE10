@@ -13,7 +13,7 @@ export interface UserRepository {
   findByEmail(email: string): Promise<any>;
   findById(id: string, relations?: string[]): Promise<any>;
   findByEntity(entityId: string): Promise<any[]>;
-  find(): Promise<User[]>;
+  find(relations: ['company']): Promise<User[]>;
   save(user: User): Promise<User>;
 
 }
