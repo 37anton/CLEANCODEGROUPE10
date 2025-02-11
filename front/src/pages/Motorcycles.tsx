@@ -34,8 +34,8 @@ const Motorcycles: React.FC = () => {
   }, [token]);
 
   return (
-    <div className="min-h-screen p-6">
-      <h1 className="text-4xl font-bold mb-6">Gestion des Motos</h1>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">🏍️ Gestion des Motos</h1>
       <CreateMotorcycle refreshList={fetchMotorcycles} />
       <MotorcycleList motorcycles={motorcycles} />
     </div>
