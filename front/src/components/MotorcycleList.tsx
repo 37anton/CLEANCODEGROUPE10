@@ -10,7 +10,7 @@ interface MotorcycleListProps {
 const MotorcycleList: React.FC<MotorcycleListProps> = ({ motorcycles }) => {
   return (
     <div className="space-y-4">
-      <h1 className="text-3xl font-bold mb-6">Liste des motos</h1>
+      <h1 className="text-2xl font-bold mb-6">Liste des motos</h1>
       {motorcycles.length === 0 ? (
         <p className="text-center">Aucune moto trouvée</p>
       ) : (

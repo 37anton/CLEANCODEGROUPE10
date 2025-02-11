@@ -11,7 +11,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="drawer">
+    <div className="drawer mb-24">
       <input id="menu-toggle" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         <nav className="navbar bg-base-100 shadow-md fixed top-0 left-0 w-full px-6 z-50">
