@@ -26,7 +26,7 @@ const Navbar = () => {
                 <>
                   <li className="mr-2">
                     <Link to="/motorcycles" className="btn btn-info">
-                      Motorcycles
+                      Motos
                     </Link>
                   </li>
                   <li className="mr-2">
@@ -51,31 +51,31 @@ const Navbar = () => {
                   </li>
                   <li className="mr-2">
                     <Link to="/orders" className="btn btn-primary">
-                      Orders
+                      Commandes
                     </Link>
                   </li>
                   {/* Afficher le bouton Drivers uniquement si user.company est défini */}
                   {user?.company && (
                     <li className="mr-2">
                       <Link to="/drivers" className="btn btn-info">
-                        Drivers
+                        Conducteurs
                       </Link>
                     </li>
                   )}
                   <li className="mr-2">
                     <Link to="/suppliers" className="btn btn-info">
-                      Suppliers
+                      Fournisseurs
                     </Link>
                   </li>
                   <li>
                     <button onClick={handleLogout} className="btn btn-error">
-                      Logout
+                      Déconnexion
                     </button>
                   </li>
                 </>
               ) : (
                 <li>
-                  <Link to="/login" className="btn btn-primary">Login</Link>
+                  <Link to="/login" className="btn btn-primary">Se connecter</Link>
                 </li>
               )}
             </ul>
@@ -123,35 +123,35 @@ const Navbar = () => {
               </li>
               <li>
                 <Link to="/orders" className="btn btn-primary w-full">
-                  Orders
+                  Commandes
                 </Link>
               </li>
               {user?.company && (
                 <li>
                   <Link to="/drivers" className="btn btn-info w-full">
-                    Drivers
+                    Conducteurs
                   </Link>
                 </li>
               )}
               <li>
                 <Link to="/suppliers" className="btn btn-info w-full">
-                  Suppliers
+                  Fournisseurs
                 </Link>
               </li>
               <li>
                 <Link to="/motorcycles" className="btn btn-info w-full">
-                  Motorcycles
+                  Motos
                 </Link>
               </li>
               <li>
                 <button onClick={handleLogout} className="btn btn-error w-full">
-                  Logout
+                  Se déconnecter
                 </button>
               </li>
             </>
           ) : (
             <li>
-              <Link to="/login" className="btn btn-primary w-full">Login</Link>
+              <Link to="/login" className="btn btn-primary w-full">Se connecter</Link>
             </li>
           )}
         </ul>
