@@ -26,7 +26,7 @@ export class Maintenance {
   @Column({ type: 'text', nullable: true })
   technicianRecommendations?: string;
 
-  @ManyToOne(() => Interval, interval => interval.maintenances, { nullable: true })
+  @ManyToOne(() => Interval, interval => interval.maintenances, { nullable: true, onDelete: 'SET NULL' })
   interval: Interval;
 
   @OneToMany(() => MaintenancePart, maintenancePart => maintenancePart.maintenance, { cascade: true })

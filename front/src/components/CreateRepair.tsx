@@ -2,6 +2,7 @@ import React, { useEffect, useState, FormEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import notyf from '../utils/notyf';
 
 interface PartStockItem {
   id: string;
@@ -39,8 +40,7 @@ const CreateRepair: React.FC<CreateRepairProps> = ({ incidentId, motorcycleId })
   const [description, setDescription] = useState<string>('');
   const [availablePartStocks, setAvailablePartStocks] = useState<PartStockItem[]>([]);
   const [repairParts, setRepairParts] = useState<RepairPartDto[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchPartStocks = async () => {
@@ -49,6 +49,7 @@ const CreateRepair: React.FC<CreateRepairProps> = ({ incidentId, motorcycleId })
           headers: { Authorization: `Bearer ${token}` },
         });
         setAvailablePartStocks(response.data);
+
         const initialRepairParts = response.data.map(item => ({
           partId: item.part.id,
           quantity: 0,
@@ -56,7 +57,7 @@ const CreateRepair: React.FC<CreateRepairProps> = ({ incidentId, motorcycleId })
         setRepairParts(initialRepairParts);
       } catch (err) {
         console.error("Erreur lors de la récupération du stock de pièces", err);
-        setError("Erreur lors de la récupération du stock de pièces");
+        notyf.error("Erreur lors de la récupération du stock de pièces");
       }
     };
     fetchPartStocks();
@@ -71,11 +72,11 @@ const CreateRepair: React.FC<CreateRepairProps> = ({ incidentId, motorcycleId })
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!incidentId) {
-      setError("Aucun identifiant d'incident fourni.");
+      notyf.error("Aucun identifiant d'incident fourni.");
       return;
     }
     if (!user?.id) {
-      setError("Utilisateur non authentifié.");
+      notyf.error("Utilisateur non authentifié.");
       return;
     }
 
@@ -95,52 +96,55 @@ const CreateRepair: React.FC<CreateRepairProps> = ({ incidentId, motorcycleId })
       await axios.post('http://localhost:3000/repairs', dto, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setSuccess("Réparation créée avec succès !");
-      setError(null);
+      notyf.success("Réparation créée avec succès !");
       navigate(`/repairs/vehicle/${motorcycleId}`);
     } catch (err: any) {
       console.error("Erreur lors de la création de la réparation", err);
-      setError("Erreur lors de la création de la réparation");
-      setSuccess(null);
+      notyf.error("Erreur lors de la création de la réparation");
     }
   };
 
   return (
-    <div>
-      <h1>Créer une Réparation</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500">{success}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Date de la réparation :</label>
+    <div className="card bg-base-100 shadow-xl p-6 mt-4">
+      <h1 className="card-title text-2xl font-bold mb-4">Créer une Réparation</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Date de la réparation :</span>
+          </label>
           <input
             type="datetime-local"
+            className="input input-bordered"
             value={repairDate}
             onChange={(e) => setRepairDate(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Description :</label>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Description :</span>
+          </label>
           <textarea
+            className="textarea textarea-bordered"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
-        <div>
-          <h3>Pièces utilisées :</h3>
+        <div className="form-control">
+          <h3 className="label text-lg font-semibold">Pièces utilisées :</h3>
           {availablePartStocks.length === 0 ? (
-            <p>Aucune pièce disponible dans votre stock.</p>
+            <p className="text-center">Aucune pièce disponible dans votre stock.</p>
           ) : (
             availablePartStocks.map((stockItem) => (
-              <div key={stockItem.id}>
-                <label>
-                  {stockItem.part.name} (Disponible : {stockItem.quantity})
+              <div key={stockItem.id} className="flex items-center space-x-4">
+                <label className="w-1/2">
+                  {stockItem.part.name} (Disponible: {stockItem.quantity})
                 </label>
                 <input
                   type="number"
                   min="0"
+                  className="input input-bordered w-1/2"
                   value={repairParts.find(rp => rp.partId === stockItem.part.id)?.quantity || 0}
                   onChange={(e) =>
                     handleRepairPartChange(stockItem.part.id, Number(e.target.value))
@@ -150,7 +154,7 @@ const CreateRepair: React.FC<CreateRepairProps> = ({ incidentId, motorcycleId })
             ))
           )}
         </div>
-        <button type="submit">Créer Réparation</button>
+        <button type="submit" className="btn btn-primary">Créer réparation</button>
       </form>
     </div>
   );

@@ -1,3 +1,4 @@
+// src/components/IntervalDefinitionList.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -44,23 +45,32 @@ const IntervalDefinitionList: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Liste des Définitions d'Intervalles</h1>
-      {message && <p>{message}</p>}
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Liste des modèles motos</h1>
+      {message && <div className="alert alert-info shadow-lg mb-4">{message}</div>}
       {definitions.length === 0 ? (
-        <p>Aucune définition trouvée.</p>
+        <p className="text-center">Aucune définition trouvée.</p>
       ) : (
-        <ul>
-          {definitions.map(def => (
-            <li key={def.id}>
-              <strong>{def.model}</strong> - {def.km} km, {def.timeInYears} an(s)
-              <Link to={`/update-interval/${def.id}`}>
-                <button>Modifier</button>
-              </Link>
-              <button onClick={() => handleDelete(def.id)}>Supprimer</button>
-            </li>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {definitions.map((def) => (
+            <div key={def.id} className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title">{def.model}</h2>
+                <p className="text-sm">
+                 Interval avant chaque entretien : {def.km} km, {def.timeInYears} an(s)
+                </p>
+                <div className="card-actions justify-end mt-4 space-x-2">
+                  <Link to={`/update-interval/${def.id}`}>
+                    <button className="btn btn-outline btn-sm">Modifier</button>
+                  </Link>
+                  <button onClick={() => handleDelete(def.id)} className="btn btn-error btn-sm">
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

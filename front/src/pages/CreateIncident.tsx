@@ -11,7 +11,6 @@ const CreateIncidentPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Créer un Incident</h1>
       <CreateIncident />
     </div>
   );

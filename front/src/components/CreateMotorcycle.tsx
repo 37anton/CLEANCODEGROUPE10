@@ -83,7 +83,7 @@ const CreateMotorcycle: React.FC<CreateMotorcycleProps> = ({ refreshList }) => {
 
   return (
     <form onSubmit={handleSubmit} className="card bg-base-100 shadow-xl p-6 mb-6">
-      <h1 className="text-2xl font-bold mb-4">Créer une Moto</h1>
+      <h1 className="text-2xl font-bold mb-4">Créer une moto</h1>
       <div className="form-control">
         <label className="label">
           <span className="label-text">VIN :</span>
@@ -116,7 +116,7 @@ const CreateMotorcycle: React.FC<CreateMotorcycleProps> = ({ refreshList }) => {
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Date de Fabrication :</span>
+            <span className="label-text">Date de fabrication :</span>
           </label>
           <input
             type="date"
@@ -128,7 +128,7 @@ const CreateMotorcycle: React.FC<CreateMotorcycleProps> = ({ refreshList }) => {
         </div>
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Date du Dernier Entretien :</span>
+            <span className="label-text">Date du dernier entretien :</span>
           </label>
           <input
             type="date"
@@ -154,7 +154,7 @@ const CreateMotorcycle: React.FC<CreateMotorcycleProps> = ({ refreshList }) => {
         </div>
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Kilométrage du Dernier Entretien :</span>
+            <span className="label-text">Kilométrage du dernier entretien :</span>
           </label>
           <input
             type="number"

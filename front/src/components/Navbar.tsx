@@ -25,6 +25,21 @@ const Navbar = () => {
               {token ? (
                 <>
                   <li className="mr-2">
+                    <Link to="/motorcycles" className="btn btn-info">
+                      Motorcycles
+                    </Link>
+                  </li>
+                  <li className="mr-2">
+                    <Link to="/create-interval" className="btn btn-info">
+                      Créer un modèle moto
+                    </Link>
+                  </li>
+                  <li className="mr-2">
+                    <Link to="/interval-definitions" className="btn btn-info">
+                      Voir les modèles motos
+                    </Link>
+                  </li>
+                  <li className="mr-2">
                     <Link to="/notifications" className="btn btn-secondary">
                       Notifications
                     </Link>
@@ -114,8 +129,13 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/supppliers" className="btn btn-info w-full">
+                <Link to="/suppliers" className="btn btn-info w-full">
                   Suppliers
+                </Link>
+              </li>
+              <li>
+                <Link to="/motorcycles" className="btn btn-info w-full">
+                  Motorcycles
                 </Link>
               </li>
               <li>
