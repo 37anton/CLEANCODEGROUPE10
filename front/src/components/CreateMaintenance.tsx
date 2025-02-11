@@ -1,7 +1,9 @@
+
 import React, { useEffect, useState, FormEvent } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useParams, useNavigate } from 'react-router-dom';
+import notyf from '../utils/notyf';
 
 interface PartStockItem {
   id: string;
@@ -40,8 +42,8 @@ const CreateMaintenance: React.FC = () => {
   const [technicianRecommendations, setTechnicianRecommendations] = useState<string>('');
   const [availablePartStocks, setAvailablePartStocks] = useState<PartStockItem[]>([]);
   const [replacedParts, setReplacedParts] = useState<ReplacedPartDto[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+
+  
 
   useEffect(() => {
     const fetchPartStocks = async () => {
@@ -57,6 +59,7 @@ const CreateMaintenance: React.FC = () => {
         setReplacedParts(initialReplacedParts);
       } catch (err) {
         console.error("Erreur lors de la récupération du stock de pièces", err);
+        notyf.error("Erreur lors de la récupération du stock de pièces");
       }
     };
     fetchPartStocks();
@@ -71,7 +74,7 @@ const CreateMaintenance: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!vehicleId) {
-      setError("Aucun identifiant de véhicule fourni.");
+      notyf.error("Aucun identifiant de véhicule fourni.");
       return;
     }
 
@@ -91,73 +94,92 @@ const CreateMaintenance: React.FC = () => {
       await axios.post('http://localhost:3000/maintenances', dto, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setSuccess("Maintenance créée avec succès !");
-      setError(null);
+      notyf.success("Maintenance créée avec succès !");
+
       navigate(`/maintenances/vehicle/${vehicleId}`);
     } catch (err: any) {
       console.error("Erreur lors de la création de la maintenance", err);
-      setError("Erreur lors de la création de la maintenance");
-      setSuccess(null);
+      notyf.error("Erreur lors de la création de la maintenance");
+
     }
   };
 
   return (
-    <div>
-      <h1>Créer une Maintenance</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500">{success}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Date de l'entretien :</label>
+    <div className="card bg-base-100 shadow-xl p-6 mt-4">
+      <h1 className="card-title text-2xl font-bold mb-4">Créer une maintenance</h1>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Date de l'entretien :</span>
+          </label>
           <input
             type="datetime-local"
+            className="input input-bordered"
             value={scheduledDate}
             onChange={(e) => setScheduledDate(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Status :</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value as any)} required>
-            <option value="SCHEDULED">SCHEDULED</option>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Status :</span>
+          </label>
+          <select
+            className="select select-bordered"
+            value={status}
+            onChange={(e) => setStatus(e.target.value as any)}
+            required
+          >
             <option value="COMPLETED">COMPLETED</option>
-            <option value="CANCELED">CANCELED</option>
           </select>
         </div>
-        <div>
-          <label>Kilométrage prévu :</label>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Kilométrage prévu :</span>
+          </label>
           <input
             type="number"
+            className="input input-bordered"
             value={scheduledMileage}
             onChange={(e) => setScheduledMileage(Number(e.target.value))}
           />
         </div>
-        <div>
-          <label>Coût (€) :</label>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Coût (€) :</span>
+          </label>
           <input
             type="number"
+            className="input input-bordered"
             value={cost}
             onChange={(e) => setCost(Number(e.target.value))}
           />
         </div>
-        <div>
-          <label>Recommandations du technicien :</label>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Recommandations du technicien :</span>
+          </label>
           <textarea
+            className="textarea textarea-bordered"
             value={technicianRecommendations}
             onChange={(e) => setTechnicianRecommendations(e.target.value)}
           />
         </div>
-        <div>
-          <h3>Pièces remplacées :</h3>
+        <div className="form-control">
+          <h3 className="label">Pièces remplacées :</h3>
           {availablePartStocks.length === 0 ? (
             <p>Aucune pièce disponible dans votre stock.</p>
           ) : (
             availablePartStocks.map((stockItem) => (
-              <div key={stockItem.id}>
-                <label>{stockItem.part.name} (Disponible : {stockItem.quantity}) :</label>
+              <div key={stockItem.id} className="flex items-center space-x-2">
+                <label className="w-1/2">
+                  {stockItem.part.name} (Disponible: {stockItem.quantity})
+                </label>
                 <input
                   type="number"
                   min="0"
+                  className="input input-bordered w-1/2"
                   value={replacedParts.find(rp => rp.partId === stockItem.part.id)?.quantity || 0}
                   onChange={(e) =>
                     handleReplacedPartChange(stockItem.part.id, Number(e.target.value))
@@ -167,7 +189,7 @@ const CreateMaintenance: React.FC = () => {
             ))
           )}
         </div>
-        <button type="submit">Créer Maintenance</button>
+        <button type="submit" className="btn btn-primary">Créer Maintenance</button>
       </form>
     </div>
   );

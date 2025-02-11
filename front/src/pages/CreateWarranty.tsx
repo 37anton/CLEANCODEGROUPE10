@@ -11,7 +11,6 @@ const CreateWarrantyPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Création d'une Garantie</h1>
       <CreateWarranty />
     </div>
   );

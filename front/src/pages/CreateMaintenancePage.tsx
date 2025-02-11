@@ -11,7 +11,6 @@ const CreateMaintenancePage: React.FC = () => {
 
   return (
     <div>
-      <h1>Création d'une Maintenance</h1>
       <CreateMaintenance />
     </div>
   );

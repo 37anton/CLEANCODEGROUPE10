@@ -11,7 +11,6 @@ const MaintenanceHistoryPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Historique des Entretiens</h1>
       <MaintenanceHistory vehicleId={vehicleId} />
     </div>
   );

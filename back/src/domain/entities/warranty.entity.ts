@@ -13,7 +13,7 @@ export class Warranty {
   @Column({ type: 'timestamp' })
   endDate: Date;
 
-  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.warranties)
+  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.warranties, {onDelete: 'SET NULL' })
   motorcycle: Motorcycle;
 
   @OneToMany(() => WarrantyPart, wp => wp.warranty)

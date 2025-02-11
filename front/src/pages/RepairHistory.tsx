@@ -1,3 +1,4 @@
+// src/pages/RepairHistoryPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -47,41 +48,45 @@ const RepairHistoryPage: React.FC = () => {
     fetchRepairs();
   }, [vehicleId, token]);
 
-  if (loading) return <p>Chargement...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) {
+    return <p className="text-center mt-4">Chargement...</p>;
+  }
+  if (error) {
+    return <div className="alert alert-error shadow-lg mt-4">{error}</div>;
+  }
 
   return (
-    <div>
-      <h1>Historique des Réparations</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Historique des réparations</h1>
       {repairs.length === 0 ? (
-        <p>Aucune réparation enregistrée.</p>
+        <p className="text-center">Aucune réparation enregistrée.</p>
       ) : (
-        <ul>
-          {repairs.map(repair => (
-            <li key={repair.id}>
-              <p>
-                <strong>Date :</strong> {new Date(repair.repairDate).toLocaleDateString()}
+        <div className="space-y-4">
+          {repairs.map((repair) => (
+            <div key={repair.id} className="card bg-base-100 shadow-xl p-6">
+              <p className="text-lg font-semibold">
+                Date : {new Date(repair.repairDate).toLocaleDateString()}
               </p>
-              <p>
+              <p className="mb-4">
                 <strong>Description :</strong> {repair.description}
               </p>
-              {repair.repairParts && repair.repairParts.length > 0 ? (
-                <div>
-                  <strong>Pièces utilisées :</strong>
-                  <ul>
-                    {repair.repairParts.map(rp => (
+              <div>
+                <strong>Pièces utilisées :</strong>
+                {repair.repairParts && repair.repairParts.length > 0 ? (
+                  <ul className="list-disc ml-6">
+                    {repair.repairParts.map((rp) => (
                       <li key={rp.id}>
                         {rp.partStock?.part?.name || 'N/A'} x {rp.quantity}
                       </li>
                     ))}
                   </ul>
-                </div>
-              ) : (
-                <p><strong>Pièces utilisées :</strong> -</p>
-              )}
-            </li>
+                ) : (
+                  <span> -</span>
+                )}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

@@ -11,7 +11,7 @@ const MaintenancePlanPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Plan d'entretien de la Moto</h1>
+      <h1>Plan d'entretien de la moto</h1>
       <MaintenancePlanComponent motorcycleId={motorcycleId} />
     </div>
   );

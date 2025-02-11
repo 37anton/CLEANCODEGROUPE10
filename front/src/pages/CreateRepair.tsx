@@ -11,7 +11,6 @@ const CreateRepairPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Créer une Réparation</h1>
       <CreateRepair incidentId={incidentId} motorcycleId={motorcycleId} />
     </div>
   );

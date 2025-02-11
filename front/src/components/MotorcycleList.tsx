@@ -1,4 +1,4 @@
-// components/MotorcycleList.tsx
+// src/components/MotorcycleList.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { Motorcycle } from "../pages/Motorcycles";
@@ -9,49 +9,65 @@ interface MotorcycleListProps {
 
 const MotorcycleList: React.FC<MotorcycleListProps> = ({ motorcycles }) => {
   return (
-    <div>
-      <h1>Liste des Motos</h1>
+    <div className="space-y-4">
+      <h1 className="text-3xl font-bold mb-6">Liste des motos</h1>
       {motorcycles.length === 0 ? (
-        <p>Aucune moto trouvée</p>
+        <p className="text-center">Aucune moto trouvée</p>
       ) : (
-        <ul>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {motorcycles.map((moto) => (
-            <li key={moto.id}>
-              <p>
-                {moto.model} - {moto.vin}
-              </p>
-              {/* Boutons existants */}
-              <Link to={`/motorcycles/update/${moto.id}`}>
-                <button>Modifier</button>
-              </Link>
-              <Link to={`/motorcycles/delete/${moto.id}`}>
-                <button>Supprimer</button>
-              </Link>
-              <Link to={`/maintenance-plan/${moto.id}`}>
-                <button>Voir Maintenance</button>
-              </Link>
-              <Link to={`/incidents/create/${moto.id}`}>
-                <button>Créer Incident</button>
-              </Link>
-              <Link to={`/incidents/vehicle/${moto.id}`}>
-                <button>Historique Incidents</button>
-              </Link>
-              <Link to={`/warranties/create/${moto.id}`}>
-                <button>Ajouter Garantie</button>
-              </Link>
-              <Link to={`/warranties/vehicle/${moto.id}`}>
-                <button>Voir Garanties</button>
-              </Link>
-              {/* Nouveaux boutons */}
-              <Link to={`/maintenances/create/${moto.id}`}>
-                <button>Faire Maintenance</button>
-              </Link>
-              <Link to={`/repairs/create/${moto.id}`}>
-                <button>Créer Réparation</button>
-              </Link>
-            </li>
+            <div key={moto.id} className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title">Modèle : {moto.model}</h2>
+                <p className="text-sm">VIN : {moto.vin}</p>
+                <p className="text-sm">
+                  <strong>Date de fabrication :</strong>{" "}
+                  {new Date(moto.manufactureDate).toLocaleDateString()}
+                </p>
+                <p className="text-sm">
+                  <strong>Date du dernier entretien :</strong>{" "}
+                  {new Date(moto.lastMaintenanceDate).toLocaleDateString()}
+                </p>
+                <p className="text-sm">
+                  <strong>Kilométrage :</strong> {moto.mileage}
+                </p>
+                <p className="text-sm">
+                  <strong>Kilométrage du dernier entretien :</strong>{" "}
+                  {moto.lastMaintenanceMileage}
+                </p>
+                <div className="card-actions justify-end mt-4 space-x-2">
+                  <Link to={`/motorcycles/update/${moto.id}`}>
+                    <button className="btn btn-outline btn-sm">Modifier</button>
+                  </Link>
+                  <Link to={`/motorcycles/delete/${moto.id}`}>
+                    <button className="btn btn-outline btn-sm">Supprimer</button>
+                  </Link>
+                  <Link to={`/maintenance-plan/${moto.id}`}>
+                    <button className="btn btn-info btn-sm">Prochaine maintenance</button>
+                  </Link>
+                  <Link to={`/maintenances/create/${moto.id}`}>
+                    <button className="btn btn-primary btn-sm">Faire maintenance</button>
+                  </Link>
+                  <Link to={`/maintenances/vehicle/${moto.id}`}>
+                    <button className="btn btn-secondary btn-sm">Historique maintenance</button>
+                  </Link>
+                  <Link to={`/incidents/create/${moto.id}`}>
+                  <button className="btn btn-secondary btn-sm">Créer incident</button>
+                  </Link>
+                  <Link to={`/incidents/vehicle/${moto.id}`}>
+                    <button className="btn btn-accent btn-sm">Historique incidents</button>
+                  </Link>
+                  <Link to={`/warranties/create/${moto.id}`}>
+                    <button className="btn btn-warning btn-sm">Ajouter garantie</button>
+                  </Link>
+                  <Link to={`/warranties/vehicle/${moto.id}`}>
+                    <button className="btn btn-warning btn-sm">Voir garanties</button>
+                  </Link>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

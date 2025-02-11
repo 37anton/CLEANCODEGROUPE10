@@ -13,7 +13,7 @@ export class Incident {
   @Column()
   description: string;
 
-  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.incidents)
+  @ManyToOne(() => Motorcycle, motorcycle => motorcycle.incidents, {onDelete: 'SET NULL' })
   motorcycle: Motorcycle;
 
   @OneToMany(() => Repair, repair => repair.incident)
